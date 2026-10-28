@@ -1,0 +1,16 @@
+info:
+  name: reaccionnar
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: POST http://localhost:3000/api/v1/resenas/1/reaccion
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
