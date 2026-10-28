@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { crearResena, listarResenasPelicula, eliminarResena, reaccionarResena } from '../controllers/resenas.controller.js';
+import { validarResena, validarReaccion } from '../validators/resenas.validator.js';
+import { validate } from '../middlewares/validate.js';
+import { requireAuth } from '../middlewares/auth.js';
+
+const router = Router();
+
+router.get('/pelicula/:id', listarResenasPelicula);
+router.post('/pelicula/:id', requireAuth, validarResena, validate, crearResena);
+router.delete('/:id', requireAuth, eliminarResena);
+router.post('/:id/reaccion', requireAuth, validarReaccion, validate, reaccionarResena);
+
+export default router;
