@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { listarCategorias, crearCategoria, eliminarCategoria } from "../controllers/categorias.controller.js";
+import { validarCategoria } from "../validators/categorias.validator.js";
+import { validate } from "../middlewares/validate.js";
+import { requireAuth } from "../middlewares/auth.js";
+import { requireAdmin } from "../middlewares/roles.js";
+const router = Router();
+router.get("/", listarCategorias);
+router.post("/", requireAuth, requireAdmin, validarCategoria, validate, crearCategoria);
+router.delete("/:id", requireAuth, requireAdmin, eliminarCategoria);
+export default router;

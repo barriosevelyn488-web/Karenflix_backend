@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { listarPeliculas, proponerPelicula, listarPendientes, cambiarEstadoPelicula } from "../controllers/peliculas.controller.js";
+import { validarPelicula } from "../validators/peliculas.validator.js";
+import { validate } from "../middlewares/validate.js";
+import { requireAuth } from "../middlewares/auth.js";
+import { requireAdmin } from "../middlewares/roles.js";
+const router = Router();
+router.get("/", listarPeliculas);
+router.post("/", requireAuth, validarPelicula, validate, proponerPelicula);
+router.get("/admin/pendientes", requireAuth, requireAdmin, listarPendientes);
+router.patch("/admin/:id/estado", requireAuth, requireAdmin, cambiarEstadoPelicula);
+export default router;
