@@ -1,11 +1,11 @@
 # Pruebas de la API KarenFlix
 
-Esta carpeta contiene la colección para Bruno. Impórtala desde Bruno y selecciona el entorno `Local`. Antes de ejecutar las operaciones protegidas, configura `token` y `adminToken`; puedes obtenerlos al iniciar sesión con las cuentas correspondientes. La API debe estar levantada y conectada a MySQL.
+Abre esta carpeta en Bruno y selecciona el entorno `Local`. Primero levanta la API y confirma que MySQL esté conectado. Inicia sesión con tus cuentas de prueba y copia sus JWT en `token` y `adminToken` antes de ejecutar las peticiones protegidas.
 
-Las peticiones numeradas cubren autenticación, catálogo, categorías, propuestas, reseñas, reacciones y ranking. Las solicitudes de creación guardan sus identificadores en el entorno. Para editar o borrar, ejecuta primero la creación correspondiente y conserva esos valores.
+Las peticiones están numeradas para que puedas seguir el flujo. Al crear una categoría, película o reseña, Bruno guarda su ID en el entorno. Usa ese mismo ID en las peticiones de edición y eliminación.
 
-La colección exportada para Postman está en `export/KarenFlix-CRUD.postman_collection.json`. Los ejemplos de cuerpos están en `data/`, y `data/casos-crud.json` resume rutas y respuestas esperadas. Los ejemplos usan datos de prueba; cambia nombres y correos si ya existen en tu base.
+Si vas a usar Postman, importa `export/KarenFlix-CRUD.postman_collection.json`. Los cuerpos de las peticiones están en `data/`; `data/casos-crud.json` tiene la lista de operaciones y el código HTTP que debería devolver cada una. Cambia los nombres de prueba si ya existen en tu base.
 
-Para probar roles, registra dos cuentas distintas. Promueve una a administrador en Workbench siguiendo las instrucciones del README principal y usa su JWT en `adminToken`. `otherToken` sirve para comprobar que una segunda cuenta no puede editar o eliminar recursos ajenos.
+Para revisar los permisos, registra dos cuentas. Cambia el rol de una a `admin` en Workbench siguiendo el README principal y coloca su JWT en `adminToken`. El JWT de la otra cuenta va en `otherToken`; úsalo para comprobar que no pueda modificar reseñas ajenas.
 
-Algunas eliminaciones pueden responder `409` si el registro tiene relaciones que impiden borrarlo, por ejemplo una categoría asignada a películas o una película con reseñas. En ese caso, revisa los datos antes de repetir la prueba.
+Si una categoría está asignada a una película o una película tiene reseñas, la base no permitirá borrarla y la API responderá `409`. Elimina primero los registros relacionados o usa otros datos de prueba.

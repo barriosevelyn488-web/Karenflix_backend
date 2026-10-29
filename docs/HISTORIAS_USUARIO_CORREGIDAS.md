@@ -1,6 +1,6 @@
 # Historias de usuario corregidas para KarenFlix
 
-La aclaración del equipo confirma MySQL como requisito del profesor. Los IDs HU-01 a HU-21 se conservan por trazabilidad con la planificación previa. Actualiza estado en GitHub Projects solo al respaldarlo con un PR/evidencia ejecutable.
+El proyecto usa MySQL, como indicó el profesor. Se mantienen los IDs HU-01 a HU-21 para poder compararlos con la planificación anterior. En GitHub Projects, cambia el estado de una historia cuando exista un PR o una prueba que muestre el avance.
 
 ## Historias existentes revisadas
 

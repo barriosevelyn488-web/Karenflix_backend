@@ -1,5 +1,5 @@
 {
-  "nota": "Ejecuta las solicitudes en orden. Los identificadores se guardan en las variables de Bruno al crear cada registro.",
+  "nota": "Crea primero cada registro. La colección guarda el ID para usarlo después al consultar, editar o eliminar.",
   "casos": [
     {
       "recurso": "categorias",

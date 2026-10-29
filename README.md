@@ -29,7 +29,7 @@ Swagger: /api-docs. Respuestas: {status,data} o {status,error:{code,message}}.
 
 ## Pruebas de API
 
-Importa `bruno/KarenFlix API` en Bruno y selecciona `Local`. Para Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los casos y cuerpos de referencia están en la carpeta `data`. Las operaciones administrativas requieren un JWT de administrador configurado localmente.
+Abre `bruno/KarenFlix API` en Bruno y selecciona `Local`. Si usas Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los archivos de `data` contienen los cuerpos y casos de prueba. Para las operaciones administrativas, coloca el JWT de una cuenta administradora en el entorno local.
 
 ## Primer administrador
 

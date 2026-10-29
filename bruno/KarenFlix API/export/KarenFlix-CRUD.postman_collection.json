@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "e83cb62e-574b-4f2f-a0fd-7252ad7ce152",
     "name": "KarenFlix - CRUD API",
-    "description": "Coleccion importable para probar los CRUD de categorias, peliculas y resenas. Las variables se configuran en el environment local.",
+    "description": "Peticiones para probar altas, consultas, cambios y eliminaciones de categorías, películas y reseñas. Configura los tokens y los IDs antes de ejecutarlas.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
