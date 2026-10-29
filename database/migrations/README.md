@@ -1,5 +1,9 @@
-# Migraciones
+# Migraciones de la base de datos
 
-Respalda la base antes de modificarla. Base nueva: ejecutar database/schema.sql; no correr migraciones incluidas ya en ese esquema.
+Antes de cambiar una base que ya tiene datos, guarda un respaldo.
 
-Para base Sprint 2 existente, inspecciona information_schema.tables y information_schema.columns. Si faltan trailer_url, actores o pelicula_actor (y aún conserva imagen_url de 255 caracteres/rating_promedio DECIMAL(3,2)), ejecuta 001_actores_trailer.sql una sola vez. Registra la migración aplicada en el control de cambios del equipo. El schema no borra bases ni usa DROP DATABASE.
+Si todavía no existe la base de KarenFlix, ejecuta `database/schema.sql` en Workbench. Ese esquema ya incluye los cambios de la migración `001_actores_trailer.sql`, así que no hace falta correrla aparte.
+
+Para actualizar una base del Sprint 2, revisa en `information_schema` las tablas y columnas de películas y actores. La migración `001_actores_trailer.sql` es para esa versión: amplía las columnas de imagen y calificación, agrega `trailer_url` y crea las tablas de actores y reparto. Ejecútala una sola vez y confirma que terminó sin errores antes de conectar la API.
+
+El archivo no elimina la base de datos. Si tu esquema del Sprint 2 tiene cambios distintos a los esperados, no ejecutes la migración a ciegas; compara primero las columnas con el archivo SQL.

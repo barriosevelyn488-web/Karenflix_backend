@@ -1,3 +1,5 @@
-# Colecciones Bruno
+# Pruebas de Bruno
 
-Usa la colección nueva en `KarenFlix API/`, que contiene solicitudes, asserts y payloads JSON. La carpeta `pruebas sprin 2/` se conserva como material histórico del Sprint 2; los requests ejecutables actualizados están en la colección nueva.
+La colección que usamos para probar la API está en `KarenFlix API/`. Allí están las peticiones, sus comprobaciones y los cuerpos JSON.
+
+La carpeta `pruebas sprin 2/` contiene los archivos que se usaron en ese sprint. Se conserva como referencia; para las pruebas actuales, abre `KarenFlix API/`.

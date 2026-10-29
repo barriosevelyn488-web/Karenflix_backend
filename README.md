@@ -1,40 +1,61 @@
 # KarenFlix Backend
 
-API REST de KarenFlix con Node.js, Express y MySQL. El frontend consume HTTP/JSON; nunca accede directamente a MySQL.
+Backend de la aplicación KarenFlix. Está hecho con Node.js, Express y MySQL. El sitio web se comunica con la API por HTTP y recibe respuestas JSON; la conexión a MySQL se queda en el servidor.
 
-## Inicio local (Windows/Linux)
+## Ejecutar en local
 
-Requiere Node.js 20 LTS+, npm y MySQL 8+. Ejecuta npm ci, copia .env.example a .env y agrega las credenciales MySQL que usas en Workbench (host, puerto, usuario y contraseña del servidor MySQL). No asumas que la contraseña de Linux/SSH también es la contraseña MySQL. Ejecuta database/schema.sql en Workbench para una base nueva. En una base existente, respalda y sigue database/migrations/README.md. Ejecuta npm run dev. El servidor verifica MySQL antes de escuchar.
+Necesitas Node.js 20 o superior, npm y MySQL 8. Instala las dependencias y prepara la configuración local:
 
-En Linux: cp .env.example .env; edita .env con los datos de MySQL; npm ci; npm run dev. Nunca subas .env.
+```bash
+npm ci
+cp .env.example .env
+```
 
-Verifica /health, /api/v1/version y /api-docs en localhost:3000.
+Completa `.env` con los datos de conexión de MySQL que usas en Workbench. La contraseña de Linux no tiene por qué ser la misma que la de MySQL. Para una base nueva, ejecuta `database/schema.sql` en Workbench. Si vas a usar una base del Sprint 2, revisa primero las instrucciones de `database/migrations/README.md`.
 
-## Arquitectura y seguridad
+Arranca la API con `npm run dev`. El servidor comprueba la conexión a MySQL antes de empezar a escuchar en el puerto 3000. Puedes revisar `/health`, `/api/v1/version` y `/api-docs` en `http://localhost:3000`.
 
-Flujo: routes → middlewares → controllers → services → models/repositorios → MySQL. Pool mysql2 compartido, consultas parametrizadas, orden dinámico con allowlist, DTOs de salida y fábrica DTO. Errores centralizados y transacciones.
+En Linux, los comandos son los mismos. Crea `.env` a partir de `.env.example`, agrega la configuración de MySQL y ejecuta `npm ci` y `npm run dev`. Ese archivo contiene credenciales y no se debe subir a GitHub.
 
-Helmet, CORS de lista permitida, rate limit global y más estricto en auth, límite JSON, validación, bcrypt 12 rondas, JWT con issuer/audience y cookie HttpOnly. En producción cookie Secure y SameSite=None; las operaciones con cookie validan Origin. El token Bearer sigue temporalmente disponible para integrar clientes existentes. Fetch con cookie requiere credentials: 'include'.
+## Organización del código
 
-En producción configura JWT_SECRET aleatorio de al menos 32 caracteres (en Linux puedes generarlo con openssl rand -base64 48), DB_SSL=true/CA del proveedor, CORS_ORIGIN exacto y TRUST_PROXY=true solo detrás de proxy confiable. Usa usuario MySQL de permisos mínimos; nunca root desde la API.
+Las rutas pasan por los middlewares y controladores. Los servicios manejan las reglas de la aplicación y los modelos ejecutan consultas parametrizadas con el pool compartido de `mysql2`. Los DTO limitan los datos que entran y salen. Las operaciones que modifican varios registros usan transacciones.
+
+La API también configura Helmet, CORS con orígenes permitidos, límites de peticiones, validación y manejo centralizado de errores. Las contraseñas se guardan con bcrypt. El inicio de sesión entrega un JWT y una cookie `HttpOnly`; en producción la cookie lleva `Secure` y `SameSite=None`. Las peticiones autenticadas con cookie validan el origen. Mientras se conecta el frontend también se acepta `Authorization: Bearer`.
+
+Para producción, usa un `JWT_SECRET` aleatorio de al menos 32 caracteres. En Linux puedes generarlo con `openssl rand -base64 48`. Configura `DB_SSL` y el certificado CA que entregue el proveedor de MySQL. Limita `CORS_ORIGIN` al dominio del frontend y activa `TRUST_PROXY` solo cuando la API esté detrás de un proxy confiable. La API debe conectarse con un usuario MySQL de permisos limitados, no con `root`.
 
 ## Rutas principales
 
-Auth: POST /api/v1/auth/register, POST /login, POST /logout, GET /me.
-Categorías: GET público; escritura admin.
-Catálogo: GET /api/v1/peliculas?page=1&limit=20&orden=ranking, GET /:id, POST propone pendiente; PUT/DELETE admin.
-Reseñas: GET/POST /peliculas/:id/resenas, PUT/DELETE /resenas/:id. Reacciones: POST/DELETE /resenas/:id/reaccion.
-Ranking: GET /api/v1/ranking?limit=10.
-Swagger: /api-docs. Respuestas: {status,data} o {status,error:{code,message}}.
+| Recurso    | Rutas                                                                                                                      |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Sesión     | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`                 |
+| Categorías | `GET /api/v1/categorias`; escritura para administradores                                                                   |
+| Películas  | `GET /api/v1/peliculas`, `GET /api/v1/peliculas/:id`, `POST /api/v1/peliculas`; edición y eliminación para administradores |
+| Reseñas    | `GET /api/v1/peliculas/:id/resenas`, `POST /api/v1/peliculas/:id/resenas`, `PUT` y `DELETE /api/v1/resenas/:id`            |
+| Reacciones | `POST` y `DELETE /api/v1/resenas/:id/reaccion`                                                                             |
+| Ranking    | `GET /api/v1/ranking?limit=10`                                                                                             |
 
-## Pruebas de API
+La lista de películas acepta `page`, `limit`, `categoria_id`, `q` y `orden`. El límite máximo es 50. Swagger está disponible en `/api-docs`. Las respuestas exitosas usan `{status, data}`; los errores incluyen `{status, error}`.
 
-Abre `bruno/KarenFlix API` en Bruno y selecciona `Local`. Si usas Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los archivos de `data` contienen los cuerpos y casos de prueba. Para las operaciones administrativas, coloca el JWT de una cuenta administradora en el entorno local.
+## Pruebas con Bruno y Postman
 
-## Primer administrador
+La colección de Bruno está en `bruno/KarenFlix API`. Para Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los ejemplos y los casos están en la carpeta `data` de la colección. Las operaciones administrativas necesitan el JWT de una cuenta con rol `admin`.
 
-Registra usuario normal y promuévelo manualmente en Workbench: UPDATE usuarios SET rol='admin' WHERE email='correo-registrado'. No existe clave ni endpoint público para elevar privilegios.
+## Crear el primer administrador
 
-Frontend: https://github.com/WilKtu/karenflix-frontend. Historias revisadas en docs/HISTORIAS_USUARIO_CORREGIDAS.md. Cada sección debe tener rama feature/hu-XX, commits pequeños y PR revisado hacia develop.
-Excel de normalización: docs/normalizacion_karenflix.xlsx. Diagramas ER, capas y transacción: docs/diagramas/.
-Contrato para Wilder en docs/CONTRATO_API_FRONTEND.md; completar la plantilla compartida en docs/INTEGRACION_WILDER.md durante la prueba entre repos.
+Registra una cuenta normal y, desde Workbench, cambia su rol:
+
+```sql
+UPDATE usuarios SET rol = 'admin' WHERE email = 'correo-registrado';
+```
+
+No hay una ruta pública para asignar el rol de administrador.
+
+## Trabajo del equipo
+
+El frontend está en [el repositorio de KarenFlix](https://github.com/WilKtu/karenflix-frontend); su integración se debe revisar con Wilder. El contrato de la API está en `docs/CONTRATO_API_FRONTEND.md` y la revisión conjunta se puede anotar en `docs/INTEGRACION_WILDER.md`.
+
+Las historias revisadas están en `docs/HISTORIAS_USUARIO_CORREGIDAS.md`. Mantén los cambios en ramas por historia y abre los PR según sus dependencias: HU-22 hacia `develop`, HU-23 hacia HU-22, HU-11 a HU-13 hacia HU-23 y HU-19 hacia la rama de reseñas.
+
+El Excel de normalización está en `docs/normalizacion_karenflix.xlsx`. Los diagramas del modelo, la arquitectura y el flujo de reseñas están en `docs/diagramas/`.
