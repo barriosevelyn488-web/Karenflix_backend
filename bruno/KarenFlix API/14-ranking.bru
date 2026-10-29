@@ -1,0 +1,15 @@
+meta {
+  name: "Ranking"
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/v1/ranking?limit=10
+}
+
+tests {
+  test("Ranking devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}

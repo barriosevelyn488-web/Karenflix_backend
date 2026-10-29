@@ -1,0 +1,32 @@
+meta {
+  name: "Editar categoria"
+  type: http
+  seq: 25
+}
+
+put {
+  url: {{baseUrl}}/api/v1/categorias/{{categoryId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "nombre": "Drama Bruno",
+  "descripcion": "Categoria actualizada durante la prueba"
+}
+}
+
+tests {
+  test("La categoria se actualiza correctamente", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

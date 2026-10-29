@@ -1,0 +1,35 @@
+meta {
+  name: "Rechazar título duplicado"
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/v1/peliculas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "Dune Bruno Demo",
+  "descripcion": "Payload de ejemplo para integración y pruebas.",
+  "tipo": "pelicula",
+  "anio": 2021,
+  "categoria_id": 1
+}
+}
+
+tests {
+  test("Rechazar título duplicado devuelve un estado esperado", function () {
+    expect([400, 409]).to.include(res.getStatus());
+  });
+}

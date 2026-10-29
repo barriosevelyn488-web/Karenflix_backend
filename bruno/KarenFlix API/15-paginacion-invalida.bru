@@ -1,0 +1,15 @@
+meta {
+  name: "Rechazar límite excesivo"
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/v1/peliculas?limit=100000
+}
+
+tests {
+  test("Rechazar límite excesivo devuelve un estado permitido", function () {
+    expect([400]).to.include(res.getStatus());
+  });
+}

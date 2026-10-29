@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="t d">
+  <title id="t">Autenticación y sesión de KarenFlix</title>
+  <desc id="d">Registro e inicio de sesión validan datos y contraseña, consultan MySQL, firman un JWT y entregan una cookie HttpOnly. Las rutas protegidas verifican el JWT y los roles.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#46647d"/></marker><marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16806c"/></marker><style>
+    text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#19354b}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#536c80}.head{font-size:18px;font-weight:700}.path{font:13px Consolas,"Courier New",monospace;fill:#526b7d}.body{font-size:15px;fill:#38556b}.small{font-size:14px;fill:#506a7e}.card{fill:#fff;stroke:#c2d0da;stroke-width:2}.arrow{fill:none;stroke:#46647d;stroke-width:3;marker-end:url(#a)}.green{fill:none;stroke:#16806c;stroke-width:3;marker-end:url(#g)}
+  </style></defs>
+  <rect width="1600" height="1050" fill="#f3f7fa"/>
+  <text x="60" y="68" class="title">Autenticación y sesión</text>
+  <text x="60" y="102" class="sub">El JWT identificó la sesión; la cookie HttpOnly protegió el acceso desde el navegador.</text>
+
+  <text x="60" y="160" class="head">A. Registro e inicio de sesión</text>
+  <rect x="60" y="190" width="260" height="210" rx="16" class="card"/><rect x="60" y="190" width="260" height="9" rx="5" fill="#2777a2"/>
+  <text x="190" y="235" text-anchor="middle" class="head">Cliente</text><text x="190" y="270" text-anchor="middle" class="path">POST /auth/register</text><text x="190" y="296" text-anchor="middle" class="path">POST /auth/login</text><text x="85" y="345" class="body">Envía email y contraseña</text><text x="85" y="373" class="small">HTTPS en producción</text>
+
+  <rect x="390" y="190" width="260" height="210" rx="16" class="card"/><rect x="390" y="190" width="260" height="9" rx="5" fill="#b7791f"/>
+  <text x="520" y="235" text-anchor="middle" class="head">Ruta de autenticación</text><text x="520" y="270" text-anchor="middle" class="path">auth.routes.js</text><text x="415" y="315" class="body">Rate limit de auth</text><text x="415" y="345" class="body">Valida campos con validator</text><text x="415" y="375" class="small">Datos inválidos: HTTP 400</text>
+
+  <rect x="720" y="190" width="260" height="210" rx="16" class="card"/><rect x="720" y="190" width="260" height="9" rx="5" fill="#7255a0"/>
+  <text x="850" y="235" text-anchor="middle" class="head">AuthService</text><text x="850" y="270" text-anchor="middle" class="path">services/auth.service.js</text><text x="745" y="315" class="body">Registro: bcrypt guarda hash</text><text x="745" y="345" class="body">Login: compara la contraseña</text><text x="745" y="375" class="small">No devuelve password_hash</text>
+
+  <rect x="1050" y="190" width="230" height="210" rx="16" class="card"/><rect x="1050" y="190" width="230" height="9" rx="5" fill="#25836d"/>
+  <text x="1165" y="235" text-anchor="middle" class="head">MySQL</text><text x="1165" y="270" text-anchor="middle" class="path">usuarios</text><text x="1075" y="315" class="body">Email único</text><text x="1075" y="345" class="body">Contraseña como hash</text><text x="1075" y="375" class="small">Rol definido por el servidor</text>
+
+  <rect x="1350" y="190" width="200" height="210" rx="16" class="card"/><rect x="1350" y="190" width="200" height="9" rx="5" fill="#27836d"/>
+  <text x="1450" y="235" text-anchor="middle" class="head">Sesión</text><text x="1450" y="270" text-anchor="middle" class="path">JWT + cookie</text><text x="1370" y="315" class="body">Sub, issuer,</text><text x="1370" y="341" class="body">audience, expiración</text><text x="1370" y="375" class="small">Firma con JWT_SECRET</text>
+
+  <path d="M320 295H382 M650 295H712 M980 295H1042 M1280 295H1342" class="arrow"/>
+  <path d="M1350 420 H190 V408" class="green"/>
+  <rect x="495" y="422" width="750" height="46" rx="23" fill="#dff2eb"/>
+  <text x="870" y="451" text-anchor="middle" class="body">El servidor respondió con el perfil y el JWT; también estableció la cookie HttpOnly.</text>
+
+  <text x="60" y="530" class="head">B. Acceso a una ruta protegida</text>
+  <rect x="60" y="560" width="300" height="220" rx="16" class="card"/><rect x="60" y="560" width="300" height="9" rx="5" fill="#2777a2"/>
+  <text x="210" y="605" text-anchor="middle" class="head">Navegador o cliente</text><text x="85" y="650" class="body">Cookie: se envió con</text><text x="85" y="677" class="path">credentials: 'include'</text><text x="85" y="718" class="body">O encabezado Authorization</text><text x="85" y="745" class="path">Bearer &lt;token&gt;</text>
+
+  <rect x="430" y="560" width="300" height="220" rx="16" class="card"/><rect x="430" y="560" width="300" height="9" rx="5" fill="#b7791f"/>
+  <text x="580" y="605" text-anchor="middle" class="head">Passport JWT</text><text x="455" y="650" class="body">Lee cookie o Bearer</text><text x="455" y="680" class="body">Verifica firma y vigencia</text><text x="455" y="710" class="body">Valida issuer y audience</text><text x="455" y="750" class="path">config/passport.js</text>
+
+  <rect x="800" y="560" width="300" height="220" rx="16" class="card"/><rect x="800" y="560" width="300" height="9" rx="5" fill="#7255a0"/>
+  <text x="950" y="605" text-anchor="middle" class="head">Usuario actual</text><text x="825" y="650" class="body">Busca el usuario en MySQL</text><text x="825" y="680" class="body">Usa el rol vigente de la base</text><text x="825" y="710" class="small">No confía en un rol enviado</text><text x="825" y="735" class="small">por el cliente</text>
+
+  <rect x="1170" y="560" width="350" height="220" rx="16" class="card"/><rect x="1170" y="560" width="350" height="9" rx="5" fill="#25836d"/>
+  <text x="1345" y="605" text-anchor="middle" class="head">Permiso y operación</text><text x="1195" y="650" class="body">requireAuth: usuario autenticado</text><text x="1195" y="680" class="body">requireAdmin: rol administrador</text><text x="1195" y="710" class="body">Después continúa el controlador</text><text x="1195" y="750" class="small">401 sin sesión · 403 sin permiso</text>
+
+  <path d="M360 670H422 M730 670H792 M1100 670H1162" class="arrow"/>
+
+  <rect x="60" y="830" width="1460" height="145" rx="16" fill="#e7eef3"/>
+  <text x="95" y="875" class="head">Cookie, CSRF y cierre de sesión</text>
+  <text x="95" y="912" class="body">La cookie se configuró como HttpOnly; en producción también como Secure y SameSite=None. Las operaciones de cambio autenticadas por cookie validaron Origin.</text>
+  <text x="95" y="945" class="body">POST /auth/logout eliminó la cookie. Para usar cookies entre orígenes, CORS permitió el origen del frontend y el cliente envió credentials: 'include'.</text>
+</svg>

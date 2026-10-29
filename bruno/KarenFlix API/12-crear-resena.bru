@@ -1,0 +1,37 @@
+meta {
+  name: "Crear reseña"
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/api/v1/peliculas/{{movieId}}/resenas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "Muy recomendable",
+  "comentario": "Prueba de reseña desde Bruno.",
+  "calificacion": 9
+}
+ }
+
+tests {
+  test("Crear reseña devuelve un estado permitido", function () {
+    expect([201, 404, 409]).to.include(res.getStatus());
+  });
+}
+
+script:post-response {
+  if (res.getStatus() === 201) bru.setEnvVar('reviewId', String(res.getBody().data.id));
+}
