@@ -64,7 +64,8 @@
   <rect x="1075" y="615" width="460" height="10" rx="5" fill="#b7791f"/>
   <text x="1305" y="662" text-anchor="middle" class="head">Documentación del proyecto</text>
   <text x="1110" y="710" class="path">docs/</text><text x="1210" y="710" class="body">historias, diagramas y contrato</text>
-  <text x="1110" y="749" class="small">Swagger del backend: /api-docs (ruta de Express).</text>
+  <text x="1110" y="744" class="small">swagger.js configura Swagger; app.js monta /api-docs.</text>
+  <text x="1110" y="766" class="small">La ruta responde al iniciar la API con MySQL conectado.</text>
 
   <path d="M1075 295 H1018" class="line"/>
   <path d="M775 510 V463" class="line"/>

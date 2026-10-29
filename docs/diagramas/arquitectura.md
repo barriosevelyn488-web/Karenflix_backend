@@ -2,6 +2,8 @@
 
 El mapa completo quedó en `arquitectura-completa.svg`. Para presentarlo con más detalle, se prepararon cinco diagramas cortos. El orden va desde las carpetas del repositorio hasta la conexión con MySQL y los entornos.
 
+Swagger no corresponde a una carpeta. Su configuración quedó en `src/config/swagger.js` y `src/app.js` montó la ruta `/api-docs`. Esa ruta se pudo abrir después de iniciar el servidor, que verificó MySQL antes de escuchar.
+
 ## 01. Carpetas del repositorio
 
 ![Estructura del repositorio](01-estructura-repositorio.svg)
