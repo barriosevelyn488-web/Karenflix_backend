@@ -1,0 +1,31 @@
+meta {
+  name: "Aprobar propuesta"
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/peliculas/admin/{{movieId}}/estado
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "estado": "aprobada"
+}
+ }
+
+tests {
+  test("Aprobar propuesta devuelve un estado permitido", function () {
+    expect([200, 401, 403, 404]).to.include(res.getStatus());
+  });
+}

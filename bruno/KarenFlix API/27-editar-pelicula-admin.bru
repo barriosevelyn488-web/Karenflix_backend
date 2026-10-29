@@ -1,0 +1,39 @@
+meta {
+  name: "Editar pelicula"
+  type: http
+  seq: 27
+}
+
+put {
+  url: {{baseUrl}}/api/v1/peliculas/{{movieId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "Dune Bruno Editada",
+  "descripcion": "Registro actualizado desde la coleccion de pruebas.",
+  "tipo": "pelicula",
+  "anio": 2021,
+  "categoria_id": 1,
+  "director": "Denis Villeneuve",
+  "actores": ["Timothee Chalamet", "Zendaya"],
+  "imagen_url": "https://example.com/dune-poster.jpg",
+  "trailer_url": "https://www.youtube.com/watch?v=n9xhJrPXop4"
+}
+}
+
+tests {
+  test("La pelicula se actualiza correctamente", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

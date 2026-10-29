@@ -1,0 +1,27 @@
+meta {
+  name: "Login inválido"
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "email": "bruno.demo@example.com",
+  "password": "incorrecta"
+}
+ }
+
+tests {
+  test("Login inválido devuelve un estado permitido", function () {
+    expect([401]).to.include(res.getStatus());
+  });
+}

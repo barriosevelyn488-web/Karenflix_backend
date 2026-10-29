@@ -1,22 +1,19 @@
 import { ReaccionModel } from '../models/reaccion.model.js';
 import { ResenaModel } from '../models/resena.model.js';
-
+import { AppError } from '../utils/AppError.js';
 export const ReaccionService = {
   async reaccionar({ usuarioId, resenaId, tipo }) {
-    const resena = await ResenaModel.buscarPorId(resenaId);
-    if (!resena) {
-      const err = new Error('Reseña no encontrada.');
-      err.statusCode = 404;
-      throw err;
-    }
-
-    if (resena.usuario_id === usuarioId) {
-      const err = new Error('No puedes reaccionar a tu propia reseña.');
-      err.statusCode = 403;
-      throw err;
-    }
-
-    const resultado = await ReaccionModel.registrarReaccion({ usuarioId, resenaId, tipo });
-    return resultado;
+    const review = await ResenaModel.buscarPorId(resenaId);
+    if (!review) throw new AppError('Reseña no encontrada.', 404, 'NOT_FOUND');
+    if (Number(review.usuario_id) === Number(usuarioId))
+      throw new AppError('No puedes reaccionar a tu propia reseña.', 403, 'OWN_REVIEW');
+    return ReaccionModel.registrarReaccion({ usuarioId, resenaId, tipo });
+  },
+  async quitar({ usuarioId, resenaId }) {
+    const review = await ResenaModel.buscarPorId(resenaId);
+    if (!review) throw new AppError('Reseña no encontrada.', 404, 'NOT_FOUND');
+    if (Number(review.usuario_id) === Number(usuarioId))
+      throw new AppError('No puedes reaccionar a tu propia reseña.', 403, 'OWN_REVIEW');
+    return ReaccionModel.quitar({ usuarioId, resenaId });
   }
 };

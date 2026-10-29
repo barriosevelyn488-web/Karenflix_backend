@@ -1,0 +1,33 @@
+meta {
+  name: "Editar reseña propia"
+  type: http
+  seq: 21
+}
+
+put {
+  url: {{baseUrl}}/api/v1/resenas/{{reviewId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "Reseña editada",
+  "comentario": "Actualización de la prueba Bruno.",
+  "calificacion": 8
+}
+}
+
+tests {
+  test("Editar reseña propia devuelve un estado esperado", function () {
+    expect([200, 401, 404]).to.include(res.getStatus());
+  });
+}

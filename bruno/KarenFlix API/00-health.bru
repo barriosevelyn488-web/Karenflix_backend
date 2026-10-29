@@ -1,0 +1,15 @@
+meta {
+  name: "Health y versión"
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/health
+}
+
+tests {
+  test("Health y versión devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}

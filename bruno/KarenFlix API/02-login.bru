@@ -1,0 +1,31 @@
+meta {
+  name: "Iniciar sesión"
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "email": "bruno.demo@example.com",
+  "password": "BrunoDemo2026!"
+}
+ }
+
+tests {
+  test("Iniciar sesión devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}
+
+script:post-response {
+  bru.setEnvVar('token', res.getBody().data.token); bru.setEnvVar('userId', String(res.getBody().data.usuario.id));
+}

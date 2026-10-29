@@ -1,0 +1,20 @@
+meta {
+  name: "Perfil de sesión"
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/auth/me
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Perfil de sesión devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}

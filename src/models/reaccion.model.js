@@ -1,49 +1,59 @@
-import mysql from 'mysql2/promise';
-import { env } from '../config/env.js';
-
-const pool = mysql.createPool({
-  host: env.db.host,
-  port: env.db.port,
-  user: env.db.user,
-  password: env.db.password,
-  database: env.db.name
-});
-
+import pool from '../config/db.js';
 export const ReaccionModel = {
   async registrarReaccion({ usuarioId, resenaId, tipo }) {
-    const connection = await pool.getConnection();
+    const c = await pool.getConnection();
     try {
-      await connection.beginTransaction();
-
-      await connection.query(
-        `INSERT INTO reacciones (usuario_id, resena_id, tipo) VALUES (?, ?, ?)
-         ON DUPLICATE KEY UPDATE tipo = ?`,
-        [usuarioId, resenaId, tipo, tipo]
+      await c.beginTransaction();
+      await c.query('SELECT id FROM resenas WHERE id=? FOR UPDATE', [resenaId]);
+      await c.query(
+        'INSERT INTO reacciones(usuario_id,resena_id,tipo) VALUES(?,?,?) ON DUPLICATE KEY UPDATE tipo=VALUES(tipo)',
+        [usuarioId, resenaId, tipo]
       );
-
-      const [conteo] = await connection.query(
-        `SELECT 
-           SUM(CASE WHEN tipo = 'like' THEN 1 ELSE 0 END) as likes,
-           SUM(CASE WHEN tipo = 'dislike' THEN 1 ELSE 0 END) as dislikes
-         FROM reacciones WHERE resena_id = ?`,
+      const [[n]] = await c.query(
+        "SELECT SUM(tipo='like') likes,SUM(tipo='dislike') dislikes FROM reacciones WHERE resena_id=?",
         [resenaId]
       );
-
-      const likes = conteo[0].likes || 0;
-      const dislikes = conteo[0].dislikes || 0;
-
-      await connection.query(
-        `UPDATE resenas SET likes = ?, dislikes = ? WHERE id = ?`,
-        [likes, dislikes, resenaId]
+      const counts = { likes: Number(n.likes || 0), dislikes: Number(n.dislikes || 0) };
+      await c.query('UPDATE resenas SET likes=?,dislikes=? WHERE id=?', [
+        counts.likes,
+        counts.dislikes,
+        resenaId
+      ]);
+      await c.commit();
+      return counts;
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+  },
+  async quitar({ usuarioId, resenaId }) {
+    const c = await pool.getConnection();
+    try {
+      await c.beginTransaction();
+      await c.query('SELECT id FROM resenas WHERE id=? FOR UPDATE', [resenaId]);
+      await c.query('DELETE FROM reacciones WHERE usuario_id=? AND resena_id=?', [
+        usuarioId,
+        resenaId
+      ]);
+      const [[n]] = await c.query(
+        "SELECT SUM(tipo='like') likes,SUM(tipo='dislike') dislikes FROM reacciones WHERE resena_id=?",
+        [resenaId]
       );
-
-      await connection.commit();
-      connection.release();
-      return { likes, dislikes };
-    } catch (error) {
-      await connection.rollback();
-      connection.release();
-      throw error;
+      const counts = { likes: Number(n.likes || 0), dislikes: Number(n.dislikes || 0) };
+      await c.query('UPDATE resenas SET likes=?,dislikes=? WHERE id=?', [
+        counts.likes,
+        counts.dislikes,
+        resenaId
+      ]);
+      await c.commit();
+      return counts;
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
     }
   }
 };

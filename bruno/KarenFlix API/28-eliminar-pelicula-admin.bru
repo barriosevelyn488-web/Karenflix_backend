@@ -1,0 +1,20 @@
+meta {
+  name: "Eliminar pelicula"
+  type: http
+  seq: 28
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/peliculas/{{movieId}}
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("La pelicula se elimina correctamente", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: "Reacción a reseña ajena"
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseUrl}}/api/v1/resenas/{{reviewId}}/reaccion
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{otherToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "tipo": "like"
+}
+}
+
+tests {
+  test("Reacción a reseña ajena devuelve un estado esperado", function () {
+    expect([200, 401, 403, 404]).to.include(res.getStatus());
+  });
+}

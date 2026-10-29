@@ -1,0 +1,15 @@
+meta {
+  name: "Listar categorías"
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/categorias
+}
+
+tests {
+  test("Listar categorías devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}

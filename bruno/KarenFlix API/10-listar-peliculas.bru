@@ -1,0 +1,15 @@
+meta {
+  name: "Catálogo con filtros"
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/peliculas?page=1&limit=20&orden=ranking
+}
+
+tests {
+  test("Catálogo con filtros devuelve un estado permitido", function () {
+    expect([200]).to.include(res.getStatus());
+  });
+}
