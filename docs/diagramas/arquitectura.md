@@ -1,14 +1,7 @@
-# Arquitectura
+# Capas del backend
 
-```mermaid
-flowchart LR
- Browser[Frontend HTML CSS JS] -->|HTTPS JSON + cookie/Bearer| API[Express API v1]
- API --> Security[Helmet CORS RateLimit Auth Validate]
- Security --> Routes[Routes]
- Routes --> Controllers[Controllers + DTO]
- Controllers --> Services[Business services]
- Services --> Repos[Models SQL Repository]
- Repos --> Pool[mysql2 shared pool]
- Pool --> DB[(MySQL InnoDB)]
- API --> Swagger[/Swagger UI/]
-```
+La imagen muestra el recorrido de una solicitud desde el frontend o Bruno hasta MySQL y el regreso de la respuesta. Cada carpeta de `src/` corresponde a una parte de ese recorrido.
+
+![Diagrama de las capas del backend KarenFlix](capas-backend.svg)
+
+La fuente del diagrama está guardada en `capas-backend.svg`; se puede insertar en el informe y ampliar sin perder calidad.

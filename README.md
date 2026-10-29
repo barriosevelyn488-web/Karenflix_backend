@@ -84,3 +84,7 @@ No se implementó una ruta pública para elevar privilegios.
 El frontend del equipo se mantuvo en [su repositorio](https://github.com/WilKtu/karenflix-frontend). El contrato se documentó en `docs/CONTRATO_API_FRONTEND.md` y se dejó `docs/INTEGRACION_WILDER.md` para anotar la prueba conjunta.
 
 Las historias corregidas quedaron en `docs/HISTORIAS_USUARIO_CORREGIDAS.md`; la normalización de datos, en `docs/normalizacion_karenflix.xlsx`; y los diagramas, en `docs/diagramas/`. Los cambios se separaron por ramas de historia. La secuencia de integración quedó: HU-22 hacia `develop`, HU-23 hacia HU-22, HU-11 a HU-13 hacia HU-23 y HU-19 hacia la rama de reseñas.
+
+El diagrama de capas también quedó disponible como imagen en [`docs/diagramas/capas-backend.svg`](docs/diagramas/capas-backend.svg):
+
+![Capas del backend KarenFlix](docs/diagramas/capas-backend.svg)
