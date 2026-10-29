@@ -120,7 +120,7 @@ export const PeliculaModel = {
     try {
       await connection.beginTransaction();
       const directorId = await guardarDirector(connection, datos.director);
-      await connection.query(
+      const [result] = await connection.query(
         `INSERT INTO peliculas
          (titulo,titulo_normalizado,descripcion,duracion_minutos,tipo,anio,categoria_id,
           director_id,imagen_url,trailer_url,estado,creado_por)
