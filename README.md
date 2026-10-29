@@ -85,6 +85,4 @@ El frontend del equipo se mantuvo en [su repositorio](https://github.com/WilKtu/
 
 Las historias corregidas quedaron en `docs/HISTORIAS_USUARIO_CORREGIDAS.md`; la normalización de datos, en `docs/normalizacion_karenflix.xlsx`; y los diagramas, en `docs/diagramas/`. Los cambios se separaron por ramas de historia. La secuencia de integración quedó: HU-22 hacia `develop`, HU-23 hacia HU-22, HU-11 a HU-13 hacia HU-23 y HU-19 hacia la rama de reseñas.
 
-El diagrama completo de la arquitectura quedó disponible en [`docs/diagramas/arquitectura-completa.svg`](docs/diagramas/arquitectura-completa.svg):
-
-![Arquitectura completa del backend KarenFlix](docs/diagramas/arquitectura-completa.svg)
+El mapa completo quedó en [`docs/diagramas/arquitectura-completa.svg`](docs/diagramas/arquitectura-completa.svg). Para explicar el diseño paso a paso, se preparó la [guía de diagramas por partes](docs/diagramas/arquitectura.md), con imágenes separadas para el repositorio, el recorrido de solicitudes, la sesión, MySQL y la conexión por entorno.

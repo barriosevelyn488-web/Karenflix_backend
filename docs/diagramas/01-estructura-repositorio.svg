@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="t d">
+  <title id="t">Estructura del repositorio KarenFlix Backend</title>
+  <desc id="d">Vista de las carpetas principales, los archivos que inician Express y las carpetas de base de datos, Bruno y documentación.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#52718a"/></marker><style>
+    text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#19354b}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#536c80}.head{font-size:20px;font-weight:700}.path{font:14px Consolas,"Courier New",monospace;fill:#41647c}.body{font-size:16px;fill:#36566d}.small{font-size:14px;fill:#526b7d}.card{fill:#fff;stroke:#c2d0da;stroke-width:2}.line{stroke:#52718a;stroke-width:3;fill:none;marker-end:url(#a)}
+  </style></defs>
+  <rect width="1600" height="900" fill="#f3f7fa"/>
+  <text x="65" y="70" class="title">Estructura del repositorio</text>
+  <text x="65" y="104" class="sub">Cada carpeta separa una responsabilidad del backend.</text>
+
+  <rect x="65" y="155" width="400" height="660" rx="18" class="card"/>
+  <rect x="65" y="155" width="400" height="10" rx="5" fill="#2777a2"/>
+  <text x="265" y="202" text-anchor="middle" class="head">src/</text>
+  <text x="100" y="252" class="path">config/</text><text x="245" y="252" class="body">entorno, MySQL, JWT, Swagger</text>
+  <text x="100" y="298" class="path">routes/</text><text x="245" y="298" class="body">rutas por recurso</text>
+  <text x="100" y="344" class="path">middlewares/</text><text x="245" y="344" class="body">seguridad y validación</text>
+  <text x="100" y="390" class="path">validators/</text><text x="245" y="390" class="body">reglas de entrada</text>
+  <text x="100" y="436" class="path">controllers/</text><text x="245" y="436" class="body">HTTP y respuestas</text>
+  <text x="100" y="482" class="path">services/</text><text x="245" y="482" class="body">reglas del negocio</text>
+  <text x="100" y="528" class="path">models/</text><text x="245" y="528" class="body">consultas a MySQL</text>
+  <text x="100" y="574" class="path">dtos/</text><text x="245" y="574" class="body">datos permitidos</text>
+  <text x="100" y="620" class="path">factories/</text><text x="245" y="620" class="body">creación de DTO</text>
+  <text x="100" y="666" class="path">utils/</text><text x="245" y="666" class="body">errores y normalización</text>
+  <line x1="100" y1="694" x2="430" y2="694" stroke="#e2e9ee"/>
+  <text x="100" y="733" class="path">app.js · index.js · server.js</text>
+  <text x="100" y="770" class="small">composición, exportación e inicio</text>
+
+  <rect x="540" y="155" width="470" height="300" rx="18" class="card"/>
+  <rect x="540" y="155" width="470" height="10" rx="5" fill="#b7791f"/>
+  <text x="775" y="202" text-anchor="middle" class="head">Inicio de Express</text>
+  <text x="575" y="255" class="path">server.js</text><text x="735" y="255" class="body">comprueba MySQL e inicia el puerto</text>
+  <path d="M775 270 V300" class="line"/>
+  <text x="575" y="335" class="path">app.js</text><text x="735" y="335" class="body">registra middlewares y rutas</text>
+  <text x="575" y="393" class="path">index.js</text><text x="735" y="393" class="body">exporta app para otros servidores</text>
+  <text x="575" y="432" class="small">npm run dev inicia src/server.js con nodemon</text>
+
+  <rect x="1075" y="155" width="460" height="190" rx="18" class="card"/>
+  <rect x="1075" y="155" width="460" height="10" rx="5" fill="#25836d"/>
+  <text x="1305" y="202" text-anchor="middle" class="head">Configuración local</text>
+  <text x="1110" y="253" class="path">.env.example</text><text x="1275" y="253" class="body">plantilla de variables</text>
+  <text x="1110" y="295" class="path">.env</text><text x="1275" y="295" class="body">conexión local, no se sube a Git</text>
+  <text x="1110" y="326" class="small">package.json define dependencias y comandos.</text>
+
+  <rect x="1075" y="385" width="460" height="190" rx="18" class="card"/>
+  <rect x="1075" y="385" width="460" height="10" rx="5" fill="#7255a0"/>
+  <text x="1305" y="432" text-anchor="middle" class="head">Base de datos</text>
+  <text x="1110" y="483" class="path">database/schema.sql</text><text x="1345" y="483" class="body">esquema MySQL</text>
+  <text x="1110" y="525" class="path">database/migrations/</text><text x="1345" y="525" class="body">cambios versionados</text>
+  <text x="1110" y="556" class="small">Se ejecutó desde MySQL Workbench.</text>
+
+  <rect x="540" y="510" width="470" height="165" rx="18" class="card"/>
+  <rect x="540" y="510" width="470" height="10" rx="5" fill="#2777a2"/>
+  <text x="775" y="557" text-anchor="middle" class="head">Pruebas de la API</text>
+  <text x="575" y="604" class="path">bruno/KarenFlix API/</text>
+  <text x="575" y="639" class="body">Solicitudes, variables y datos JSON</text>
+
+  <rect x="540" y="710" width="470" height="105" rx="18" class="card"/>
+  <rect x="540" y="710" width="470" height="9" rx="5" fill="#72879a"/>
+  <text x="575" y="752" class="path">.github/workflows/</text><text x="760" y="752" class="body">revisión de calidad</text>
+  <text x="575" y="778" class="small">node_modules: dependencias locales, excluidas de Git.</text>
+  <text x="575" y="800" class="small">uploads/posters: sin ruta de carga activa.</text>
+
+  <rect x="1075" y="615" width="460" height="160" rx="18" class="card"/>
+  <rect x="1075" y="615" width="460" height="10" rx="5" fill="#b7791f"/>
+  <text x="1305" y="662" text-anchor="middle" class="head">Documentación</text>
+  <text x="1110" y="710" class="path">docs/</text><text x="1210" y="710" class="body">historias, diagramas y contrato</text>
+  <text x="1110" y="749" class="small">Swagger se publicó en /api-docs.</text>
+
+  <path d="M1075 295 H1018" class="line"/>
+  <path d="M775 510 V463" class="line"/>
+  <text x="800" y="855" text-anchor="middle" class="sub">La interfaz web se conectó con Express; Express fue el único componente que accedió directamente a MySQL.</text>
+</svg>
