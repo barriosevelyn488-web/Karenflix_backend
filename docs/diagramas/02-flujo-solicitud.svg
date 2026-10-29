@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-labelledby="t d">
+  <title id="t">Flujo de una solicitud en la API KarenFlix</title>
+  <desc id="d">Un cliente envía una solicitud que pasa por Express, middleware, rutas, validación, controladores, DTO, servicios y repositorios hasta MySQL. La respuesta y los errores vuelven por Express.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#46647d"/></marker><marker id="b" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M10 0L0 5L10 10z" fill="#17806b"/></marker><style>
+    text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#19354b}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#536c80}.head{font-size:18px;font-weight:700}.path{font:13px Consolas,"Courier New",monospace;fill:#526b7d}.body{font-size:15px;fill:#38556b}.small{font-size:14px;fill:#506a7e}.card{fill:#fff;stroke:#c2d0da;stroke-width:2}.both{fill:none;stroke:#46647d;stroke-width:3;marker-start:url(#b);marker-end:url(#a)}
+  </style></defs>
+  <rect width="1800" height="900" fill="#f3f7fa"/>
+  <text x="60" y="68" class="title">Qué ocurre cuando llega una solicitud</text>
+  <text x="60" y="102" class="sub">El mismo recorrido se utiliza para categorías, películas, reseñas, autenticación y ranking.</text>
+
+  <g>
+    <rect x="45" y="205" width="190" height="300" rx="16" class="card"/><rect x="45" y="205" width="190" height="9" rx="5" fill="#2777a2"/>
+    <text x="140" y="250" text-anchor="middle" class="head">1 · Cliente</text><text x="140" y="280" text-anchor="middle" class="path">Frontend / Bruno</text>
+    <text x="65" y="330" class="body">Envía HTTP</text><text x="65" y="356" class="body">Recibe JSON</text><text x="65" y="402" class="small">Cookie o</text><text x="65" y="424" class="small">Bearer JWT</text>
+
+    <rect x="265" y="205" width="190" height="300" rx="16" class="card"/><rect x="265" y="205" width="190" height="9" rx="5" fill="#b7791f"/>
+    <text x="360" y="250" text-anchor="middle" class="head">2 · Express</text><text x="360" y="280" text-anchor="middle" class="path">src/app.js</text>
+    <text x="285" y="330" class="body">Crea request ID</text><text x="285" y="356" class="body">Helmet y CORS</text><text x="285" y="382" class="body">Lee JSON</text><text x="285" y="408" class="body">Rate limit / CSRF</text>
+
+    <rect x="485" y="205" width="190" height="300" rx="16" class="card"/><rect x="485" y="205" width="190" height="9" rx="5" fill="#7255a0"/>
+    <text x="580" y="250" text-anchor="middle" class="head">3 · Rutas</text><text x="580" y="280" text-anchor="middle" class="path">src/routes/</text>
+    <text x="505" y="330" class="body">Selecciona el recurso</text><text x="505" y="369" class="path">/auth</text><text x="505" y="394" class="path">/peliculas</text><text x="505" y="419" class="path">/resenas</text><text x="505" y="444" class="path">/categorias · /ranking</text>
+
+    <rect x="705" y="205" width="190" height="300" rx="16" class="card"/><rect x="705" y="205" width="190" height="9" rx="5" fill="#cf7a2c"/>
+    <text x="800" y="250" text-anchor="middle" class="head">4 · Validación</text><text x="800" y="280" text-anchor="middle" class="path">validators/</text>
+    <text x="725" y="330" class="body">Comprueba IDs</text><text x="725" y="356" class="body">y parámetros</text><text x="725" y="395" class="body">Revisa el cuerpo</text><text x="725" y="421" class="body">antes del controlador</text>
+
+    <rect x="925" y="205" width="190" height="300" rx="16" class="card"/><rect x="925" y="205" width="190" height="9" rx="5" fill="#25836d"/>
+    <text x="1020" y="250" text-anchor="middle" class="head">5 · Controlador</text><text x="1020" y="280" text-anchor="middle" class="path">controllers/ + DTO</text>
+    <text x="945" y="330" class="body">Llama al servicio</text><text x="945" y="369" class="body">Adapta la salida</text><text x="945" y="395" class="body">y responde con</text><text x="945" y="421" class="body">el código HTTP</text>
+
+    <rect x="1145" y="205" width="190" height="300" rx="16" class="card"/><rect x="1145" y="205" width="190" height="9" rx="5" fill="#2777a2"/>
+    <text x="1240" y="250" text-anchor="middle" class="head">6 · Servicio</text><text x="1240" y="280" text-anchor="middle" class="path">src/services/</text>
+    <text x="1165" y="330" class="body">Aplica reglas</text><text x="1165" y="356" class="body">de negocio</text><text x="1165" y="395" class="body">Abre transacciones</text><text x="1165" y="421" class="body">cuando corresponde</text>
+
+    <rect x="1365" y="205" width="190" height="300" rx="16" class="card"/><rect x="1365" y="205" width="190" height="9" rx="5" fill="#7255a0"/>
+    <text x="1460" y="250" text-anchor="middle" class="head">7 · Modelo</text><text x="1460" y="280" text-anchor="middle" class="path">src/models/</text>
+    <text x="1385" y="330" class="body">Ejecuta SQL</text><text x="1385" y="356" class="body">parametrizado</text><text x="1385" y="395" class="body">Entrega datos</text><text x="1385" y="421" class="body">al servicio</text>
+
+    <rect x="1585" y="205" width="190" height="300" rx="16" class="card"/><rect x="1585" y="205" width="190" height="9" rx="5" fill="#b7791f"/>
+    <text x="1680" y="250" text-anchor="middle" class="head">8 · MySQL</text><text x="1680" y="280" text-anchor="middle" class="path">InnoDB</text>
+    <text x="1605" y="330" class="body">Guarda y consulta</text><text x="1605" y="356" class="body">los registros</text><text x="1605" y="395" class="small">El pool se configura</text><text x="1605" y="421" class="path">en config/db.js</text>
+  </g>
+  <path d="M235 360 H257 M455 360 H477 M675 360 H697 M895 360 H917 M1115 360 H1137 M1335 360 H1357 M1555 360 H1577" class="both"/>
+
+  <rect x="90" y="590" width="1620" height="205" rx="18" fill="#e7eef3"/>
+  <text x="130" y="635" class="head">¿Qué pasa si ocurre un error?</text>
+  <text x="130" y="678" class="body">El servicio o el modelo envía el error al controlador; el controlador lo pasa a Express con next(error).</text>
+  <text x="130" y="711" class="body">El middleware errorHandler.js devuelve el código y el formato común. Si la ruta no existe, notFound responde 404.</text>
+  <text x="130" y="755" class="small">Las flechas verdes indican el regreso de datos o errores; las azules, la solicitud hacia MySQL.</text>
+</svg>

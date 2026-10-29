@@ -1,0 +1,33 @@
+meta {
+  name: "Rechazar reseña inválida"
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/api/v1/peliculas/{{movieId}}/resenas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "x",
+  "comentario": "",
+  "calificacion": 11
+}
+}
+
+tests {
+  test("Rechazar reseña inválida devuelve un estado esperado", function () {
+    expect([400]).to.include(res.getStatus());
+  });
+}

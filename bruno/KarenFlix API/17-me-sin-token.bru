@@ -1,0 +1,15 @@
+meta {
+  name: "Rechazar sesión anónima"
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/api/v1/auth/me
+}
+
+tests {
+  test("Rechazar sesión anónima devuelve un estado esperado", function () {
+    expect([401]).to.include(res.getStatus());
+  });
+}

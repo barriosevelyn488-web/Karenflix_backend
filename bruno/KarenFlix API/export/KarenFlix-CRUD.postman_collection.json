@@ -1,0 +1,270 @@
+{
+  "info": {
+    "_postman_id": "e83cb62e-574b-4f2f-a0fd-7252ad7ce152",
+    "name": "KarenFlix - CRUD API",
+    "description": "Peticiones para probar altas, consultas, cambios y eliminaciones de categorías, películas y reseñas. Configura los tokens y los IDs antes de ejecutarlas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "movieId", "value": "1" },
+    { "key": "reviewId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Listar categorias",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/categorias" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Crear categoria (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Categoria de prueba\",\n  \"descripcion\": \"Registro para probar el CRUD\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/categorias"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('categoryId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar categoria (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Categoria de prueba editada\",\n  \"descripcion\": \"Categoria actualizada\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/categorias/{{categoryId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar categoria (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/api/v1/categorias/{{categoryId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 204 o categoria referenciada', () => pm.expect([204, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Peliculas",
+      "item": [
+        {
+          "name": "Listar peliculas",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/peliculas?page=1&limit=20" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Ver pelicula",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/peliculas/{{movieId}}" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Proponer pelicula",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Pelicula prueba CRUD\",\n  \"descripcion\": \"Propuesta para validar el API\",\n  \"tipo\": \"pelicula\",\n  \"anio\": 2022,\n  \"categoria_id\": 1,\n  \"director\": \"Directora de prueba\",\n  \"actores\": [\"Actriz de prueba\"],\n  \"imagen_url\": \"https://images.example.org/poster.jpg\",\n  \"trailer_url\": \"https://www.youtube.com/watch?v=n9xhJrPXop4\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/peliculas"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('movieId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar pelicula (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Pelicula prueba CRUD editada\",\n  \"descripcion\": \"Datos actualizados\",\n  \"tipo\": \"pelicula\",\n  \"anio\": 2022,\n  \"categoria_id\": 1,\n  \"director\": \"Directora de prueba\",\n  \"actores\": [\"Actriz de prueba\"],\n  \"imagen_url\": \"https://images.example.org/poster.jpg\",\n  \"trailer_url\": \"https://www.youtube.com/watch?v=n9xhJrPXop4\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/peliculas/{{movieId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar pelicula (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/api/v1/peliculas/{{movieId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 204 o tiene reseñas', () => pm.expect([204, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Resenas",
+      "item": [
+        {
+          "name": "Listar reseñas por pelicula",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/peliculas/{{movieId}}/resenas" },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Crear reseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Reseña de prueba\",\n  \"comentario\": \"Contenido para probar reseñas\",\n  \"calificacion\": 8\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/peliculas/{{movieId}}/resenas"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('reviewId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar reseña propia",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Reseña actualizada\",\n  \"comentario\": \"Texto corregido durante la prueba\",\n  \"calificacion\": 9\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/v1/resenas/{{reviewId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));"] }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar reseña propia",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/resenas/{{reviewId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('HTTP 204', () => pm.response.to.have.status(204));"] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

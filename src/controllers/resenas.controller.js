@@ -1,5 +1,75 @@
-
-export const listarResenasPelicula = async (req, res, next) => { res.status(200).json({ status: "success", data: [] }); };
-export const crearResena = async (req, res, next) => { res.status(201).json({ status: "success", message: "Reseña creada" }); };
-export const eliminarResena = async (req, res, next) => { res.status(200).json({ status: "success", message: "Reseña eliminada" }); };
-export const reaccionarResena = async (req, res, next) => { res.status(200).json({ status: "success", message: "Reacción registrada" }); };
+import { ResenaService } from '../services/resenas.service.js';
+import { ReaccionService } from '../services/reacciones.service.js';
+import { createDto, createInputDto } from '../factories/dto.factory.js';
+export const listarResenasPelicula = async (req, res, next) => {
+  try {
+    res.json({
+      status: 'success',
+      data: (await ResenaService.listarPorPelicula(Number(req.params.id))).map((x) =>
+        createDto('resena', x)
+      )
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+export const crearResena = async (req, res, next) => {
+  try {
+    const datos = createInputDto('resena', req.body);
+    const id = await ResenaService.crear({
+      pelicula_id: Number(req.params.id),
+      usuario_id: req.user.id,
+      ...datos
+    });
+    res.status(201).json({ status: 'success', data: { id, ...datos, usuario_id: req.user.id } });
+  } catch (e) {
+    next(e);
+  }
+};
+export const actualizarResena = async (req, res, next) => {
+  try {
+    const datos = createInputDto('resena', req.body);
+    await ResenaService.actualizar(Number(req.params.id), req.user.id, datos);
+    res.json({
+      status: 'success',
+      data: { id: Number(req.params.id), ...datos, usuario_id: req.user.id }
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+export const eliminarResena = async (req, res, next) => {
+  try {
+    await ResenaService.eliminar(Number(req.params.id), req.user.id);
+    res.status(204).end();
+  } catch (e) {
+    next(e);
+  }
+};
+export const reaccionarResena = async (req, res, next) => {
+  try {
+    res.json({
+      status: 'success',
+      data: await ReaccionService.reaccionar({
+        usuarioId: req.user.id,
+        resenaId: Number(req.params.id),
+        tipo: req.body.tipo
+      })
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+export const quitarReaccion = async (req, res, next) => {
+  try {
+    res.json({
+      status: 'success',
+      data: await ReaccionService.quitar({
+        usuarioId: req.user.id,
+        resenaId: Number(req.params.id)
+      })
+    });
+  } catch (e) {
+    next(e);
+  }
+};

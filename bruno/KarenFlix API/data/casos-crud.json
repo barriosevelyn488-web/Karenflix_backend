@@ -1,0 +1,108 @@
+{
+  "nota": "Crea primero cada registro. La colección guarda el ID para usarlo después al consultar, editar o eliminar.",
+  "casos": [
+    {
+      "recurso": "categorias",
+      "operacion": "listar",
+      "metodo": "GET",
+      "ruta": "/api/v1/categorias",
+      "esperado": 200
+    },
+    {
+      "recurso": "categorias",
+      "operacion": "crear",
+      "metodo": "POST",
+      "ruta": "/api/v1/categorias",
+      "esperado": 201,
+      "archivo": "categoria.json",
+      "requiere": "adminToken"
+    },
+    {
+      "recurso": "categorias",
+      "operacion": "actualizar",
+      "metodo": "PUT",
+      "ruta": "/api/v1/categorias/{{categoryId}}",
+      "esperado": 200,
+      "requiere": "categoryId y adminToken"
+    },
+    {
+      "recurso": "categorias",
+      "operacion": "eliminar",
+      "metodo": "DELETE",
+      "ruta": "/api/v1/categorias/{{categoryId}}",
+      "esperado": 204,
+      "requiere": "categoryId y adminToken"
+    },
+    {
+      "recurso": "peliculas",
+      "operacion": "listar",
+      "metodo": "GET",
+      "ruta": "/api/v1/peliculas",
+      "esperado": 200
+    },
+    {
+      "recurso": "peliculas",
+      "operacion": "detalle",
+      "metodo": "GET",
+      "ruta": "/api/v1/peliculas/{{movieId}}",
+      "esperado": 200
+    },
+    {
+      "recurso": "peliculas",
+      "operacion": "proponer",
+      "metodo": "POST",
+      "ruta": "/api/v1/peliculas",
+      "esperado": 201,
+      "archivo": "pelicula.json",
+      "requiere": "token"
+    },
+    {
+      "recurso": "peliculas",
+      "operacion": "actualizar",
+      "metodo": "PUT",
+      "ruta": "/api/v1/peliculas/{{movieId}}",
+      "esperado": 200,
+      "requiere": "movieId y adminToken"
+    },
+    {
+      "recurso": "peliculas",
+      "operacion": "eliminar",
+      "metodo": "DELETE",
+      "ruta": "/api/v1/peliculas/{{movieId}}",
+      "esperado": 204,
+      "requiere": "movieId y adminToken"
+    },
+    {
+      "recurso": "resenas",
+      "operacion": "listar por pelicula",
+      "metodo": "GET",
+      "ruta": "/api/v1/peliculas/{{movieId}}/resenas",
+      "esperado": 200
+    },
+    {
+      "recurso": "resenas",
+      "operacion": "crear",
+      "metodo": "POST",
+      "ruta": "/api/v1/peliculas/{{movieId}}/resenas",
+      "esperado": 201,
+      "archivo": "resena.json",
+      "requiere": "token"
+    },
+    {
+      "recurso": "resenas",
+      "operacion": "actualizar",
+      "metodo": "PUT",
+      "ruta": "/api/v1/resenas/{{reviewId}}",
+      "esperado": 200,
+      "requiere": "reviewId y token propietario"
+    },
+    {
+      "recurso": "resenas",
+      "operacion": "eliminar",
+      "metodo": "DELETE",
+      "ruta": "/api/v1/resenas/{{reviewId}}",
+      "esperado": 204,
+      "requiere": "reviewId y token propietario"
+    }
+  ]
+}

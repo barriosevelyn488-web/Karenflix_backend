@@ -1,0 +1,20 @@
+meta {
+  name: "Eliminar categoria"
+  type: http
+  seq: 26
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/categorias/{{categoryId}}
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("La categoria se elimina correctamente", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

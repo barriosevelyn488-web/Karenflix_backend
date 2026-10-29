@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="t d">
+  <title id="t">Conexión de KarenFlix en local y producción</title>
+  <desc id="d">El frontend y Bruno llaman a Express. Express comprueba el origen, gestiona cookies o JWT y accede a MySQL mediante variables de entorno; en producción se requiere HTTPS y TLS de base de datos.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#46647d"/></marker><style>
+    text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#19354b}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#536c80}.head{font-size:19px;font-weight:700}.path{font:14px Consolas,"Courier New",monospace;fill:#526b7d}.body{font-size:15px;fill:#38556b}.small{font-size:13px;fill:#506a7e}.card{fill:#fff;stroke:#c2d0da;stroke-width:2}.flow{fill:none;stroke:#46647d;stroke-width:3;marker-end:url(#a)}
+  </style></defs>
+  <rect width="1600" height="1000" fill="#f3f7fa"/>
+  <text x="60" y="68" class="title">Conexión del frontend, la API y MySQL</text>
+  <text x="60" y="102" class="sub">El mismo diseño se usó en desarrollo local y se configuró con dominios y credenciales distintos para producción.</text>
+
+  <rect x="60" y="150" width="1480" height="360" rx="20" fill="#eaf2f7"/>
+  <text x="95" y="190" class="head">Desarrollo local</text>
+  <rect x="100" y="225" width="330" height="180" rx="15" class="card"/>
+  <text x="265" y="265" text-anchor="middle" class="head">Frontend</text><text x="265" y="298" text-anchor="middle" class="path">http://localhost:&lt;puerto&gt;</text><text x="125" y="345" class="body">fetch con credentials: 'include'</text><text x="125" y="378" class="small">Origen agregado a CORS_ORIGIN</text>
+  <rect x="635" y="225" width="330" height="180" rx="15" class="card"/>
+  <text x="800" y="265" text-anchor="middle" class="head">Express API</text><text x="800" y="298" text-anchor="middle" class="path">http://localhost:3000</text><text x="660" y="345" class="body">npm run dev</text><text x="660" y="378" class="small">JWT cookie o Authorization Bearer</text>
+  <rect x="1170" y="225" width="330" height="180" rx="15" class="card"/>
+  <text x="1335" y="265" text-anchor="middle" class="head">MySQL local</text><text x="1335" y="298" text-anchor="middle" class="path">127.0.0.1:3306 / karenflix</text><text x="1195" y="345" class="body">Credenciales del servidor MySQL</text><text x="1195" y="378" class="small">Configuradas en .env</text>
+  <path d="M430 315 H627 M965 315 H1162" class="flow"/>
+  <rect x="470" y="430" width="660" height="48" rx="24" fill="#fff"/>
+  <text x="800" y="460" text-anchor="middle" class="small">Bruno usa el mismo API local mediante baseUrl = http://localhost:3000</text>
+
+  <rect x="60" y="550" width="1480" height="360" rx="20" fill="#e7f2ed"/>
+  <text x="95" y="590" class="head">Producción: el despliegue aún requiere configuración del proveedor</text>
+  <rect x="100" y="625" width="330" height="180" rx="15" class="card"/>
+  <text x="265" y="665" text-anchor="middle" class="head">Frontend publicado</text><text x="265" y="698" text-anchor="middle" class="path">https://frontend.ejemplo</text><text x="125" y="745" class="body">CORS_ORIGIN igual al dominio</text><text x="125" y="778" class="small">fetch mantiene credentials: 'include'</text>
+  <rect x="635" y="625" width="330" height="180" rx="15" class="card"/>
+  <text x="800" y="665" text-anchor="middle" class="head">Node.js / Express</text><text x="800" y="698" text-anchor="middle" class="path">https://api.ejemplo</text><text x="660" y="745" class="body">Secrets en el proveedor</text><text x="660" y="778" class="small">Cookie Secure · SameSite=None</text>
+  <rect x="1170" y="625" width="330" height="180" rx="15" class="card"/>
+  <text x="1335" y="665" text-anchor="middle" class="head">MySQL administrado</text><text x="1335" y="698" text-anchor="middle" class="path">host y puerto del proveedor</text><text x="1195" y="745" class="body">DB_SSL=true · certificado CA</text><text x="1195" y="778" class="small">Usuario de permisos limitados</text>
+  <path d="M430 715 H627 M965 715 H1162" class="flow"/>
+  <text x="800" y="855" text-anchor="middle" class="body">Los dominios de ejemplo se reemplazaron por los asignados por el equipo y el proveedor de alojamiento.</text>
+  <text x="800" y="883" text-anchor="middle" class="small">No se incluyeron contraseñas, JWT_SECRET ni certificados en Git.</text>
+</svg>
