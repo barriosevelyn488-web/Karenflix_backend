@@ -41,6 +41,14 @@ export const env = {
 if (env.jwt.secret.length < 32) throw new Error('JWT_SECRET debe tener al menos 32 caracteres');
 
 if (env.nodeEnv === 'production') {
+  if (
+    [
+      'replace-with-a-random-secret-at-least-32-characters-long',
+      'dev-only-change-this-secret-32-chars-min'
+    ].includes(env.jwt.secret)
+  ) {
+    throw new Error('JWT_SECRET debe ser una clave aleatoria propia en producción');
+  }
   for (const key of ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'CORS_ORIGIN']) {
     if (!process.env[key]) throw new Error(`${key} es obligatorio en producción`);
   }
