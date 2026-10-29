@@ -1,8 +1,8 @@
 # Pruebas de la API KarenFlix
 
-Abre esta carpeta en Bruno y selecciona el entorno `Local`. Primero levanta la API y confirma que MySQL esté conectado. Inicia sesión con tus cuentas de prueba y copia sus JWT en `token` y `adminToken` antes de ejecutar las peticiones protegidas.
+Las pruebas usan el entorno `Local` de Bruno y requieren que la API esté conectada a MySQL. Inicia sesión con las cuentas de prueba y guarda sus JWT en `token` y `adminToken`; varias peticiones necesitan esos valores para ejecutarse.
 
-Las peticiones están numeradas para que puedas seguir el flujo. Al crear una categoría, película o reseña, Bruno guarda su ID en el entorno. Usa ese mismo ID en las peticiones de edición y eliminación.
+Las peticiones numeradas siguen el flujo de uso. Bruno guarda en el entorno el ID de cada categoría, película o reseña que se crea y lo usa después para editarla o eliminarla.
 
 Si vas a usar Postman, importa `export/KarenFlix-CRUD.postman_collection.json`. Los cuerpos de las peticiones están en `data/`; `data/casos-crud.json` tiene la lista de operaciones y el código HTTP que debería devolver cada una. Cambia los nombres de prueba si ya existen en tu base.
 
