@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>KarenFlix - Documento SCRUM</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: #333333;
+      background: #ffffff;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .page {
+      width: 210mm;
+      height: 297mm;
+      padding: 22mm 20mm 20mm 20mm;
+      position: relative;
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .page-footer {
+      position: absolute;
+      bottom: 12mm;
+      right: 20mm;
+      font-size: 11px;
+      color: #888888;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Portada */
+    .cover-page {
+      padding: 35mm 20mm 25mm 20mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cover-header-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #4a5568;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .cover-main-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 46px;
+      font-weight: 900;
+      color: #1a2b4c;
+      margin: 0 0 14px 0;
+      line-height: 1.05;
+    }
+    .cover-sub-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    .cover-meta-topics {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: #718096;
+      font-weight: 500;
+    }
+    .cover-teal-bar {
+      width: 100%;
+      height: 9px;
+      background-color: #0b6969;
+      margin: 35mm 0 25mm 0;
+    }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .cover-card {
+      background-color: #f0f4f8;
+      padding: 12px 14px;
+      border-radius: 4px;
+    }
+    .cover-card.card-teal {
+      background-color: #e6f4f1;
+    }
+    .cover-card.card-orange {
+      background-color: #fdf2e9;
+    }
+    .cover-card.card-purple {
+      background-color: #f0eef9;
+    }
+    .cover-card-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .card-teal .cover-card-label { color: #0b6969; }
+    .card-purple .cover-card-label { color: #4a3aff; }
+    .card-orange .cover-card-label { color: #d35400; }
+    .cover-card-value {
+      font-family: 'Roboto', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #1a2b4c;
+      line-height: 1.35;
+    }
+
+    /* Títulos de sección */
+    .section-banner {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .section-num-box {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      margin-right: 15px;
+      min-width: 50px;
+      text-align: center;
+    }
+    .box-green { background-color: #107c6f; }
+    .box-blue { background-color: #2b43b6; }
+    .box-orange { background-color: #f25c3b; }
+    .box-royal { background-color: #1e5bb8; }
+    .box-purple { background-color: #6b46c1; }
+
+    .section-title-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a2b4c;
+      margin: 0;
+    }
+
+    /* Tablas */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+    table.data-table th, table.data-table td {
+      border: 1px solid #e2e8f0;
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.data-table th {
+      background-color: #f8fafc;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #1a2b4c;
+      font-size: 12px;
+    }
+    table.data-table tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    /* Cards de Rol (Página 3) */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 15px 0 20px 0;
+    }
+    .role-card-header {
+      background-color: #107c6f;
+      color: #ffffff;
+      padding: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 4px 4px 0 0;
+      text-align: center;
+    }
+    .role-card-body {
+      background-color: #e6f4f1;
+      padding: 12px;
+      font-size: 11.5px;
+      border-radius: 0 0 4px 4px;
+      min-height: 145px;
+    }
+    .role-card-body strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #0b6969;
+    }
+    .role-card-body ul {
+      margin: 0;
+      padding-left: 15px;
+    }
+    .role-card-body li {
+      margin-bottom: 4px;
+    }
+
+    /* Callout verde / naranja */
+    .callout-box {
+      border-left: 4px solid #107c6f;
+      background-color: #f0f7f6;
+      padding: 12px 15px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 12.5px;
+    }
+    .callout-box-orange {
+      border-left: 4px solid #d97706;
+      background-color: #fffbeb;
+      padding: 14px 16px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 12.5px;
+    }
+
+    /* Parámetros Sprint (Página 5) */
+    .params-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 15px 0 20px 0;
+    }
+    .param-box {
+      background-color: #f0f4f8;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .param-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      color: #2b43b6;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .param-value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #1a2b4c;
+    }
+
+    /* Fichas de Historia de Usuario */
+    .hu-card {
+      border: 1px solid #cbd5e1;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .hu-card-header {
+      background-color: #ea580c;
+      color: #ffffff;
+      padding: 7px 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .hu-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+    .hu-table td {
+      border: 1px solid #e2e8f0;
+      padding: 6px 10px;
+      vertical-align: top;
+    }
+    .hu-table td.hu-label {
+      width: 25%;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #ea580c;
+      background-color: #fffaf0;
+    }
+    .hu-table td.hu-value {
+      width: 75%;
+      background-color: #ffffff;
+    }
+    .check-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .check-list li {
+      margin-bottom: 3px;
+      position: relative;
+      padding-left: 18px;
+    }
+    .check-list li::before {
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+    .check-list li.checked::before {
+      content: '☑';
+      color: #16a34a;
+    }
+    .check-list li.unchecked::before {
+      content: '☐';
+      color: #64748b;
+    }
+
+    /* Status badge */
+    .badge-realizado {
+      color: #166534;
+      background-color: #dcfce7;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .badge-proceso {
+      color: #854d0e;
+      background-color: #fef9c3;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .badge-hacer {
+      color: #475569;
+      background-color: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Contenido página 2 */
+    .toc-item {
+      display: flex;
+      margin-bottom: 12px;
+      background: #f8fafc;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .toc-num {
+      padding: 12px 18px;
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 60px;
+    }
+    .toc-body {
+      padding: 10px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .toc-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a2b4c;
+    }
+    .toc-desc {
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    /* Columnas Kanban página 24 */
+    .kanban-cols {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 15px 0;
+    }
+    .k-col-head {
+      padding: 7px;
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 3px 3px 0 0;
+    }
+    .k-col-body {
+      background: #f1f5f9;
+      padding: 8px;
+      font-size: 10px;
+      border-radius: 0 0 3px 3px;
+      min-height: 80px;
+      color: #334155;
+    }
+
+    /* Evidencias página 25 */
+    .box-retro {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .retro-col {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .retro-head {
+      padding: 6px 10px;
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .retro-body {
+      padding: 8px 10px;
+      font-size: 10.5px;
+      color: #334155;
+    }
+    .retro-body ul {
+      margin: 0;
+      padding-left: 14px;
+    }
+    .retro-body li {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PÁGINA 1: PORTADA -->
+  <div class="page cover-page">
+    <div>
+      <div class="cover-header-tag">DOCUMENTO DE GESTIÓN ÁGIL</div>
+      <div class="cover-main-title">Documento SCRUM</div>
+      <div class="cover-sub-title">KarenFlix — Reseñas y ranking de películas, series y anime</div>
+      <div class="cover-meta-topics">Roles · Sprints · Historias de usuario · Seguimiento · Evidencias</div>
+    </div>
+
+    <div>
+      <div class="cover-teal-bar"></div>
+      <div class="cover-grid">
+        <div class="cover-card card-teal">
+          <div class="cover-card-label">ESTUDIANTES</div>
+          <div class="cover-card-value">Evelyn Barrios (Persona 1 · Scrum Master)<br>Wilder Katu (Persona 2 · Product Owner)</div>
+        </div>
+        <div class="cover-card card-purple">
+          <div class="cover-card-label">DOCENTES EVALUADORES</div>
+          <div class="cover-card-value">Eduin Salas<br>Andre Lopez</div>
+        </div>
+        <div class="cover-card card-orange">
+          <div class="cover-card-label">INSTITUCIÓN / PROGRAMA</div>
+          <div class="cover-card-value">Campuslands · Desarrollo Web Full-Stack / Node.js & Express</div>
+        </div>
+        <div class="cover-card">
+          <div class="cover-card-label">PERIODO</div>
+          <div class="cover-card-value">26/10/2026 – 30/10/2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 1</div>
+  </div>
+
+  <!-- PÁGINA 2: CONTENIDO -->
+  <div class="page">
+    <h2 style="font-family:'Montserrat',sans-serif; font-size:24px; font-weight:800; color:#1a2b4c; margin-top:0; margin-bottom:12px;">Contenido</h2>
+    <p style="font-size:13px; color:#4a5568; margin-bottom:25px;">
+      Este documento reúne la gestión de <strong>KarenFlix</strong> bajo la metodología SCRUM: una aplicación full-stack (Node.js + Express + MySQL en el backend y HTML, CSS y JavaScript puro en el frontend) para registrar, calificar y rankear películas, series y anime. El trabajo se realiza en pareja durante 2 sprints.
+    </p>
+
+    <div class="toc-item">
+      <div class="toc-num box-green">01</div>
+      <div class="toc-body">
+        <div class="toc-title">Roles asignados</div>
+        <div class="toc-desc">Quién ocupa cada rol Scrum y qué responsabilidades asume.</div>
+      </div>
+    </div>
+
+    <div class="toc-item">
+      <div class="toc-num box-blue">02</div>
+      <div class="toc-body">
+        <div class="toc-title">Definición de sprints</div>
+        <div class="toc-desc">Duración, objetivos, fechas y ceremonias de cada sprint.</div>
+      </div>
+    </div>
+
+    <div class="toc-item">
+      <div class="toc-num box-orange">03</div>
+      <div class="toc-body">
+        <div class="toc-title">Historias de usuario</div>
+        <div class="toc-desc">Backlog priorizado y fichas con criterios de aceptación.</div>
+      </div>
+    </div>
+
+    <div class="toc-item">
+      <div class="toc-num box-royal">04</div>
+      <div class="toc-body">
+        <div class="toc-title">Herramienta de seguimiento</div>
+        <div class="toc-desc">Tablero, columnas de flujo y campos registrados por tarea.</div>
+      </div>
+    </div>
+
+    <div class="toc-item">
+      <div class="toc-num box-purple">05</div>
+      <div class="toc-body">
+        <div class="toc-title">Evidencias</div>
+        <div class="toc-desc">Lista de verificación, capturas del tablero y cierre.</div>
+      </div>
+    </div>
+
+    <div class="page-footer">Documento SCRUM · Página 2</div>
+  </div>
+
+  <!-- PÁGINA 3: 01 ROLES ASIGNADOS -->
+  <div class="page">
+    <div class="section-banner">
+      <div class="section-num-box box-green">01</div>
+      <h2 class="section-title-text">Roles asignados</h2>
+    </div>
+    <p>El equipo es una pareja: cada integrante asume un rol Scrum y ambos son developers con módulos completos (backend + frontend).</p>
+
+    <div class="roles-grid">
+      <div>
+        <div class="role-card-header">Product Owner</div>
+        <div class="role-card-body">
+          <strong>Responsable: Wilder Katu</strong>
+          <ul>
+            <li>Define y prioriza el backlog</li>
+            <li>Redacta las historias de usuario</li>
+            <li>Acepta o rechaza los entregables</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="role-card-header">Scrum Master</div>
+        <div class="role-card-body">
+          <strong>Responsable: Evelyn Barrios</strong>
+          <ul>
+            <li>Facilita las ceremonias del sprint</li>
+            <li>Identifica y elimina impedimentos</li>
+            <li>Vela por el cumplimiento del proceso</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="role-card-header">Equipo de desarrollo</div>
+        <div class="role-card-body">
+          <strong>Responsable: Evelyn Barrios y Wilder Katu</strong>
+          <ul>
+            <li>Estima y ejecuta las tareas</li>
+            <li>Entrega incrementos funcionales</li>
+            <li>Registra evidencias del sprint</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:14px; font-weight:700; color:#1a2b4c; margin-top:20px; margin-bottom:8px;">Asignación de roles</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width:20%;">Rol</th>
+          <th style="width:25%;">Persona asignada</th>
+          <th style="width:20%;">Sprints en los que actúa</th>
+          <th style="width:35%;">Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Product Owner</strong></td>
+          <td>Wilder Katu</td>
+          <td>Sprint 1 – 2</td>
+          <td>Prioriza el backlog, redacta las HU y acepta entregables. También desarrolla reseñas, ranking, listados y el frontend principal.</td>
+        </tr>
+        <tr>
+          <td><strong>Scrum Master</strong></td>
+          <td>Evelyn Barrios</td>
+          <td>Sprint 1 – 2</td>
+          <td>Dirige la daily, la review y la retro y registra evidencias. También desarrolla auth, catálogo, seguridad y el panel admin.</td>
+        </tr>
+        <tr>
+          <td><strong>Equipo de desarrollo</strong></td>
+          <td>Evelyn Barrios y Wilder Katu</td>
+          <td>Sprint 1 – 2</td>
+          <td>Reparto vertical: cada uno hace sus módulos del backend al frontend. Cada PR lo aprueba la otra persona del equipo.</td>
+        </tr>
+        <tr>
+          <td><strong>Revisores / docentes</strong></td>
+          <td>Eduin Salas y Andre Lopez</td>
+          <td>Sprint 1 – 2</td>
+          <td>Agregados como colaboradores en los dos repos privados.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-footer">Documento SCRUM · Página 3</div>
+  </div>
+
+  <!-- PÁGINA 4: TRABAJO EN PAREJA -->
+  <div class="page">
+    <div class="callout-box" style="margin-top: 15mm; font-size:14px; line-height:1.6;">
+      <strong style="color:#0b6969; font-size:16px; font-family:'Montserrat',sans-serif; display:block; margin-bottom:8px;">Trabajo en pareja</strong>
+      Al final de cada daily, cada integrante explica sus cambios a la otra durante 15 minutos (<strong>"explícame tu PR"</strong>), para que ambos dominen todo el código de punta a punta.
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 4</div>
+  </div>
+
+  <!-- PÁGINA 5: 02 DEFINICIÓN DE SPRINTS -->
+  <div class="page">
+    <div class="section-banner">
+      <div class="section-num-box box-blue">02</div>
+      <h2 class="section-title-text">Definición de sprints</h2>
+    </div>
+    <p>Describa la duración, los objetivos y las fechas de cada sprint, así como las ceremonias que se realizan.</p>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c;">Parámetros generales</h3>
+    <div class="params-grid">
+      <div class="param-box">
+        <div class="param-title">DURACIÓN DEL SPRINT</div>
+        <div class="param-value">2 a 3 días</div>
+      </div>
+      <div class="param-box">
+        <div class="param-title">NÚMERO DE SPRINTS</div>
+        <div class="param-value">2</div>
+      </div>
+      <div class="param-box">
+        <div class="param-title">CAPACIDAD POR SPRINT</div>
+        <div class="param-value">32 – 48 h</div>
+      </div>
+      <div class="param-box">
+        <div class="param-title">FECHA DE INICIO</div>
+        <div class="param-value">26/10/2026</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c;">Plan de sprints</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width:15%;">Sprint</th>
+          <th style="width:50%;">Objetivo del sprint</th>
+          <th style="width:12%;">Inicio</th>
+          <th style="width:10%;">Fin</th>
+          <th style="width:13%;">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sprint 1</strong></td>
+          <td>Base técnica, autenticación con roles, catálogo (categorías y películas), seed realista y base visual del frontend. (37 pts)</td>
+          <td>26/10</td>
+          <td>27/10</td>
+          <td><span class="badge-realizado">Realizado</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 2</strong></td>
+          <td>Reseñas con transacciones, likes/dislikes, ranking, frontend completo, panel admin, documentación, despliegue en Vercel y entrega. (46 pts)</td>
+          <td>28/10</td>
+          <td>30/10</td>
+          <td><span class="badge-proceso">En proceso</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c;">Ceremonias</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
+      <div style="background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+        <strong style="color:#2b43b6; font-family:'Montserrat',sans-serif;">Planificación</strong><br>
+        <span style="font-size:11px; color:#64748b;">Día 1 y día 3 · 1 hora</span>
+        <p style="margin:4px 0 0 0; font-size:11.5px;">Definir el objetivo del sprint, seleccionar historias y repartir subtareas.</p>
+      </div>
+      <div style="background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+        <strong style="color:#2b43b6; font-family:'Montserrat',sans-serif;">Daily</strong><br>
+        <span style="font-size:11px; color:#64748b;">Diario, máximo 15 min</span>
+        <p style="margin:4px 0 0 0; font-size:11.5px;">Avance, próximos pasos y bloqueos; después, 15 min de "explícame tu PR".</p>
+      </div>
+      <div style="background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+        <strong style="color:#2b43b6; font-family:'Montserrat',sans-serif;">Revisión</strong><br>
+        <span style="font-size:11px; color:#64748b;">Cierre de cada sprint (días 2 y 5)</span>
+        <p style="margin:4px 0 0 0; font-size:11.5px;">Demo de lo terminado en el frontend y en Swagger; se graba como evidencia.</p>
+      </div>
+      <div style="background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+        <strong style="color:#2b43b6; font-family:'Montserrat',sans-serif;">Retrospectiva</strong><br>
+        <span style="font-size:11px; color:#64748b;">Tras la revisión</span>
+        <p style="margin:4px 0 0 0; font-size:11.5px;">Qué funcionó, qué mejorar y una acción concreta para el siguiente sprint.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">Documento SCRUM · Página 5</div>
+  </div>
+
+  <!-- PÁGINA 6: DEFINICIÓN DE HECHO (DoD) -->
+  <div class="page">
+    <div class="callout-box-orange" style="margin-top: 15mm;">
+      <h3 style="font-family:'Montserrat',sans-serif; font-size:15px; font-weight:700; color:#b45309; margin-top:0; margin-bottom:10px;">Definición de Hecho (DoD)</h3>
+      <ul style="margin:0; padding-left:18px; line-height:1.7;">
+        <li>Código en una rama feature y PR aprobado por la otra persona del equipo.</li>
+        <li>Criterios de aceptación cumplidos y probados en Bruno.</li>
+        <li>Endpoint documentado en Swagger.</li>
+        <li>Errores con el código HTTP correcto y mensaje claro en el frontend.</li>
+        <li>Sin errores críticos ni credenciales en el repositorio.</li>
+        <li>Tarjeta movida a Hecho con su evidencia en el tablero.</li>
+      </ul>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 6</div>
+  </div>
+
+  <!-- PÁGINA 7: 03 HISTORIAS DE USUARIO Y BACKLOG 1 -->
+  <div class="page">
+    <div class="section-banner">
+      <div class="section-num-box box-orange">03</div>
+      <h2 class="section-title-text">Historias de usuario</h2>
+    </div>
+    <p>Redacte cada historia con el formato: <em>Como [rol], quiero [acción], para [beneficio]</em>. Los criterios de aceptación deben poder verificarse.</p>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:10px;">Épicas del producto</h3>
+    <table class="data-table" style="font-size:11px;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Épica / módulo</th>
+          <th>Historias</th>
+          <th>Puntos</th>
+          <th>Sprint</th>
+          <th>Responsable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>EP-01</strong></td><td>Arquitectura y configuración — Node.js + Express, MySQL, capas, SOLID, errores y SemVer</td><td>HU-01, HU-02</td><td>8</td><td>Sprint 1</td><td>Evelyn Barrios</td></tr>
+        <tr><td><strong>EP-02</strong></td><td>Usuarios y seguridad — registro, login JWT, passport, roles, rate limit y CORS</td><td>HU-03 – HU-05</td><td>11</td><td>Sprint 1</td><td>Evelyn Barrios</td></tr>
+        <tr><td><strong>EP-03</strong></td><td>Catálogo — categorías, películas y series, aprobación y pósters</td><td>HU-06 – HU-08, HU-17</td><td>14</td><td>Sprint 1 – 2</td><td>Evelyn Barrios</td></tr>
+        <tr><td><strong>EP-04</strong></td><td>Reseñas y reacciones — CRUD de reseñas y likes/dislikes con transacciones</td><td>HU-11, HU-12</td><td>13</td><td>Sprint 2</td><td>Wilder Katu</td></tr>
+        <tr><td><strong>EP-05</strong></td><td>Ranking y listados — ranking ponderado, filtros, orden y paginación</td><td>HU-13, HU-14</td><td>10</td><td>Sprint 2</td><td>Wilder Katu</td></tr>
+        <tr><td><strong>EP-06</strong></td><td>Frontend y experiencia de usuario — base visual, detalle y panel admin</td><td>HU-09, HU-15, HU-16</td><td>13</td><td>Sprint 1 – 2</td><td>Wilder Katu · Evelyn Barrios</td></tr>
+        <tr><td><strong>EP-07</strong></td><td>Datos, pruebas y calidad — seed realista, Bruno y casos borde</td><td>HU-10, HU-19</td><td>5</td><td>Sprint 1 – 2</td><td>Evelyn Barrios y Wilder Katu</td></tr>
+        <tr><td><strong>EP-08</strong></td><td>Documentación, despliegue y entrega — Swagger, README, Vercel, PDF SCRUM y video</td><td>HU-18, HU-20, HU-21</td><td>9</td><td>Sprint 2</td><td>Evelyn Barrios y Wilder Katu</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:10px;">Backlog priorizado</h3>
+    <table class="data-table" style="font-size:11px;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Historia</th>
+          <th>Prioridad</th>
+          <th>Puntos</th>
+          <th>Sprint</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>HU-01</strong></td><td>Configuración del proyecto y base de datos</td><td>Alta</td><td>5</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-02</strong></td><td>Arquitectura por capas y manejo de errores</td><td>Alta</td><td>3</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+      </tbody>
+    </table>
+    <div class="page-footer">Documento SCRUM · Página 7</div>
+  </div>
+
+  <!-- PÁGINA 8: BACKLOG PRIORIZADO 2 -->
+  <div class="page">
+    <table class="data-table" style="font-size:11.5px; margin-top:0;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Historia</th>
+          <th>Prioridad</th>
+          <th>Puntos</th>
+          <th>Sprint</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>HU-03</strong></td><td>Registro de usuarios</td><td>Alta</td><td>3</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-04</strong></td><td>Inicio de sesión con JWT</td><td>Alta</td><td>5</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-05</strong></td><td>Roles y protección de rutas</td><td>Alta</td><td>3</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-06</strong></td><td>Gestión de categorías</td><td>Alta</td><td>3</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-07</strong></td><td>Registro y gestión de películas y series</td><td>Alta</td><td>5</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-08</strong></td><td>Aprobación de películas</td><td>Alta</td><td>3</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-09</strong></td><td>Base visual del frontend y cliente de la API</td><td>Alta</td><td>5</td><td>Sprint 1</td><td><span class="badge-proceso">En proceso</span></td></tr>
+        <tr><td><strong>HU-10</strong></td><td>Datos de prueba realistas</td><td>Media</td><td>2</td><td>Sprint 1</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-11</strong></td><td>Gestión de reseñas con transacción</td><td>Alta</td><td>8</td><td>Sprint 2</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-12</strong></td><td>Like y dislike en reseñas</td><td>Alta</td><td>5</td><td>Sprint 2</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-13</strong></td><td>Ranking ponderado</td><td>Alta</td><td>5</td><td>Sprint 2</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-14</strong></td><td>Listado con filtros, orden y paginación</td><td>Alta</td><td>5</td><td>Sprint 2</td><td><span class="badge-proceso">En proceso</span></td></tr>
+        <tr><td><strong>HU-15</strong></td><td>Detalle de película con reseñas</td><td>Alta</td><td>3</td><td>Sprint 2</td><td><span class="badge-proceso">En proceso</span></td></tr>
+        <tr><td><strong>HU-16</strong></td><td>Panel de administración</td><td>Alta</td><td>5</td><td>Sprint 2</td><td><span class="badge-hacer">Por hacer</span></td></tr>
+        <tr><td><strong>HU-17</strong></td><td>Subida de pósters</td><td>Media</td><td>3</td><td>Sprint 2</td><td><span class="badge-hacer">Por hacer</span></td></tr>
+        <tr><td><strong>HU-18</strong></td><td>Documentación Swagger y README</td><td>Alta</td><td>3</td><td>Sprint 2</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-19</strong></td><td>Pruebas y casos borde</td><td>Media</td><td>3</td><td>Sprint 2</td><td><span class="badge-realizado">Realizado</span></td></tr>
+        <tr><td><strong>HU-20</strong></td><td>Entrega final</td><td>Alta</td><td>3</td><td>Sprint 2</td><td><span class="badge-hacer">Por hacer</span></td></tr>
+        <tr><td><strong>HU-21</strong></td><td>Despliegue en la nube</td><td>Alta</td><td>3</td><td>Sprint 2</td><td><span class="badge-hacer">Por hacer</span></td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-weight:700; color:#1a2b4c; font-size:12px; margin-top:10px;">
+      Total: 83 puntos de historia · Sprint 1: 37 · Sprint 2: 46 · Evelyn (P1): 38 · Wilder (P2): 36 · Compartidas: 9.
+    </p>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:14px; font-weight:700; color:#ea580c; margin-top:20px;">Ficha de historia de usuario</h3>
+    <div class="page-footer">Documento SCRUM · Página 8</div>
+  </div>
+
+  <!-- PÁGINA 9: HU-01 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-01 · Configuración del proyecto y base de datos</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como desarrolladora, quiero</strong> configurar Node.js + Express y la conexión a MySQL con variables de entorno, <strong>para</strong> tener una base técnica segura y preparada para transacciones.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Proyecto inicializado con npm y scripts dev/start.</li>
+              <li class="checked">Conexión con mysql2/promise mediante un pool.</li>
+              <li class="checked">Credenciales solo en .env (con .env.example documentado).</li>
+              <li class="checked">schema.sql con claves foráneas, UNIQUE y CHECK.</li>
+              <li class="checked">Los errores de conexión se registran sin exponer datos sensibles.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">01.1 Crear el repo y el package.json con las dependencias obligatorias.</li>
+              <li class="checked">01.2 Crear config/env.js con dotenv.</li>
+              <li class="checked">01.3 Crear config/db.js (pool, Singleton) y probar la conexión.</li>
+              <li class="checked">01.4 Escribir database/schema.sql (tablas normalizadas 3FN).</li>
+              <li class="checked">01.5 Configurar app.js y server.js (JSON y CORS).</li>
+              <li class="checked">01.6 Primer commit y rama develop.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">5</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 9</div>
+  </div>
+
+  <!-- PÁGINA 10: HU-02 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-02 · Arquitectura por capas y manejo de errores</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como desarrolladora, quiero</strong> organizar el código en capas aplicando SOLID y patrones de diseño, <strong>para</strong> mantener el código claro, escalable y fácil de explicar.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Carpetas routes, middlewares, controllers, services, models, config y utils.</li>
+              <li class="checked">Los controladores no tienen SQL y los modelos no tienen lógica de negocio.</li>
+              <li class="checked">Errores centralizados con AppError y errorHandler.</li>
+              <li class="checked">Códigos HTTP correctos (200, 201, 204, 400, 401, 403, 404, 409, 500).</li>
+              <li class="checked">API versionada en /api/v1 y GET /version con el paquete semver.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">02.1 Crear la estructura de carpetas.</li>
+              <li class="checked">02.2 Implementar utils/AppError.js.</li>
+              <li class="checked">02.3 Implementar middlewares/errorHandler.js y la respuesta 404.</li>
+              <li class="checked">02.4 Crear el endpoint /api/v1/version con semver.</li>
+              <li class="checked">02.5 Configurar ESLint + Prettier.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">3</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 10</div>
+  </div>
+
+  <!-- PÁGINA 11: HU-03 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-03 · Registro de usuarios</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como visitante, quiero</strong> crear una cuenta con nombre, email y contraseña, <strong>para</strong> poder publicar reseñas.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Email único (409 si ya existe).</li>
+              <li class="checked">Contraseña cifrada con bcrypt.</li>
+              <li class="checked">Validaciones con express-validator (email válido, contraseña de al menos 8 caracteres).</li>
+              <li class="checked">Rol por defecto: usuario.</li>
+              <li class="checked">La respuesta no incluye la contraseña.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">03.1 Modelo de usuarios (create, findByEmail).</li>
+              <li class="checked">03.2 Service de registro con bcrypt.</li>
+              <li class="checked">03.3 Validador de registro.</li>
+              <li class="checked">03.4 Ruta POST /auth/register y su controlador.</li>
+              <li class="checked">03.5 Prueba en Bruno.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">3</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 11</div>
+  </div>
+
+  <!-- PÁGINA 12: HU-04 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-04 · Inicio de sesión con JWT</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como usuaria registrada, quiero</strong> iniciar sesión y recibir un token, <strong>para</strong> acceder a las funciones protegidas.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Login con email y contraseña (401 genérico si fallan, sin decir cuál).</li>
+              <li class="checked">Token firmado con jsonwebtoken y expiración definida en .env.</li>
+              <li class="checked">La estrategia passport-jwt protege las rutas privadas (Bearer y Cookie HttpOnly).</li>
+              <li class="checked">GET /auth/me devuelve el perfil de la sesión.</li>
+              <li class="checked">Rate limit más estricto en /auth.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">04.1 Service de login (bcrypt.compare + jwt.sign).</li>
+              <li class="checked">04.2 config/passport.js con la estrategia JWT.</li>
+              <li class="checked">04.3 Middleware auth con passport.authenticate.</li>
+              <li class="checked">04.4 Ruta GET /auth/me.</li>
+              <li class="checked">04.5 Limitador de peticiones para /auth.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">5</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 12</div>
+  </div>
+
+  <!-- PÁGINA 13: HU-05 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-05 · Roles y protección de rutas</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como administradora, quiero</strong> que solo las cuentas admin gestionen categorías y aprueben películas, <strong>para</strong> proteger la integridad del catálogo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Middleware de roles (403 si no hay permiso).</li>
+              <li class="checked">Rutas de administración protegidas con auth + rol.</li>
+              <li class="checked">Rate limit global en /api.</li>
+              <li class="checked">CORS limitado al dominio del frontend.</li>
+              <li class="checked">Usuario admin inicial incluido en el seed.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">05.1 Crear middlewares/roles.js.</li>
+              <li class="checked">05.2 Aplicar auth + roles a las rutas de admin.</li>
+              <li class="checked">05.3 Crear middlewares/rateLimit.js (global y auth).</li>
+              <li class="checked">05.4 Configurar CORS desde .env.</li>
+              <li class="checked">05.5 Probar los casos 401 y 403.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">3</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 13</div>
+  </div>
+
+  <!-- PÁGINA 14: HU-06 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-06 · Gestión de categorías</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como administradora, quiero</strong> crear, consultar, editar y eliminar categorías, <strong>para</strong> organizar el catálogo (Anime, Ciencia Ficción, Superhéroes, Fantasía).</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">GET público; POST, PUT y DELETE solo admin.</li>
+              <li class="checked">Nombre único (409).</li>
+              <li class="checked">No se elimina una categoría con películas asociadas (409).</li>
+              <li class="checked">Validaciones de nombre y descripción.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">06.1 Modelo de categorías.</li>
+              <li class="checked">06.2 Service con reglas de unicidad y borrado.</li>
+              <li class="checked">06.3 Validadores.</li>
+              <li class="checked">06.4 Rutas y controlador.</li>
+              <li class="checked">06.5 Documentación en Swagger.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">3</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 14</div>
+  </div>
+
+  <!-- PÁGINA 15: HU-07 Y HU-08 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-07 · Registro y gestión de películas y series</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como usuaria, quiero</strong> proponer películas, series o anime con título, descripción, categoría, año, tipo, tráiler y actores, <strong>para</strong> ampliar el catálogo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Las propuestas quedan en estado pendiente.</li>
+              <li class="checked">Títulos únicos sin importar mayúsculas ni espacios (409).</li>
+              <li class="checked">Año válido y categoría existente.</li>
+              <li class="checked">Soporte para trailer_url y relación de actores en 3FN.</li>
+              <li class="checked">Solo admin edita y elimina. El listado público muestra solo las aprobadas.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">07.1 Modelo de películas con transacciones.</li>
+              <li class="checked">07.2 utils/normalizar.js para el título.</li>
+              <li class="checked">07.3 Service de creación con validación de duplicados.</li>
+              <li class="checked">07.4 Rutas POST, PUT y DELETE.</li>
+              <li class="checked">07.5 Documentación en Swagger.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 5 pts (Sprint 1 · Evelyn Barrios) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-08 · Aprobación de películas</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como administradora, quiero</strong> ver las propuestas pendientes y aprobarlas o rechazarlas, <strong>para</strong> mantener la calidad del catálogo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">GET /peliculas/admin/pendientes solo para admin.</li>
+              <li class="checked">PATCH /peliculas/admin/:id/estado con aprobada o rechazada.</li>
+              <li class="checked">Se registra quién aprobó (aprobado_por).</li>
+              <li class="checked">404 si la película no existe.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">08.1 Consulta de pendientes en el modelo.</li>
+              <li class="checked">08.2 Service de cambio de estado.</li>
+              <li class="checked">08.3 Validador del estado.</li>
+              <li class="checked">08.4 Rutas y pruebas en Bruno.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 3 pts (Sprint 1 · Evelyn Barrios) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 15</div>
+  </div>
+
+  <!-- PÁGINA 16: HU-09 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-09 · Base visual del frontend y cliente de la API</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como usuaria, quiero</strong> una interfaz clara, moderna y responsive con login y registro, <strong>para</strong> usar la app cómodamente desde cualquier dispositivo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Repo de frontend separado (HTML, CSS y JS puro).</li>
+              <li class="checked">Estilos globales con variables CSS y diseño mobile-first.</li>
+              <li class="unchecked">api.js centraliza fetch, token y errores.</li>
+              <li class="unchecked">Toasts con los mensajes de validación del backend.</li>
+              <li class="unchecked">Pantallas de login y registro conectadas y menú según el rol.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">09.1 Crear el repo y la estructura (index.html, css/, js/).</li>
+              <li class="checked">09.2 Hoja de estilos base y componentes (botones, tarjetas, toasts, loader).</li>
+              <li class="unchecked">09.3 js/api.js con el manejo del token.</li>
+              <li class="unchecked">09.4 Pantallas de login y registro.</li>
+              <li class="unchecked">09.5 Navbar dinámico según el rol.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">5</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Wilder Katu</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-proceso">En proceso</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 16</div>
+  </div>
+
+  <!-- PÁGINA 17: HU-10 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-10 · Datos de prueba realistas</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como equipo, quiero</strong> contar con datos variados y realistas, <strong>para</strong> probar el ranking y mostrar una demo convincente.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">6 categorías y unos 40 títulos de distintos tipos y años.</li>
+              <li class="checked">12 usuarios (2 admin) con contraseñas cifradas con bcrypt.</li>
+              <li class="checked">Unas 120 reseñas con fechas repartidas en 12 meses y calificaciones variadas.</li>
+              <li class="checked">Reacciones cruzadas, sin likes a reseñas propias.</li>
+              <li class="checked">El script seeds.sql se ejecuta sin errores en MySQL.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">10.1 Lista de títulos y categorías.</li>
+              <li class="checked">10.2 Generar los hashes bcrypt de los usuarios.</li>
+              <li class="checked">10.3 Escribir reseñas variadas en tono y longitud.</li>
+              <li class="checked">10.4 Insertar reacciones coherentes.</li>
+              <li class="checked">10.5 Archivo database/seeds.sql listo para cargar en MySQL.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Media</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">2</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 1</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Wilder Katu</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-realizado">Realizado</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 17</div>
+  </div>
+
+  <!-- PÁGINA 18: HU-11 Y HU-12 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-11 · Gestión de reseñas con transacción</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como usuaria, quiero</strong> crear, editar y eliminar mis reseñas con título, comentario y nota de 1 a 10, <strong>para</strong> compartir mi opinión.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Una reseña por usuaria y película (409).</li>
+              <li class="checked">Calificación entera entre 1 y 10.</li>
+              <li class="checked">Solo la autora edita o elimina (403).</li>
+              <li class="checked">Crear, editar o eliminar recalcula rating_promedio y total_resenas dentro de una transacción.</li>
+              <li class="checked">Si falla un paso se ejecuta ROLLBACK; si todo sale bien, COMMIT.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">11.1 Modelo de reseñas transaccional.</li>
+              <li class="checked">11.2 Service con beginTransaction, commit y rollback.</li>
+              <li class="checked">11.3 Validadores.</li>
+              <li class="checked">11.4 Rutas POST /peliculas/:id/resenas, PUT y DELETE /resenas/:id.</li>
+              <li class="checked">11.5 Probar el rollback forzando un error.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 8 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-12 · Like y dislike en reseñas</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como usuaria, quiero</strong> dar like o dislike a reseñas de otras personas, <strong>para</strong> destacar las opiniones más útiles.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">No se puede reaccionar a la reseña propia (403).</li>
+              <li class="checked">Un voto por persona, que se puede cambiar o quitar.</li>
+              <li class="checked">Los contadores se actualizan en la misma transacción.</li>
+              <li class="checked">La respuesta devuelve los contadores actualizados.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">12.1 Modelo de reacciones (INSERT … ON DUPLICATE KEY UPDATE).</li>
+              <li class="checked">12.2 Service transaccional.</li>
+              <li class="checked">12.3 Ruta POST /resenas/:id/reaccion.</li>
+              <li class="unchecked">12.4 Botones de like y dislike en el frontend.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 5 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 18</div>
+  </div>
+
+  <!-- PÁGINA 19: HU-13 Y HU-14 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-13 · Ranking ponderado</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como visitante, quiero</strong> ver un ranking basado en calificaciones, likes/dislikes y fecha de las reseñas, <strong>para</strong> descubrir los mejores títulos.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Cada reseña pesa según su recencia y su reputación.</li>
+              <li class="checked">Promedio bayesiano para títulos con pocas reseñas.</li>
+              <li class="checked">GET /ranking?limit=10.</li>
+              <li class="checked">Fórmula documentada en el README.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">13.1 Consulta SQL con cálculo ponderado y bayesiano.</li>
+              <li class="checked">13.2 Modelo y controlador de ranking.</li>
+              <li class="checked">13.3 Service y ruta /ranking.</li>
+              <li class="unchecked">13.4 Sección Top 10 en Inicio del frontend.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 5 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-14 · Listado con filtros, orden y paginación</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como visitante, quiero</strong> listar títulos, filtrar por categoría y ordenar por ranking, popularidad o recientes, <strong>para</strong> encontrar rápido qué ver.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Filtro por categoría y búsqueda por título (q).</li>
+              <li class="checked">Orden por ranking, popularidad o recientes.</li>
+              <li class="checked">Paginación con un límite máximo de 50.</li>
+              <li class="unchecked">Pantalla de catálogo con cuadrícula de pósters y chips de categoría.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">14.1 Validar los query params en backend.</li>
+              <li class="checked">14.2 Consulta SQL con filtros y orden.</li>
+              <li class="unchecked">14.3 Pantalla de listado en catalogo.html.</li>
+              <li class="unchecked">14.4 Botón Cargar más en catalogo.js.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 5 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-proceso">En proceso</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 19</div>
+  </div>
+
+  <!-- PÁGINA 20: HU-15 Y HU-16 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-15 · Detalle de película con reseñas</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como visitante, quiero</strong> ver la información completa de un título con sus reseñas y tráiler, <strong>para</strong> decidir si lo veo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Backend preparado con GET /peliculas/:id y reseñas.</li>
+              <li class="unchecked">Muestra póster, año, tipo, categoría, tráiler incrustado y reparto de actores.</li>
+              <li class="unchecked">Lista de reseñas con sus likes y dislikes.</li>
+              <li class="unchecked">Formulario para reseñar cuando hay sesión (1 a 10).</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">15.1 Endpoints probados en backend con trailer_url y actores.</li>
+              <li class="unchecked">15.2 Maquetar pantalla de detalle en detalle.html.</li>
+              <li class="unchecked">15.3 Formulario con selector de 1 a 10.</li>
+              <li class="unchecked">15.4 Mensajes de éxito y error.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 3 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-proceso">En proceso</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-16 · Panel de administración</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como administradora, quiero</strong> un panel para gestionar categorías, películas y propuestas pendientes, <strong>para</strong> administrar todo desde el navegador.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Backend y middleware de rol admin listos.</li>
+              <li class="unchecked">Acceso web protegido solo con rol admin.</li>
+              <li class="unchecked">CRUD de categorías y películas con formularios validados.</li>
+              <li class="unchecked">Aprobar o rechazar propuestas pendientes.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="unchecked">16.1 Layout del panel en admin.html y admin.css.</li>
+              <li class="unchecked">16.2 Sección de categorías.</li>
+              <li class="unchecked">16.3 Sección de películas y trailers.</li>
+              <li class="unchecked">16.4 Sección de pendientes con botones de aprobar/rechazar.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 5 pts (Sprint 2 · Evelyn Barrios) · <strong>Estado: <span class="badge-hacer">Por hacer</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 20</div>
+  </div>
+
+  <!-- PÁGINA 21: HU-17 Y HU-18 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-17 · Subida de pósters</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como administradora, quiero</strong> definir la imagen del póster de cada título con vista previa, <strong>para</strong> que el catálogo se vea profesional.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Validación de URL de póster con express-validator en backend.</li>
+              <li class="unchecked">El admin puede poner la URL del póster con vista previa en el panel.</li>
+              <li class="unchecked">Póster por defecto cuando no hay imagen.</li>
+              <li class="unchecked">Error claro cuando la URL no es válida.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">17.1 Validar imagen_url en backend.</li>
+              <li class="unchecked">17.2 Campo de póster con vista previa en el panel.</li>
+              <li class="unchecked">17.3 Imagen por defecto (poster-default.webp).</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Media / 3 pts (Sprint 2 · Evelyn Barrios) · <strong>Estado: <span class="badge-hacer">Por hacer</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-18 · Documentación Swagger y README</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como desarrolladora, quiero</strong> documentar todos los endpoints y el proyecto, <strong>para</strong> que cualquiera pueda instalar y consumir la API.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Swagger en /api-docs con todos los endpoints, cuerpos, respuestas y autenticación Bearer.</li>
+              <li class="checked">README con descripción, tecnologías, instalación, variables de entorno, estructura, principios, consideraciones técnicas, créditos y ejemplos de endpoints.</li>
+              <li class="checked">Links al repo del frontend y diagramas SVG vectoriales.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">18.1 Crear docs/openapi.json y configuración Swagger.</li>
+              <li class="checked">18.2 Documentar todos los esquemas de respuestas y códigos HTTP.</li>
+              <li class="checked">18.3 README técnico formal del backend.</li>
+              <li class="checked">18.4 Diagramas de capas y arquitectura en SVG.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 3 pts (Sprint 2 · Wilder Katu) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 21</div>
+  </div>
+
+  <!-- PÁGINA 22: HU-19 Y HU-20 -->
+  <div class="page">
+    <div class="hu-card" style="margin-bottom:12px;">
+      <div class="hu-card-header">HU-19 · Pruebas y casos borde</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como equipo, quiero</strong> probar los flujos principales y los casos borde, <strong>para</strong> entregar un sistema estable.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Colección de Bruno con 28 peticiones cubriendo todos los endpoints.</li>
+              <li class="checked">Casos borde probados: duplicados (409), calificación inválida (400), like propio (403), token vencido/ausente (401), rol insuficiente (403).</li>
+              <li class="checked">Transacciones verificadas con COMMIT y ROLLBACK.</li>
+              <li class="checked">Export JSON estándar listo para evaluar.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">19.1 Colección de Bruno en bruno/KarenFlix API.</li>
+              <li class="checked">19.2 Lista de casos borde y archivos de data JSON.</li>
+              <li class="checked">19.3 Pruebas cruzadas entre Evelyn y Wilder.</li>
+              <li class="checked">19.4 Exportación de colección JSON lista.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Media / 3 pts (Sprint 2 · Evelyn / Wilder) · <strong>Estado: <span class="badge-realizado">Realizado</span></strong></td></tr>
+      </table>
+    </div>
+
+    <div class="hu-card">
+      <div class="hu-card-header">HU-20 · Entrega final</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como equipo, quiero</strong> preparar las evidencias y la entrega, <strong>para</strong> demostrar el funcionamiento y el proceso de desarrollo.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">Repos privados con los trainers (Eduin Salas y Andre Lopez) como colaboradores.</li>
+              <li class="checked">PDF SCRUM con evidencias dentro del repo backend.</li>
+              <li class="unchecked">CHANGELOG y tag v1.0.0.</li>
+              <li class="unchecked">Video de máximo 10 minutos con los dos integrantes en cámara.</li>
+              <li class="checked">Conventional Commits en todo el historial de Git.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="checked">20.1 Tablero Kanban actualizado en GitHub Projects.</li>
+              <li class="checked">20.2 Completar el PDF SCRUM oficial.</li>
+              <li class="unchecked">20.3 CHANGELOG y tag v1.0.0.</li>
+              <li class="unchecked">20.4 Guion y grabación del video.</li>
+              <li class="unchecked">20.5 Revisión final de la entrega.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad / Puntos</td><td class="hu-value">Alta / 3 pts (Sprint 2 · Evelyn / Wilder) · <strong>Estado: <span class="badge-hacer">Por hacer</span></strong></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 22</div>
+  </div>
+
+  <!-- PÁGINA 23: HU-21 -->
+  <div class="page">
+    <div class="hu-card">
+      <div class="hu-card-header">HU-21 · Despliegue en la nube</div>
+      <table class="hu-table">
+        <tr>
+          <td class="hu-label">Historia</td>
+          <td class="hu-value"><strong>Como equipo, quiero</strong> publicar KarenFlix en un dominio de Vercel con la base de datos MySQL en la nube, <strong>para</strong> que el profe y cualquier persona puedan usar la app desde un link.</td>
+        </tr>
+        <tr>
+          <td class="hu-label">Criterios de aceptación</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="unchecked">Frontend publicado en Vercel con un link público.</li>
+              <li class="unchecked">Backend Express publicado en Vercel; GET /api/v1/version responde en línea.</li>
+              <li class="unchecked">MySQL en la nube con SSL, cargada con schema.sql y seeds.sql.</li>
+              <li class="unchecked">Variables de entorno configuradas en Vercel, nunca en el repo.</li>
+              <li class="unchecked">CORS permite solo el dominio del frontend; links en los dos README.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="hu-label">Subtareas</td>
+          <td class="hu-value">
+            <ul class="check-list">
+              <li class="unchecked">21.1 Crear la base MySQL en la nube (Aiven) y cargar esquema y semillas.</li>
+              <li class="checked">21.2 Agregar src/index.js (export default app) y SSL en config/db.js.</li>
+              <li class="unchecked">21.3 Desplegar el backend en Vercel y cargar las variables de entorno.</li>
+              <li class="unchecked">21.4 Desplegar el frontend y configurar API_URL en js/config.js.</li>
+              <li class="unchecked">21.5 Probar el flujo completo en línea y poner los links en los README.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td class="hu-label">Prioridad</td><td class="hu-value">Alta</td></tr>
+        <tr><td class="hu-label">Puntos de historia</td><td class="hu-value">3</td></tr>
+        <tr><td class="hu-label">Sprint asignado</td><td class="hu-value">Sprint 2</td></tr>
+        <tr><td class="hu-label">Responsable</td><td class="hu-value">Evelyn Barrios y Wilder Katu</td></tr>
+        <tr><td class="hu-label">Estado</td><td class="hu-value"><span class="badge-hacer">Por hacer</span></td></tr>
+      </table>
+    </div>
+    <div class="page-footer">Documento SCRUM · Página 23</div>
+  </div>
+
+  <!-- PÁGINA 24: 04 HERRAMIENTA DE SEGUIMIENTO -->
+  <div class="page">
+    <div class="section-banner">
+      <div class="section-num-box box-royal">04</div>
+      <h2 class="section-title-text">Herramienta de seguimiento</h2>
+    </div>
+    <p>Indique la herramienta utilizada para gestionar el tablero, las columnas del flujo y los campos de cada tarea.</p>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:10px;">Herramienta seleccionada</h3>
+    <table class="data-table">
+      <tbody>
+        <tr><td style="width:25%; font-weight:700;">Herramienta</td><td>GitHub Projects (enlazado a issues, PRs y commits)</td></tr>
+        <tr><td style="font-weight:700;">Enlace al tablero</td><td><a href="https://github.com/users/barriosevelyn488-web/projects/1" target="_blank" style="color:#1e5bb8; text-decoration:none;">https://github.com/users/barriosevelyn488-web/projects/1</a></td></tr>
+        <tr><td style="font-weight:700;">Tipo de acceso</td><td>Público / Colaboradores: barriosevelyn488-web, WilKtu, esalascampuslands</td></tr>
+        <tr><td style="font-weight:700;">Fecha de creación</td><td>26/10/2026</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:15px;">Flujo del tablero (5 columnas profesionales)</h3>
+    <div class="kanban-cols">
+      <div>
+        <div class="k-col-head" style="background:#64748b;">Por hacer</div>
+        <div class="k-col-body">Historias planificadas del Sprint pendientes de inicio.</div>
+      </div>
+      <div>
+        <div class="k-col-head" style="background:#d97706;">En proceso</div>
+        <div class="k-col-body">Tareas en desarrollo activo en ramas feature.</div>
+      </div>
+      <div>
+        <div class="k-col-head" style="background:#2563eb;">Testing / En rev.</div>
+        <div class="k-col-body">PR abierto, revisión de código ("Explícame tu PR") y Bruno.</div>
+      </div>
+      <div>
+        <div class="k-col-head" style="background:#16a34a;">Realizado</div>
+        <div class="k-col-body">PR aprobado y mergeado a develop (cumple DoD).</div>
+      </div>
+      <div>
+        <div class="k-col-head" style="background:#7c3aed;">Desplegado</div>
+        <div class="k-col-body">En producción en Vercel con MySQL cloud.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:15px;">Campos registrados en cada tarea</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Descripción</th>
+          <th>Ejemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Tipo de tarea</strong></td><td>Categoría o naturaleza de la actividad</td><td>Backend, frontend, documentación, pruebas</td></tr>
+        <tr><td><strong>Descripción</strong></td><td>Detalle de lo que debe realizarse</td><td>Crear POST /api/v1/peliculas/:id/resenas con transacción</td></tr>
+        <tr><td><strong>Prioridad</strong></td><td>Importancia y urgencia de la tarea</td><td>Alta</td></tr>
+        <tr><td><strong>Estado</strong></td><td>Situación dentro del flujo de trabajo</td><td>Realizado / En proceso</td></tr>
+        <tr><td><strong>Sprint</strong></td><td>Período de desarrollo al que pertenece</td><td>Sprint 1 / Sprint 2</td></tr>
+        <tr><td><strong>Responsable</strong></td><td>Persona que ejecuta la tarea</td><td>Evelyn Barrios / Wilder Katu</td></tr>
+        <tr><td><strong>Estimación</strong></td><td>Tiempo o puntos estimados</td><td>8 puntos / 5 h</td></tr>
+      </tbody>
+    </table>
+    <div class="page-footer">Documento SCRUM · Página 24</div>
+  </div>
+
+  <!-- PÁGINA 25: 05 EVIDENCIAS Y CIERRE -->
+  <div class="page">
+    <div class="section-banner">
+      <div class="section-num-box box-purple">05</div>
+      <h2 class="section-title-text">Evidencias</h2>
+    </div>
+    <p>Marque cada evidencia cuando esté cargada y registre su ubicación para que pueda consultarse.</p>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:8px;">Lista de verificación</h3>
+    <table class="data-table" style="font-size:11px;">
+      <thead>
+        <tr>
+          <th style="width:5%;">✓</th>
+          <th style="width:25%;">Evidencia</th>
+          <th style="width:40%;">Descripción</th>
+          <th style="width:30%;">Ubicación / enlace</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:#16a34a; font-weight:bold; text-align:center;">☑</td>
+          <td><strong>Repositorio del proyecto</strong></td>
+          <td>Enlace al código con historial de commits limpios</td>
+          <td><a href="https://github.com/barriosevelyn488-web/Karenflix_backend" style="color:#2563eb; text-decoration:none;">repo backend</a> · <a href="https://github.com/WilKtu/karenflix-frontend" style="color:#2563eb; text-decoration:none;">repo frontend</a></td>
+        </tr>
+        <tr>
+          <td style="color:#16a34a; font-weight:bold; text-align:center;">☑</td>
+          <td><strong>Capturas del tablero</strong></td>
+          <td>Tablero en cada etapa con tareas y responsables</td>
+          <td><a href="https://github.com/users/barriosevelyn488-web/projects/1" style="color:#2563eb; text-decoration:none;">GitHub Projects (Online)</a></td>
+        </tr>
+        <tr>
+          <td style="color:#16a34a; font-weight:bold; text-align:center;">☑</td>
+          <td><strong>Historias de usuario</strong></td>
+          <td>Fichas con criterios de aceptación cumplidos</td>
+          <td>Sección 03 de este documento y GitHub Issues</td>
+        </tr>
+        <tr>
+          <td style="color:#64748b; font-weight:bold; text-align:center;">☐</td>
+          <td><strong>Videos de revisión</strong></td>
+          <td>Grabación de demostración al cierre (≤ 10 min)</td>
+          <td>[URL video en README al cierre]</td>
+        </tr>
+        <tr>
+          <td style="color:#16a34a; font-weight:bold; text-align:center;">☑</td>
+          <td><strong>Actas de retrospectiva</strong></td>
+          <td>Mejoras identificadas y aplicadas</td>
+          <td>Registrada al pie de este documento</td>
+        </tr>
+        <tr>
+          <td style="color:#16a34a; font-weight:bold; text-align:center;">☑</td>
+          <td><strong>Avance del sprint</strong></td>
+          <td>Resumen de puntos completados (14 HUs Hechas)</td>
+          <td>83 pts totales / 14 HUs en Hecho</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; color:#1a2b4c; margin-top:12px;">Cierre del proyecto (Retrospectiva Ágil)</h3>
+    <div class="box-retro">
+      <div class="retro-col">
+        <div class="retro-head box-green">Qué funcionó</div>
+        <div class="retro-body">
+          <ul>
+            <li>Arquitectura desacoplada en capas SOLID.</li>
+            <li>Transacciones ACID reales en MySQL con rollback ante fallos.</li>
+            <li>Seguridad: cookies HttpOnly, rate limit y JWT.</li>
+            <li>Base de datos normalizada (3FN) con actores y trailers.</li>
+            <li>Documentación interactiva en Swagger UI.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="retro-col">
+        <div class="retro-head box-orange">Qué mejorar</div>
+        <div class="retro-body">
+          <ul>
+            <li>Acordar contratos de URL de endpoints antes de maquetar.</li>
+            <li>Asignar mayor margen de tiempo a componentes visuales interactivos de frontend sin librerías.</li>
+            <li>Planificar pruebas de integración continuas más frecuentes.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="retro-col">
+        <div class="retro-head box-royal">Próximos pasos</div>
+        <div class="retro-body">
+          <ul>
+            <li>Conectar el panel web de administración con el backend.</li>
+            <li>Completar vistas de catálogo y detalle con reproductor de tráiler.</li>
+            <li>Aprovisionar MySQL en Aiven y desplegar ambos repos en Vercel.</li>
+            <li>Grabar el video final de sustentación en pareja.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">Documento SCRUM · Página 25</div>
+  </div>
+
+</body>
+</html>
