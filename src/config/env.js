@@ -1,19 +1,48 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+const bool = (value, fallback = false) => (value == null ? fallback : value === 'true');
+const required = (name, value) => {
+  if (!value && process.env.NODE_ENV === 'production')
+    throw new Error(`${name} es obligatorio en producción`);
+  return value;
+};
+
 export const env = {
-  port: process.env.PORT || 3000,
+  port: Number(process.env.PORT || 3000),
   nodeEnv: process.env.NODE_ENV || 'development',
+  apiVersion: process.env.npm_package_version || '0.1.0',
   db: {
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
+    port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    name: process.env.DB_NAME || 'karenflix'
+    name: process.env.DB_NAME || 'karenflix',
+    ssl: bool(process.env.DB_SSL),
+    ca: process.env.DB_CA,
+    connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10)
   },
   jwt: {
-    secret: process.env.JWT_SECRET || 'secreto',
-    expiresIn: process.env.JWT_EXPIRES_IN || '2h'
+    secret: required(
+      'JWT_SECRET',
+      process.env.JWT_SECRET ||
+        (process.env.NODE_ENV === 'production' ? '' : 'dev-only-change-this-secret-32-chars-min')
+    ),
+    expiresIn: process.env.JWT_EXPIRES_IN || '2h',
+    cookieName: process.env.JWT_COOKIE_NAME || 'karenflix_token'
   },
-  corsOrigin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*'
+  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5500,http://127.0.0.1:5500')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean),
+  trustProxy: process.env.TRUST_PROXY === 'true'
 };
+
+if (env.jwt.secret.length < 32) throw new Error('JWT_SECRET debe tener al menos 32 caracteres');
+
+if (env.nodeEnv === 'production') {
+  for (const key of ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'CORS_ORIGIN']) {
+    if (!process.env[key]) throw new Error(`${key} es obligatorio en producción`);
+  }
+  if (!env.db.ssl) throw new Error('DB_SSL=true es obligatorio en producción');
+}

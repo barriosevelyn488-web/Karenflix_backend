@@ -1,6 +1,11 @@
 node_modules/
 .env
+.env.*
+!.env.example
 uploads/posters/*
 !uploads/posters/.gitkeep
 coverage/
 .DS_Store
+.vscode/
+*.log
+npm-debug.log*

@@ -1,10 +1,16 @@
-import { body } from "express-validator";
+import { body } from 'express-validator';
 export const validarRegistro = [
-  body("nombre").notEmpty().withMessage("El nombre es obligatorio"),
-  body("email").isEmail().withMessage("Debe proporcionar un email válido"),
-  body("password").isLength({ min: 8 }).withMessage("La contraseña debe tener al menos 8 caracteres")
+  body('nombre').trim().isLength({ min: 2, max: 100 }),
+  body('email').trim().isEmail().normalizeEmail().isLength({ max: 150 }),
+  body('password')
+    .isString()
+    .isLength({ min: 10 })
+    .custom((value) => Buffer.byteLength(value, 'utf8') <= 72)
 ];
 export const validarLogin = [
-  body("email").isEmail().withMessage("Debe proporcionar un email válido"),
-  body("password").notEmpty().withMessage("La contraseña es obligatoria")
+  body('email').trim().isEmail().normalizeEmail(),
+  body('password')
+    .isString()
+    .notEmpty()
+    .custom((value) => Buffer.byteLength(value, 'utf8') <= 72)
 ];

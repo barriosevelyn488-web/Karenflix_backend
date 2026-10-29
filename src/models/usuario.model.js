@@ -1,24 +1,23 @@
-import mysql from 'mysql2/promise';
-import { env } from '../config/env.js';
-
-const pool = mysql.createPool({
-  host: env.db.host,
-  port: env.db.port,
-  user: env.db.user,
-  password: env.db.password,
-  database: env.db.name
-});
-
+import pool from '../config/db.js';
 export const UsuarioModel = {
   async buscarPorEmail(email) {
-    const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+    const [rows] = await pool.query(
+      'SELECT id, nombre, email, password_hash, rol, created_at FROM usuarios WHERE email = ?',
+      [email]
+    );
     return rows[0];
   },
-  
-  async crear({ nombre, email, password, rol }) {
+  async buscarPorId(id) {
+    const [rows] = await pool.query(
+      'SELECT id, nombre, email, rol, created_at FROM usuarios WHERE id = ?',
+      [id]
+    );
+    return rows[0];
+  },
+  async crear({ nombre, email, password }) {
     const [result] = await pool.query(
       'INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES (?, ?, ?, ?)',
-      [nombre, email, password, rol || 'usuario']
+      [nombre, email.toLowerCase(), password, 'usuario']
     );
     return result.insertId;
   }

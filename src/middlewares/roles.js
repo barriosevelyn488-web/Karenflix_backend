@@ -1,6 +1,5 @@
-export const requireAdmin = (req, res, next) => {
-  if (!req.user || req.user.rol !== "admin") {
-    return res.status(403).json({ status: "fail", message: "Acceso denegado. Se requieren permisos de administrador." });
-  }
-  next();
-};
+import { AppError } from '../utils/AppError.js';
+export const requireAdmin = (req, _res, next) =>
+  req.user?.rol === 'admin'
+    ? next()
+    : next(new AppError('Se requieren permisos de administrador.', 403, 'FORBIDDEN'));
