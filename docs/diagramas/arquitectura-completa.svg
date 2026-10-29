@@ -162,7 +162,7 @@
   <text x="630" y="1144" class="path">passport.js</text>
   <text x="815" y="1144" class="body">valida JWT de cookie o Bearer</text>
   <text x="630" y="1181" class="path">swagger.js</text>
-  <text x="815" y="1181" class="body">publica la documentación en /api-docs</text>
+  <text x="815" y="1181" class="body">Swagger del backend: ruta Express /api-docs</text>
   <text x="630" y="1228" class="small">.env.example se usó como plantilla; .env quedó fuera de Git.</text>
 
   <!-- Shared modules -->
