@@ -1,9 +1,13 @@
 # Migraciones de la base de datos
 
-Antes de modificar una base de datos existente, realice una copia de seguridad y verifique que pueda restaurarla.
+La migración `001_actores_trailer.sql` se preparó para actualizar la base de datos del Sprint 2. Amplió las columnas de imagen y calificación de `peliculas`, agregó `trailer_url` y creó las tablas `actores` y `pelicula_actor`.
 
-Para crear la base de datos desde cero, ejecute `database/schema.sql` en MySQL Workbench. Este esquema ya contiene los cambios de `001_actores_trailer.sql`; por tanto, no aplique esa migración por separado.
+Para una instalación nueva se utilizó `database/schema.sql`, que ya incluyó esos cambios. En ese caso, la migración no se ejecutó por separado.
 
-Para actualizar la base del Sprint 2, compruebe en `information_schema` que las tablas y columnas requeridas por la migración aún no existan. El archivo `001_actores_trailer.sql` amplía las columnas de imagen y calificación, agrega `trailer_url` y crea las tablas `actores` y `pelicula_actor`. Aplíquelo una sola vez sobre una base compatible y confirme que finalizó correctamente antes de iniciar la API.
+## Uso en MySQL Workbench
 
-La migración no elimina la base de datos. Si el esquema del Sprint 2 difiere de la estructura prevista, no la aplique hasta comparar las tablas y columnas existentes con las instrucciones del archivo SQL.
+Antes de actualizar una base existente, se debía crear y verificar una copia de seguridad. También se comprobaban las tablas y columnas en `information_schema` para confirmar que la base correspondía al esquema del Sprint 2 y que los cambios aún no se habían aplicado. En MySQL Workbench, se abrió `001_actores_trailer.sql` y se ejecutó una sola vez sobre la conexión a `karenflix`.
+
+Al terminar, se verificaban `trailer_url`, `actores` y `pelicula_actor` antes de iniciar la API. Si parte de esos cambios ya existía o el esquema difería del esperado, primero se comparaban las definiciones con el archivo; no se volvía a ejecutar sin adaptar la migración.
+
+El script no eliminó la base de datos ni sus registros.

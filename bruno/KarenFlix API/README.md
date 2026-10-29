@@ -1,11 +1,9 @@
 # Pruebas de la API KarenFlix
 
-Las pruebas usan el entorno `Local` de Bruno y requieren que la API esté conectada a MySQL. Inicia sesión con las cuentas de prueba y guarda sus JWT en `token` y `adminToken`; varias peticiones necesitan esos valores para ejecutarse.
+Para revisar la API se prepararon solicitudes de Bruno y una colección exportada para Postman. La carpeta `export/` contiene las operaciones CRUD de categorías, películas y reseñas. En `data/` quedaron los cuerpos JSON y `casos-crud.json` registró las rutas y respuestas esperadas.
 
-Las peticiones numeradas siguen el flujo de uso. Bruno guarda en el entorno el ID de cada categoría, película o reseña que se crea y lo usa después para editarla o eliminarla.
+La colección de Bruno se conectó a `http://localhost:3000` mediante la variable `baseUrl` del entorno `Local`. La API se inició con `npm run dev` después de completar `.env` y establecer la conexión con MySQL.
 
-Si vas a usar Postman, importa `export/KarenFlix-CRUD.postman_collection.json`. Los cuerpos de las peticiones están en `data/`; `data/casos-crud.json` tiene la lista de operaciones y el código HTTP que debería devolver cada una. Cambia los nombres de prueba si ya existen en tu base.
+El registro y el inicio de sesión guardaron el JWT en `token`. Las operaciones administrativas requirieron que se agregara el JWT de una cuenta con rol `admin` a `adminToken`. Para comprobar permisos entre cuentas también se dejó `otherToken` en el entorno. El primer administrador se preparó desde Workbench, como se describió en el README principal.
 
-Para revisar los permisos, registra dos cuentas. Cambia el rol de una a `admin` en Workbench siguiendo el README principal y coloca su JWT en `adminToken`. El JWT de la otra cuenta va en `otherToken`; úsalo para comprobar que no pueda modificar reseñas ajenas.
-
-Si una categoría está asignada a una película o una película tiene reseñas, la base no permitirá borrarla y la API responderá `409`. Elimina primero los registros relacionados o usa otros datos de prueba.
+Las peticiones de creación guardaron sus IDs en el entorno para utilizarlos luego en consultas, ediciones y eliminaciones. La colección se ejecutó con datos de prueba; si alguno ya existía en la base, se cambió el nombre o el correo antes de repetir el flujo. Las eliminaciones de categorías o películas con registros relacionados respondieron `409` y requirieron conservar esos datos o retirarlos primero.

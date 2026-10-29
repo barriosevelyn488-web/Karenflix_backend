@@ -1,61 +1,86 @@
 # KarenFlix Backend
 
-Backend de la aplicación KarenFlix. Está hecho con Node.js, Express y MySQL. El sitio web se comunica con la API por HTTP y recibe respuestas JSON; la conexión a MySQL se queda en el servidor.
+Para KarenFlix se desarrolló una API con Node.js, Express y MySQL. El frontend se conectó mediante HTTP y recibió respuestas JSON; las credenciales de MySQL permanecieron en el servidor.
 
-## Ejecutar en local
+## Implementación
 
-Necesitas Node.js 20 o superior, npm y MySQL 8. Instala las dependencias y prepara la configuración local:
+El código quedó organizado en `src/`. Las rutas reciben las solicitudes y aplican los middlewares; los controladores traducen HTTP a operaciones de la aplicación, los servicios contienen las reglas de negocio y los modelos ejecutan consultas parametrizadas con el pool de `mysql2`. Los DTO limitaron los datos de entrada y salida, y la fábrica de DTO seleccionó el tipo correspondiente. Las operaciones que modificaron varios registros se ejecutaron en transacciones.
+
+En `src/middlewares/` se incorporaron validación, autenticación, control de roles, límites de peticiones, protección del origen y manejo de errores. También se configuraron Helmet, CORS y límites al tamaño de las solicitudes. Las contraseñas se almacenaron con bcrypt. El inicio de sesión emitió un JWT y una cookie `HttpOnly`; en producción, la cookie quedó configurada con `Secure` y `SameSite=None`. Para facilitar la integración inicial, la API también aceptó `Authorization: Bearer`.
+
+El esquema MySQL se dejó en `database/schema.sql`. La migración `database/migrations/001_actores_trailer.sql` agregó el reparto y el tráiler para bases creadas con el esquema del Sprint 2. Los criterios de uso quedaron documentados en `database/migrations/README.md`.
+
+## Ejecución local
+
+La aplicación se ejecutó con Node.js 20 o superior, npm y MySQL 8. La configuración se tomó de `.env`; el archivo `.env.example` se dejó como plantilla sin credenciales.
 
 ```bash
 npm ci
 cp .env.example .env
 ```
 
-Completa `.env` con los datos de conexión de MySQL que usas en Workbench. La contraseña de Linux no tiene por qué ser la misma que la de MySQL. Para una base nueva, ejecuta `database/schema.sql` en Workbench. Si vas a usar una base del Sprint 2, revisa primero las instrucciones de `database/migrations/README.md`.
+En `.env` se agregaron el host, puerto, usuario, contraseña y nombre de la base MySQL usados en Workbench. Para una base nueva se ejecutó `database/schema.sql`; para una base del Sprint 2 se revisó la guía de migraciones antes de modificarla. La API se inició con `npm run dev` y comprobó la conexión antes de escuchar en el puerto `3000`.
 
-Arranca la API con `npm run dev`. El servidor comprueba la conexión a MySQL antes de empezar a escuchar en el puerto 3000. Puedes revisar `/health`, `/api/v1/version` y `/api-docs` en `http://localhost:3000`.
+La configuración local se verificó en `http://localhost:3000/health`, `http://localhost:3000/api/v1/version` y `http://localhost:3000/api-docs`. En Linux se usaron los mismos comandos. `.env` se mantuvo fuera del control de versiones.
 
-En Linux, los comandos son los mismos. Crea `.env` a partir de `.env.example`, agrega la configuración de MySQL y ejecuta `npm ci` y `npm run dev`. Ese archivo contiene credenciales y no se debe subir a GitHub.
+## Conexión con el frontend
 
-## Organización del código
+El navegador se comunicó con la API en `http://localhost:3000/api/v1`. El origen real del frontend se agregó a `CORS_ORIGIN` en `.env`; por ejemplo, si el frontend se ejecutó en `http://localhost:5173`, ese origen se agregó exactamente. No se modificó el repositorio frontend durante este trabajo.
 
-Las rutas pasan por los middlewares y controladores. Los servicios manejan las reglas de la aplicación y los modelos ejecutan consultas parametrizadas con el pool compartido de `mysql2`. Los DTO limitan los datos que entran y salen. Las operaciones que modifican varios registros usan transacciones.
+Para conservar la cookie de sesión, las solicitudes del navegador se enviaron con `credentials: 'include'`:
 
-La API también configura Helmet, CORS con orígenes permitidos, límites de peticiones, validación y manejo centralizado de errores. Las contraseñas se guardan con bcrypt. El inicio de sesión entrega un JWT y una cookie `HttpOnly`; en producción la cookie lleva `Secure` y `SameSite=None`. Las peticiones autenticadas con cookie validan el origen. Mientras se conecta el frontend también se acepta `Authorization: Bearer`.
+```js
+const API_URL = 'http://localhost:3000/api/v1';
 
-Para producción, usa un `JWT_SECRET` aleatorio de al menos 32 caracteres. En Linux puedes generarlo con `openssl rand -base64 48`. Configura `DB_SSL` y el certificado CA que entregue el proveedor de MySQL. Limita `CORS_ORIGIN` al dominio del frontend y activa `TRUST_PROXY` solo cuando la API esté detrás de un proxy confiable. La API debe conectarse con un usuario MySQL de permisos limitados, no con `root`.
+const respuesta = await fetch(`${API_URL}/auth/login`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  credentials: 'include',
+  body: JSON.stringify({ email, password })
+});
 
-## Rutas principales
+const resultado = await respuesta.json();
+```
 
-| Recurso    | Rutas                                                                                                                      |
+Después del inicio de sesión, el frontend consultó el catálogo de esta forma:
+
+```js
+const respuestaCatalogo = await fetch(`${API_URL}/peliculas?page=1&limit=20`, {
+  credentials: 'include'
+});
+
+const catalogo = await respuestaCatalogo.json();
+```
+
+La API también aceptó un JWT en `Authorization: Bearer <token>` para clientes que ya trabajaban con ese mecanismo. Las rutas, formatos de respuesta y errores se describieron en `docs/CONTRATO_API_FRONTEND.md`.
+
+## Rutas disponibles
+
+| Recurso    | Rutas implementadas                                                                                                        |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------- |
 | Sesión     | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`                 |
-| Categorías | `GET /api/v1/categorias`; escritura para administradores                                                                   |
+| Categorías | `GET /api/v1/categorias`; creación, edición y eliminación para administradores                                             |
 | Películas  | `GET /api/v1/peliculas`, `GET /api/v1/peliculas/:id`, `POST /api/v1/peliculas`; edición y eliminación para administradores |
 | Reseñas    | `GET /api/v1/peliculas/:id/resenas`, `POST /api/v1/peliculas/:id/resenas`, `PUT` y `DELETE /api/v1/resenas/:id`            |
 | Reacciones | `POST` y `DELETE /api/v1/resenas/:id/reaccion`                                                                             |
 | Ranking    | `GET /api/v1/ranking?limit=10`                                                                                             |
 
-La lista de películas acepta `page`, `limit`, `categoria_id`, `q` y `orden`. El límite máximo es 50. Swagger está disponible en `/api-docs`. Las respuestas exitosas usan `{status, data}`; los errores incluyen `{status, error}`.
+El listado de películas aceptó `page`, `limit`, `categoria_id`, `q` y `orden`; el máximo de `limit` fue 50. Swagger quedó disponible en `/api-docs`. Las respuestas exitosas usaron `{status, data}` y los errores `{status, error}`.
 
-## Pruebas con Bruno y Postman
+## Pruebas
 
-La colección de Bruno está en `bruno/KarenFlix API`. Para Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los ejemplos y los casos están en la carpeta `data` de la colección. Las operaciones administrativas necesitan el JWT de una cuenta con rol `admin`.
+Las solicitudes de Bruno se guardaron en `bruno/KarenFlix API/`. La colección de Postman quedó en `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`; los cuerpos y casos de prueba se guardaron en la carpeta `data/` de Bruno. Para las operaciones administrativas se necesitó un JWT de una cuenta con rol `admin`.
 
-## Crear el primer administrador
-
-Registra una cuenta normal y, desde Workbench, cambia su rol:
+El primer administrador se creó al registrar una cuenta normal y cambiar su rol desde Workbench:
 
 ```sql
 UPDATE usuarios SET rol = 'admin' WHERE email = 'correo-registrado';
 ```
 
-No hay una ruta pública para asignar el rol de administrador.
+No se implementó una ruta pública para elevar privilegios.
 
-## Trabajo del equipo
+## Documentación y trabajo por ramas
 
-El frontend está en [el repositorio de KarenFlix](https://github.com/WilKtu/karenflix-frontend); su integración se debe revisar con Wilder. El contrato de la API está en `docs/CONTRATO_API_FRONTEND.md` y la revisión conjunta se puede anotar en `docs/INTEGRACION_WILDER.md`.
+El frontend del equipo se mantuvo en [su repositorio](https://github.com/WilKtu/karenflix-frontend). El contrato se documentó en `docs/CONTRATO_API_FRONTEND.md` y se dejó `docs/INTEGRACION_WILDER.md` para anotar la prueba conjunta.
 
-Las historias revisadas están en `docs/HISTORIAS_USUARIO_CORREGIDAS.md`. Mantén los cambios en ramas por historia y abre los PR según sus dependencias: HU-22 hacia `develop`, HU-23 hacia HU-22, HU-11 a HU-13 hacia HU-23 y HU-19 hacia la rama de reseñas.
-
-El Excel de normalización está en `docs/normalizacion_karenflix.xlsx`. Los diagramas del modelo, la arquitectura y el flujo de reseñas están en `docs/diagramas/`.
+Las historias corregidas quedaron en `docs/HISTORIAS_USUARIO_CORREGIDAS.md`; la normalización de datos, en `docs/normalizacion_karenflix.xlsx`; y los diagramas, en `docs/diagramas/`. Los cambios se separaron por ramas de historia. La secuencia de integración quedó: HU-22 hacia `develop`, HU-23 hacia HU-22, HU-11 a HU-13 hacia HU-23 y HU-19 hacia la rama de reseñas.

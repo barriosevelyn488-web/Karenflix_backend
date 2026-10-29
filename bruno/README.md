@@ -1,5 +1,7 @@
-# Pruebas de Bruno
+# Pruebas de la API
 
-La colección que usamos para probar la API está en `KarenFlix API/`. Allí están las peticiones, sus comprobaciones y los cuerpos JSON.
+Para el backend se preparó una colección de Bruno en `KarenFlix API/`. Allí se organizaron las solicitudes, las comprobaciones de respuesta y los cuerpos JSON usados durante las pruebas.
 
-La carpeta `pruebas sprin 2/` contiene los archivos que se usaron en ese sprint. Se conserva como referencia; para las pruebas actuales, abre `KarenFlix API/`.
+Los archivos de `pruebas sprin 2/` correspondieron a la colección anterior y se conservaron como referencia. Para probar la versión actual de la API, se utilizó `KarenFlix API/`.
+
+La colección se conectó con la API local mediante `baseUrl`, configurado en `KarenFlix API/environments/local.bru` como `http://localhost:3000`. La API necesitó estar iniciada y conectada a MySQL antes de enviar las solicitudes.
