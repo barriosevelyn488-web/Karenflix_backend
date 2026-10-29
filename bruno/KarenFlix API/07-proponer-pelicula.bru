@@ -37,7 +37,7 @@ body:json {
 
 tests {
   test("Proponer película devuelve un estado permitido", function () {
-    expect([201, 400, 409]).to.include(res.getStatus());
+    expect(res.getStatus()).to.equal(201);
   });
 }
 

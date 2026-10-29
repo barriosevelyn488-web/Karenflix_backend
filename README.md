@@ -27,6 +27,10 @@ Reseñas: GET/POST /peliculas/:id/resenas, PUT/DELETE /resenas/:id. Reacciones: 
 Ranking: GET /api/v1/ranking?limit=10.
 Swagger: /api-docs. Respuestas: {status,data} o {status,error:{code,message}}.
 
+## Pruebas de API
+
+Importa `bruno/KarenFlix API` en Bruno y selecciona `Local`. Para Postman, importa `bruno/KarenFlix API/export/KarenFlix-CRUD.postman_collection.json`. Los casos y cuerpos de referencia están en la carpeta `data`. Las operaciones administrativas requieren un JWT de administrador configurado localmente.
+
 ## Primer administrador
 
 Registra usuario normal y promuévelo manualmente en Workbench: UPDATE usuarios SET rol='admin' WHERE email='correo-registrado'. No existe clave ni endpoint público para elevar privilegios.

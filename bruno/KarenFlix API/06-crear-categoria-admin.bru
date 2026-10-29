@@ -27,6 +27,10 @@ body:json {
 
 tests {
   test("Crear categoría admin devuelve un estado permitido", function () {
-    expect([201, 401, 403, 409]).to.include(res.getStatus());
+    expect(res.getStatus()).to.equal(201);
   });
+}
+
+script:post-response {
+  if (res.getStatus() === 201) bru.setEnvVar('categoryId', String(res.getBody().data.id));
 }
