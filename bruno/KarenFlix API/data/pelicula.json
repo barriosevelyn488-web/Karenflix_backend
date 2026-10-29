@@ -1,0 +1,11 @@
+{
+  "titulo": "Dune Bruno Demo",
+  "descripcion": "Payload de ejemplo para integración y pruebas.",
+  "tipo": "pelicula",
+  "anio": 2021,
+  "categoria_id": 1,
+  "director": "Denis Villeneuve",
+  "actores": ["Timothée Chalamet", "Zendaya"],
+  "imagen_url": "https://example.com/poster.jpg",
+  "trailer_url": "https://www.youtube.com/watch?v=n9xhJrPXop4"
+}

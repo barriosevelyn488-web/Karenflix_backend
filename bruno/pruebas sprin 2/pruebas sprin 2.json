@@ -14,15 +14,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/auth/register",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "auth",
-            "register"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "auth", "register"],
           "query": [],
           "variable": []
         },
@@ -46,15 +39,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/auth/login",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "auth",
-            "login"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "auth", "login"],
           "query": [],
           "variable": []
         }
@@ -69,14 +55,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/categorias",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "categorias"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "categorias"],
           "query": [],
           "variable": []
         }
@@ -91,14 +71,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/peliculas",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "peliculas"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "peliculas"],
           "query": [],
           "variable": []
         }
@@ -113,14 +87,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/peliculas",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "peliculas"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "peliculas"],
           "query": [],
           "variable": []
         }
@@ -135,16 +103,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/resenas/pelicula/1",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "resenas",
-            "pelicula",
-            "1"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "resenas", "pelicula", "1"],
           "query": [],
           "variable": []
         }
@@ -159,14 +119,8 @@
         "url": {
           "raw": "http://localhost:3000/api/v1/ranking?limit=10",
           "protocol": "http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "ranking"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "ranking"],
           "query": [
             {
               "key": "limit",
@@ -186,16 +140,8 @@
         "url": {
           "raw": "POST http://localhost:3000/api/v1/resenas/1/reaccion",
           "protocol": "POST http",
-          "host": [
-            "localhost:3000"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "resenas",
-            "1",
-            "reaccion"
-          ],
+          "host": ["localhost:3000"],
+          "path": ["api", "v1", "resenas", "1", "reaccion"],
           "query": [],
           "variable": []
         }

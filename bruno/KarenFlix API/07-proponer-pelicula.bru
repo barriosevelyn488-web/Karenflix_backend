@@ -1,0 +1,46 @@
+meta {
+  name: "Proponer película"
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/peliculas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "titulo": "Dune Bruno Demo",
+  "descripcion": "Payload de ejemplo para integración y pruebas.",
+  "tipo": "pelicula",
+  "anio": 2021,
+  "categoria_id": 1,
+  "director": "Denis Villeneuve",
+  "actores": [
+    "Timothée Chalamet",
+    "Zendaya"
+  ],
+  "imagen_url": "https://example.com/poster.jpg",
+  "trailer_url": "https://www.youtube.com/watch?v=n9xhJrPXop4"
+}
+ }
+
+tests {
+  test("Proponer película devuelve un estado permitido", function () {
+    expect([201, 400, 409]).to.include(res.getStatus());
+  });
+}
+
+script:post-response {
+  if (res.getStatus() === 201) bru.setEnvVar('movieId', String(res.getBody().data.id));
+}

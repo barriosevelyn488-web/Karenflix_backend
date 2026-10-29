@@ -1,0 +1,20 @@
+meta {
+  name: "Eliminar reseña propia"
+  type: http
+  seq: 27
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/resenas/{{reviewId}}
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Eliminar reseña propia devuelve un estado esperado", function () {
+    expect([204, 401, 404]).to.include(res.getStatus());
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: "Rechazar reacción propia"
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/api/v1/resenas/{{reviewId}}/reaccion
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "tipo": "like"
+}
+ }
+
+tests {
+  test("Rechazar reacción propia devuelve un estado permitido", function () {
+    expect([403]).to.include(res.getStatus());
+  });
+}

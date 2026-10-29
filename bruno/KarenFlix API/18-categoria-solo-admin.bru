@@ -1,0 +1,32 @@
+meta {
+  name: "Rechazar categoría para usuario"
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/api/v1/categorias
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+{
+  "nombre": "No permitido Bruno",
+  "descripcion": "Caso de autorización"
+}
+}
+
+tests {
+  test("Rechazar categoría para usuario devuelve un estado esperado", function () {
+    expect([403]).to.include(res.getStatus());
+  });
+}
