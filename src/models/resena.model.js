@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 
+// Recalcula el resumen agregado de una película tras modificar sus reseñas.
 async function recalcularRating(connection, peliculaId) {
   await connection.query('SELECT id FROM peliculas WHERE id=? FOR UPDATE', [peliculaId]);
   const [[stats]] = await connection.query(
@@ -13,6 +14,7 @@ async function recalcularRating(connection, peliculaId) {
   ]);
 }
 
+// Persistencia de reseñas; ResenaService valida permisos y existencia del recurso.
 export const ResenaModel = {
   async listarPorPelicula(peliculaId) {
     const [rows] = await pool.query(

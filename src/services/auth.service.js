@@ -4,6 +4,7 @@ import { UsuarioModel } from '../models/usuario.model.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
 
+// Implementa los casos de uso de autenticación consumidos por auth.controller.js.
 export const AuthService = {
   async registrar({ nombre, email, password }) {
     const normalizedEmail = email.trim().toLowerCase();
@@ -15,14 +16,14 @@ export const AuthService = {
       email: normalizedEmail,
       password: passwordHash
     });
-    const usuario = { id, nombre: nombre.trim(), email: normalizedEmail, rol: 'usuario' };
-    return { token: this.crearToken(usuario), usuario };
+    const user = { id, nombre: nombre.trim(), email: normalizedEmail, rol: 'usuario' };
+    return { token: this.crearToken(user), usuario: user };
   },
   async login({ email, password }) {
-    const usuario = await UsuarioModel.buscarPorEmail(email.trim().toLowerCase());
-    if (!usuario || !(await bcrypt.compare(password, usuario.password_hash)))
+    const user = await UsuarioModel.buscarPorEmail(email.trim().toLowerCase());
+    if (!user || !(await bcrypt.compare(password, user.password_hash)))
       throw new AppError('Credenciales inválidas.', 401, 'INVALID_CREDENTIALS');
-    const dto = { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol };
+    const dto = { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol };
     return { token: this.crearToken(dto), usuario: dto };
   },
   crearToken(usuario) {

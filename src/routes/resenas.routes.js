@@ -16,7 +16,10 @@ import {
 import { param } from 'express-validator';
 import { validate } from '../middlewares/validate.js';
 import { requireAuth } from '../middlewares/auth.js';
+
 const router = Router();
+
+// Las rutas públicas consultan reseñas; los cambios requieren una sesión autenticada.
 router.get(
   '/pelicula/:id',
   [param('id').isInt({ min: 1 }).toInt()],
@@ -28,4 +31,5 @@ router.put('/:id', requireAuth, validarActualizarResena, validate, actualizarRes
 router.delete('/:id', requireAuth, validarIdResena, validate, eliminarResena);
 router.post('/:id/reaccion', requireAuth, validarReaccion, validate, reaccionarResena);
 router.delete('/:id/reaccion', requireAuth, validarIdResena, validate, quitarReaccion);
+
 export default router;

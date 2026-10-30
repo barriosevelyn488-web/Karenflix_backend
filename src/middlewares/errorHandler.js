@@ -1,11 +1,14 @@
 import { AppError } from '../utils/AppError.js';
 import { env } from '../config/env.js';
+
 export const notFound = (req, res, next) =>
   next(new AppError(`Ruta no encontrada: ${req.method} ${req.originalUrl}`, 404, 'NOT_FOUND'));
+
+// Normaliza errores de Express y MySQL en la forma de respuesta común de la API.
 export const errorHandler = (error, req, res, _next) => {
-  let status = error.statusCode || 500,
-    code = error.code || 'INTERNAL_ERROR',
-    message = error.message || 'Error interno del servidor';
+  let status = error.statusCode || 500;
+  let code = error.code || 'INTERNAL_ERROR';
+  let message = error.message || 'Error interno del servidor';
   if (error.code === 'ER_DUP_ENTRY') {
     status = 409;
     code = 'DUPLICATE';

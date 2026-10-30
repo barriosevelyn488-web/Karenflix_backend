@@ -1,6 +1,6 @@
-export const usuarioDto = (user) => ({
-  id: user.id,
-  nombre: user.nombre,
-  email: user.email,
-  rol: user.rol
+export const usuarioDto = (usuario) => ({
+  id: usuario.id,
+  nombre: usuario.nombre,
+  email: usuario.email,
+  rol: usuario.rol
 });

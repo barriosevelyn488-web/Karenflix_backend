@@ -1,3 +1,4 @@
+// Los DTO de entrada limitan los campos que pasan de req.body a los servicios.
 export const usuarioEntradaDto = ({ nombre, email, password }) => ({
   nombre,
   email,

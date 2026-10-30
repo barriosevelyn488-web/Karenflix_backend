@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 import { env } from './env.js';
 
+// Pool compartido por los modelos para reutilizar conexiones con MySQL.
 const pool = mysql.createPool({
   host: env.db.host,
   port: env.db.port,
@@ -17,6 +18,7 @@ const pool = mysql.createPool({
 });
 
 export const db = pool;
+
 export const verificarConexion = async () => {
   const connection = await pool.getConnection();
   try {
@@ -25,5 +27,7 @@ export const verificarConexion = async () => {
     connection.release();
   }
 };
+
 export const cerrarConexion = () => pool.end();
+
 export default pool;

@@ -1,5 +1,7 @@
 import { PeliculaModel } from '../models/pelicula.model.js';
 import { AppError } from '../utils/AppError.js';
+
+// Mantiene las reglas de películas entre peliculas.controller.js y PeliculaModel.
 export const PeliculaService = {
   listar: (query) => PeliculaModel.listar(query),
   async obtener(id) {

@@ -1,3 +1,4 @@
+// Normaliza espacios y mayúsculas; los títulos además ignoran tildes al comparar.
 export const normalizarTexto = (texto = '') =>
   texto.trim().toLocaleLowerCase('es').replace(/\s+/g, ' ');
 

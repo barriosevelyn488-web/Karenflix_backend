@@ -19,7 +19,10 @@ import { listarResenasPelicula, crearResena } from '../controllers/resenas.contr
 import { validate } from '../middlewares/validate.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { requireAdmin } from '../middlewares/roles.js';
+
 const router = Router();
+
+// Cada ruta enlaza validación/autorización con el controlador correspondiente.
 router.get('/', validarListadoPeliculas, validate, listarPeliculas);
 router.get('/admin/pendientes', requireAuth, requireAdmin, listarPendientes);
 router.post('/', requireAuth, validarPelicula, validate, proponerPelicula);
@@ -44,4 +47,5 @@ router.patch(
   validate,
   cambiarEstadoPelicula
 );
+
 export default router;

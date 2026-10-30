@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 
+// Consulta agregada que entrega las películas ordenadas por su score ponderado.
 export const RankingModel = {
   async listarPorScore(limit) {
     const [rows] = await pool.query(

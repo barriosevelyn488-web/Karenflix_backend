@@ -1,4 +1,6 @@
 import pool from '../config/db.js';
+
+// Consultas de usuarios consumidas por autenticación y por la estrategia JWT.
 export const UsuarioModel = {
   async buscarPorEmail(email) {
     const [rows] = await pool.query(

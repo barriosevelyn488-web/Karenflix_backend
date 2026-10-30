@@ -1,4 +1,6 @@
 import { validationResult } from 'express-validator';
+
+// Convierte errores de los validators en una respuesta uniforme antes del controlador.
 export const validate = (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty())

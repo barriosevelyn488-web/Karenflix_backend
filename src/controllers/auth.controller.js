@@ -1,11 +1,16 @@
 import { AuthService } from '../services/auth.service.js';
 import { env } from '../config/env.js';
 import { createDto, createInputDto } from '../factories/dto.factory.js';
+
 const expiresMs = () => {
-  const m = String(env.jwt.expiresIn).match(/^(\d+)(s|m|h|d)$/);
-  if (!m) return 7200000;
-  return Number(m[1]) * { s: 1000, m: 60000, h: 3600000, d: 86400000 }[m[2]];
+  const durationMatch = String(env.jwt.expiresIn).match(/^(\d+)(s|m|h|d)$/);
+  if (!durationMatch) return 7200000;
+  return (
+    Number(durationMatch[1]) *
+    { s: 1000, m: 60000, h: 3600000, d: 86400000 }[durationMatch[2]]
+  );
 };
+
 const cookieOptions = () => ({
   httpOnly: true,
   secure: env.nodeEnv === 'production',
@@ -13,6 +18,8 @@ const cookieOptions = () => ({
   path: '/',
   maxAge: expiresMs()
 });
+
+// Los controladores conectan las solicitudes HTTP con AuthService y sus DTO de respuesta.
 export const registrar = async (req, res, next) => {
   try {
     const result = await AuthService.registrar(createInputDto('usuario', req.body));
@@ -23,10 +30,11 @@ export const registrar = async (req, res, next) => {
         status: 'success',
         data: { usuario: createDto('usuario', result.usuario), token: result.token }
       });
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
   }
 };
+
 export const login = async (req, res, next) => {
   try {
     const result = await AuthService.login(createInputDto('usuario', req.body));
@@ -34,10 +42,11 @@ export const login = async (req, res, next) => {
       status: 'success',
       data: { usuario: createDto('usuario', result.usuario), token: result.token }
     });
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
   }
 };
+
 export const logout = (_req, res) =>
   res
     .clearCookie(env.jwt.cookieName, {
@@ -48,5 +57,6 @@ export const logout = (_req, res) =>
     })
     .status(204)
     .end();
+
 export const me = (req, res) =>
   res.json({ status: 'success', data: createDto('usuario', req.user) });

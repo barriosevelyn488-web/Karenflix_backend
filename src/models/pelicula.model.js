@@ -1,6 +1,7 @@
 import pool from '../config/db.js';
 import { normalizarTitulo } from '../utils/normalizar.js';
 
+// Consulta base reutilizada para dar a los servicios el detalle calculado de cada título.
 const selectPeliculas = `
   SELECT p.id,p.titulo,p.descripcion,p.tipo,p.anio,p.duracion_minutos,
     p.categoria_id,c.nombre AS categoria_nombre,p.director_id,d.nombre AS director_nombre,
@@ -32,17 +33,18 @@ async function guardarDirector(connection, nombre) {
 
 async function guardarActores(connection, peliculaId, nombres) {
   for (const nombre of nombres || []) {
-    const [actor] = await connection.query(
+    const [actorResult] = await connection.query(
       'INSERT INTO actores(nombre) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)',
       [nombre.trim()]
     );
     await connection.query('INSERT IGNORE INTO pelicula_actor(pelicula_id,actor_id) VALUES(?,?)', [
       peliculaId,
-      actor.insertId
+      actorResult.insertId
     ]);
   }
 }
 
+// Acceso a datos de películas; PeliculaService aplica las reglas de negocio sobre estas consultas.
 export const PeliculaModel = {
   async existeAprobada(id) {
     const [rows] = await pool.query("SELECT id FROM peliculas WHERE id=? AND estado='aprobada'", [
@@ -104,7 +106,7 @@ export const PeliculaModel = {
     const [rows] = await pool.query(`${selectPeliculas} WHERE p.id=?`, [id]);
     if (!rows[0]) return null;
 
-    const [actores] = await pool.query(
+    const [actorRows] = await pool.query(
       `SELECT a.id,a.nombre
        FROM pelicula_actor pa
        JOIN actores a ON a.id=pa.actor_id
@@ -112,9 +114,10 @@ export const PeliculaModel = {
        ORDER BY a.nombre`,
       [id]
     );
-    return { ...rows[0], actores };
+    return { ...rows[0], actores: actorRows };
   },
 
+  // Crea título y relaciones de reparto en una misma transacción.
   async crear(datos, usuarioId) {
     const connection = await pool.getConnection();
     try {

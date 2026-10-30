@@ -1,11 +1,13 @@
 import swaggerUi from 'swagger-ui-express';
 import { env } from './env.js';
 
+// Respuestas comunes reutilizadas en las definiciones de cada endpoint.
 const ok = { 200: { description: 'Operación completada' } };
 const created = { 201: { description: 'Recurso creado' } };
 const unauthorized = { 401: { description: 'Se requiere autenticación' } };
 const forbidden = { 403: { description: 'Permiso insuficiente' } };
 
+// Este documento alimenta Swagger UI, montado en /api-docs desde app.js.
 export const swaggerDocument = {
   openapi: '3.0.3',
   info: {

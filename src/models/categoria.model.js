@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 
+// Persistencia de categorías; este modelo es usado por CategoriaService.
 export const CategoriaModel = {
   async listar() {
     const [rows] = await pool.query(

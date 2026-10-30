@@ -1,6 +1,8 @@
 import app from './app.js';
 import { env } from './config/env.js';
 import { verificarConexion, cerrarConexion } from './config/db.js';
+
+// Comprueba MySQL antes de aceptar solicitudes y cierra sus recursos al apagar.
 try {
   await verificarConexion();
   const server = app.listen(env.port, () =>

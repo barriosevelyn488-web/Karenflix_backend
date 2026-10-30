@@ -3,7 +3,8 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { env } from './env.js';
 import { UsuarioModel } from '../models/usuario.model.js';
 
-const fromCookieOrHeader = (req) => {
+// Passport acepta JWT tanto en Authorization: Bearer como en la cookie de sesión.
+const extractToken = (req) => {
   const bearer = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
   if (bearer) return bearer;
   const prefix = `${env.jwt.cookieName}=`;
@@ -13,10 +14,11 @@ const fromCookieOrHeader = (req) => {
     .find((part) => part.startsWith(prefix));
   return item ? decodeURIComponent(item.slice(prefix.length)) : null;
 };
+
 passport.use(
   new JwtStrategy(
     {
-      jwtFromRequest: fromCookieOrHeader,
+      jwtFromRequest: extractToken,
       secretOrKey: env.jwt.secret,
       issuer: 'karenflix-api',
       audience: 'karenflix-client'
@@ -31,4 +33,5 @@ passport.use(
     }
   )
 );
+
 export default passport;

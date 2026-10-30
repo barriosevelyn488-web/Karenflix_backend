@@ -1,4 +1,6 @@
 import rateLimit from 'express-rate-limit';
+
+// Límites generales y específicos de autenticación aplicados por los routers.
 export const apiRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,

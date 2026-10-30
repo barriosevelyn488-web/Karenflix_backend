@@ -7,6 +7,8 @@ import {
   resenaEntradaDto,
   usuarioEntradaDto
 } from '../dtos/entrada.dto.js';
+
+// Centraliza el mapeo entre datos de modelos, DTO de salida y DTO de entrada de API.
 export const createDto = (type, value) =>
   ({ usuario: usuarioDto, pelicula: peliculaDto, resena: resenaDto })[type]?.(value) ?? value;
 
