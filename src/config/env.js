@@ -32,7 +32,10 @@ export const env = {
     expiresIn: process.env.JWT_EXPIRES_IN || '2h',
     cookieName: process.env.JWT_COOKIE_NAME || 'karenflix_token'
   },
-  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5500,http://127.0.0.1:5500')
+  corsOrigins: (
+    process.env.CORS_ORIGIN ||
+    'http://localhost:5500,http://127.0.0.1:5500,http://localhost:5501,http://127.0.0.1:5501,http://localhost:5502,http://127.0.0.1:5502'
+  )
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean),
