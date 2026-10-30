@@ -7,7 +7,7 @@ const created = { 201: { description: 'Recurso creado' } };
 const unauthorized = { 401: { description: 'Se requiere autenticación' } };
 const forbidden = { 403: { description: 'Permiso insuficiente' } };
 
-// Este documento alimenta Swagger UI, montado en /api-docs desde app.js.
+// Este documento alimenta Swagger UI, montado en /docs desde app.js.
 export const swaggerDocument = {
   openapi: '3.0.3',
   info: {
