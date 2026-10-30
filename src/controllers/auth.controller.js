@@ -60,3 +60,19 @@ export const logout = (_req, res) =>
 
 export const me = (req, res) =>
   res.json({ status: 'success', data: createDto('usuario', req.user) });
+
+export const actualizarPerfil = async (req, res, next) => {
+  try {
+    const actualizado = await AuthService.actualizarPerfil(req.user.id, req.body);
+    res.json({
+      status: 'success',
+      data: {
+        ...createDto('usuario', actualizado),
+        bio: req.body?.bio || '',
+        genero_favorito: req.body?.genero_favorito || 'Ciencia ficción'
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

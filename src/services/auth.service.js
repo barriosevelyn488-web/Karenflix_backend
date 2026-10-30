@@ -26,6 +26,25 @@ export const AuthService = {
     const dto = { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol };
     return { token: this.crearToken(dto), usuario: dto };
   },
+  async actualizarPerfil(userId, { nombre, email, nuevaPassword }) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    const cleanNombre = String(nombre || '').trim();
+    if (cleanNombre.length < 2)
+      throw new AppError('El nombre debe tener mínimo 2 caracteres.', 400, 'INVALID_NAME');
+    const existente = await UsuarioModel.buscarPorEmail(normalizedEmail);
+    if (existente && Number(existente.id) !== Number(userId))
+      throw new AppError('El correo ya está en uso por otra cuenta.', 409, 'EMAIL_EXISTS');
+    const passwordHash =
+      nuevaPassword && String(nuevaPassword).length >= 8
+        ? await bcrypt.hash(String(nuevaPassword), 12)
+        : null;
+    const actualizado = await UsuarioModel.actualizar(userId, {
+      nombre: cleanNombre,
+      email: normalizedEmail,
+      passwordHash
+    });
+    return actualizado;
+  },
   crearToken(usuario) {
     return jwt.sign({ sub: String(usuario.id), rol: usuario.rol }, env.jwt.secret, {
       expiresIn: env.jwt.expiresIn,

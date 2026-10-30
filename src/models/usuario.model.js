@@ -22,5 +22,20 @@ export const UsuarioModel = {
       [nombre, email.toLowerCase(), password, 'usuario']
     );
     return result.insertId;
+  },
+  async actualizar(id, { nombre, email, passwordHash }) {
+    if (passwordHash) {
+      await pool.query(
+        'UPDATE usuarios SET nombre = ?, email = ?, password_hash = ? WHERE id = ?',
+        [nombre, email.toLowerCase(), passwordHash, id]
+      );
+    } else {
+      await pool.query('UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?', [
+        nombre,
+        email.toLowerCase(),
+        id
+      ]);
+    }
+    return this.buscarPorId(id);
   }
 };
