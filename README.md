@@ -1,4 +1,14 @@
-# KarenFlix Backend
+# KarenFlix Backend · API RESTful
+
+[![Repositorio Frontend](https://img.shields.io/badge/Frontend-Repositorio_Oficial-E50914?style=for-the-badge&logo=github&logoColor=white)](https://github.com/WilKtu/karenflix-frontend)
+[![Documentación SCRUM](https://img.shields.io/badge/SCRUM-Documento_Oficial_PDF-007A78?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white)](docs/KarenFlix_Documento_SCRUM_Oficial.pdf)
+
+> **Repositorio Oficial del Frontend:** [https://github.com/WilKtu/karenflix-frontend](https://github.com/WilKtu/karenflix-frontend)  
+> **Proyecto Full-Stack:** KarenFlix (Plataforma de Catálogo, Reseñas y Moderación de Películas)  
+> **Equipo de Desarrollo:** Evelyn Barrios (Scrum Master) & Wilder Katu (Product Owner)  
+> **Docentes Evaluadores:** Eduin Salas & Andre Lopez · Campuslands 2026
+
+---
 
 Para KarenFlix se desarrolló una API con Node.js, Express y MySQL. El frontend se conectó mediante HTTP y recibió respuestas JSON; las credenciales de MySQL permanecieron en el servidor.
 
