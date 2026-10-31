@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { env } from './env.js';
 
-// Pool compartido por los modelos para reutilizar conexiones con MySQL.
+// Pool compartido por los modelos para reutilizar conexiones con MySQL (Local o Aiven Cloud).
 const pool = mysql.createPool({
   host: env.db.host,
   port: env.db.port,
@@ -14,7 +14,7 @@ const pool = mysql.createPool({
   charset: 'utf8mb4',
   timezone: 'Z',
   decimalNumbers: true,
-  ssl: env.db.ssl ? { ca: env.db.ca || undefined, rejectUnauthorized: true } : undefined
+  ssl: env.db.ssl ? { ca: env.db.ca || undefined, rejectUnauthorized: Boolean(env.db.ca) } : undefined
 });
 
 export const db = pool;
