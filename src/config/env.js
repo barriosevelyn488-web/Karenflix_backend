@@ -1,4 +1,7 @@
 import dotenv from 'dotenv';
+import { createRequire } from 'node:module';
+
+const { version } = createRequire(import.meta.url)('../../package.json');
 
 dotenv.config();
 
@@ -12,7 +15,7 @@ const requireProductionValue = (name, value) => {
 export const env = {
   port: Number(process.env.PORT || 3000),
   nodeEnv: process.env.NODE_ENV || 'development',
-  apiVersion: process.env.npm_package_version || '0.1.0',
+  apiVersion: version,
   db: {
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 3306),
@@ -20,7 +23,7 @@ export const env = {
     password: process.env.DB_PASSWORD || '',
     name: process.env.DB_NAME || 'karenflix',
     ssl: parseBoolean(process.env.DB_SSL),
-    ca: process.env.DB_CA,
+    ca: process.env.DB_CA?.replace(/\\n/g, '\n'),
     connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10)
   },
   jwt: {

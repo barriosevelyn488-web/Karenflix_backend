@@ -150,4 +150,13 @@ export const swaggerDocument = {
   }
 };
 
-export const swaggerMiddleware = [swaggerUi.serve, swaggerUi.setup(swaggerDocument)];
+// Vercel no sirve express.static, por eso los archivos de Swagger UI se cargan desde un CDN.
+const SWAGGER_CDN = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.0';
+
+export const swaggerMiddleware = [
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customCssUrl: `${SWAGGER_CDN}/swagger-ui.css`,
+    customJs: [`${SWAGGER_CDN}/swagger-ui-bundle.js`, `${SWAGGER_CDN}/swagger-ui-standalone-preset.js`]
+  })
+];
