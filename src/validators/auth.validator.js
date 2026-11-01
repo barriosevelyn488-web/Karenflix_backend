@@ -6,7 +6,7 @@ export const validarRegistro = [
   body('email').trim().isEmail().normalizeEmail().isLength({ max: 150 }),
   body('password')
     .isString()
-    .isLength({ min: 10 })
+    .isLength({ min: 8 })
     .custom((value) => Buffer.byteLength(value, 'utf8') <= 72)
 ];
 
