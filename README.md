@@ -1,8 +1,16 @@
 # KarenFlix Backend · API RESTful
 
+[![App en Vivo](https://img.shields.io/badge/Vercel-App_en_Vivo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://karenflix-frontend.vercel.app)
+[![API Swagger Docs](https://img.shields.io/badge/Swagger-Documentación_API-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://karenflix-backend.vercel.app/api-docs)
+[![Video Demostrativo](https://img.shields.io/badge/Google_Drive-Video_Demostrativo_HD-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/1HSiNq5PU6jD3jWmLozYrz2bn8PvheCkM?usp=sharing)
+[![GitHub Projects](https://img.shields.io/badge/SCRUM-GitHub_Projects_Kanban-1F883D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/barriosevelyn488-web/projects/1)
 [![Repositorio Frontend](https://img.shields.io/badge/Frontend-Repositorio_Oficial-E50914?style=for-the-badge&logo=github&logoColor=white)](https://github.com/WilKtu/karenflix-frontend)
 [![Documentación SCRUM](https://img.shields.io/badge/SCRUM-Documento_Oficial_PDF-007A78?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white)](docs/KarenFlix_Documento_SCRUM_Oficial.pdf)
 
+> **Aplicación en Producción (Frontend):** [https://karenflix-frontend.vercel.app](https://karenflix-frontend.vercel.app)  
+> **API REST y Swagger UI (Backend):** [https://karenflix-backend.vercel.app/api-docs](https://karenflix-backend.vercel.app/api-docs)  
+> **Video Demostrativo Oficial (Google Drive):** [https://drive.google.com/drive/folders/1HSiNq5PU6jD3jWmLozYrz2bn8PvheCkM?usp=sharing](https://drive.google.com/drive/folders/1HSiNq5PU6jD3jWmLozYrz2bn8PvheCkM?usp=sharing)  
+> **Tablero de Seguimiento SCRUM (GitHub Projects):** [https://github.com/users/barriosevelyn488-web/projects/1](https://github.com/users/barriosevelyn488-web/projects/1)  
 > **Repositorio Oficial del Frontend:** [https://github.com/WilKtu/karenflix-frontend](https://github.com/WilKtu/karenflix-frontend)  
 > **Proyecto Full-Stack:** KarenFlix (Plataforma de Catálogo, Reseñas y Moderación de Películas)  
 > **Equipo de Desarrollo:** Evelyn Barrios (Scrum Master) & Wilder Katu (Product Owner)  
@@ -10,7 +18,7 @@
 
 ---
 
-Para KarenFlix se desarrolló una API con Node.js, Express y MySQL. El frontend se conectó mediante HTTP y recibió respuestas JSON; las credenciales de MySQL permanecieron en el servidor.
+Para KarenFlix se desarrolló una API con Node.js, Express y MySQL (Aiven Cloud). El frontend se conectó mediante HTTP y recibió respuestas JSON; las credenciales de MySQL permanecieron en el servidor.
 
 ## Implementación
 
@@ -35,12 +43,12 @@ La configuración local se verificó en `http://localhost:3000/health`, `http://
 
 ## Conexión con el frontend
 
-El navegador se comunicó con la API en `http://localhost:3000/api/v1`. El origen real del frontend se agregó a `CORS_ORIGIN` en `.env`; por ejemplo, si el frontend se ejecutó en `http://localhost:5173`, ese origen se agregó exactamente. No se modificó el repositorio frontend durante este trabajo.
+El navegador se comunicó con la API en `http://localhost:3000/api/v1` en local o en `https://karenflix-backend.vercel.app/api/v1` en producción. El origen del frontend desplegado en Vercel está habilitado en CORS.
 
 Para conservar la cookie de sesión, las solicitudes del navegador se enviaron con `credentials: 'include'`:
 
 ```js
-const API_URL = 'http://localhost:3000/api/v1';
+const API_URL = 'https://karenflix-backend.vercel.app/api/v1';
 
 const respuesta = await fetch(`${API_URL}/auth/login`, {
   method: 'POST',

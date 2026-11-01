@@ -26,7 +26,7 @@ app.use(helmet());
 app.use(
   cors({
     origin(origin, cb) {
-      if (!origin || env.corsOrigins.includes(origin)) return cb(null, true);
+      if (!origin || env.corsOrigins.includes(origin) || origin.endsWith('.vercel.app')) return cb(null, true);
       return cb(new Error('Origen no permitido por CORS.'));
     },
     credentials: true,
