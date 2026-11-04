@@ -1,22 +1,34 @@
-import { ReaccionModel } from '../models/reaccion.model.js';
-import { ResenaModel } from '../models/resena.model.js';
+import { BaseService } from './base.service.js';
+import { reaccionModel as defaultReaccionModel, ReaccionModel } from '../models/reaccion.model.js';
+import { resenaModel as defaultResenaModel, ResenaModel } from '../models/resena.model.js';
 
-export const ReaccionService = {
-  async reaccionar({ usuarioId, resenaId, tipo }) {
-    const resena = await ResenaModel.buscarPorId(resenaId);
-    if (!resena) {
-      const err = new Error('Reseña no encontrada.');
-      err.statusCode = 404;
-      throw err;
-    }
-
-    if (resena.usuario_id === usuarioId) {
-      const err = new Error('No puedes reaccionar a tu propia reseña.');
-      err.statusCode = 403;
-      throw err;
-    }
-
-    const resultado = await ReaccionModel.registrarReaccion({ usuarioId, resenaId, tipo });
-    return resultado;
+/**
+ * Servicio de Reacciones (Like / Dislike) orientado a objetos
+ */
+export class ReaccionesService extends BaseService {
+  constructor(reaccionModel = defaultReaccionModel, resenaModel = defaultResenaModel) {
+    super();
+    this.reaccionModel = reaccionModel;
+    this.resenaModel = resenaModel;
   }
-};
+
+  /**
+   * Registra una reacción (like/dislike) sobre una reseña existente.
+   */
+  async reaccionar({ usuarioId, resenaId, tipo }) {
+    const resena = await this.resenaModel.buscarPorId(resenaId);
+    if (!resena) {
+      throw this.createError('Reseña no encontrada.', 404);
+    }
+
+    if (!['like', 'dislike'].includes(tipo)) {
+      throw this.createError('El tipo de reacción debe ser like o dislike.', 400);
+    }
+
+    return await this.reaccionModel.registrarReaccion({ usuarioId, resenaId, tipo });
+  }
+}
+
+export const reaccionesService = new ReaccionesService();
+export const ReaccionService = reaccionesService;
+export default ReaccionesService;

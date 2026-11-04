@@ -1,26 +1,43 @@
-import mysql from 'mysql2/promise';
-import { env } from '../config/env.js';
+import { BaseService } from './base.service.js';
+import { peliculaModel as defaultPeliculaModel, PeliculaModel } from '../models/pelicula.model.js';
+import { calcularScorePonderado } from '../utils/ranking.js';
 
-const pool = mysql.createPool({
-  host: env.db.host,
-  port: env.db.port,
-  user: env.db.user,
-  password: env.db.password,
-  database: env.db.name
-});
-
-export const RankingService = {
-  async obtenerRanking(limit = 10) {
-    const [rows] = await pool.query(
-      `SELECT p.*, c.nombre as categoria_nombre, d.nombre as director_nombre 
-       FROM peliculas p 
-       JOIN categorias c ON p.categoria_id = c.id 
-       LEFT JOIN directores d ON p.director_id = d.id 
-       WHERE p.estado = 'aprobada' 
-       ORDER BY p.rating_promedio DESC, p.total_resenas DESC 
-       LIMIT ?`,
-      [Number(limit)]
-    );
-    return rows;
+/**
+ * Servicio de Ranking Ponderado orientado a objetos
+ */
+export class RankingService extends BaseService {
+  constructor(peliculaModel = defaultPeliculaModel) {
+    super();
+    this.peliculaModel = peliculaModel;
   }
-};
+
+  /**
+   * Obtiene el listado de películas ordenadas según su score bayesiano ponderado.
+   * @param {number} limit
+   */
+  async obtenerRanking(limit = 10) {
+    const peliculas = await this.peliculaModel.listarAprobadas({ limit: 100 });
+
+    const conScore = peliculas.map((p) => {
+      const peliculaJson = p.toJSON();
+      const score = calcularScorePonderado(peliculaJson.rating_promedio, peliculaJson.total_resenas);
+      return {
+        ...peliculaJson,
+        score_ponderado: score
+      };
+    });
+
+    conScore.sort((a, b) => {
+      if (b.score_ponderado !== a.score_ponderado) {
+        return b.score_ponderado - a.score_ponderado;
+      }
+      return b.rating_promedio - a.rating_promedio;
+    });
+
+    const parsedLimit = parseInt(limit, 10) || 10;
+    return conScore.slice(0, parsedLimit);
+  }
+}
+
+export const rankingService = new RankingService();
+export default RankingService;
