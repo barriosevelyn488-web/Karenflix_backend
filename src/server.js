@@ -1,6 +1,6 @@
 import app from './app.js';
-import { env } from './config/env.js';
+import { config } from './config/config.js';
 
-app.listen(env.port, () => {
-  console.log(`Servidor corriendo en el puerto ${env.port} en entorno [${env.nodeEnv}]`);
+app.listen(config.port, () => {
+  console.log(`Servidor corriendo en el puerto ${config.port} en entorno [${config.nodeEnv}]`);
 });

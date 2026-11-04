@@ -1,11 +1,11 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { env } from './env.js';
-import { UsuarioModel } from '../models/usuario.model.js';
+import { config } from './config.js';
+import { usuarioModel } from '../models/usuario.model.js';
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: env.jwtSecret || 'karenflix_2026'
+  secretOrKey: config.jwt.secret
 };
 
 passport.use(
