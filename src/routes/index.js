@@ -6,6 +6,7 @@ import peliculasRoutes from './peliculas.routes.js';
 import resenasRoutes from './resenas.routes.js';
 import rankingRoutes from './ranking.routes.js';
 import favoritosRoutes from './favoritos.routes.js';
+import usuariosRoutes from './usuarios.routes.js';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/peliculas', peliculasRoutes);
 router.use('/resenas', resenasRoutes);
 router.use('/ranking', rankingRoutes);
 router.use('/favoritos', favoritosRoutes);
+router.use('/usuarios', usuariosRoutes);
 
 export default router;
