@@ -8,7 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Montaje de rutas con versión API v1
 app.use('/api/v1', router);
 
 app.use((err, req, res, next) => {
@@ -16,7 +15,7 @@ app.use((err, req, res, next) => {
   const status = statusCode >= 500 ? 'error' : 'fail';
 
   if (process.env.NODE_ENV !== 'production' && statusCode >= 500) {
-    console.error('[Error no controlado]:', err);
+    console.error('[Error]:', err);
   }
 
   res.status(statusCode).json({

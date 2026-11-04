@@ -2,9 +2,6 @@ import { BaseService } from './base.service.js';
 import { resenaModel as defaultResenaModel, ResenaModel } from '../models/resena.model.js';
 import { peliculaModel as defaultPeliculaModel, PeliculaModel } from '../models/pelicula.model.js';
 
-/**
- * Servicio de Reseñas orientado a objetos con control transaccional
- */
 export class ResenasService extends BaseService {
   constructor(resenaModel = defaultResenaModel, peliculaModel = defaultPeliculaModel) {
     super();
@@ -12,9 +9,6 @@ export class ResenasService extends BaseService {
     this.peliculaModel = peliculaModel;
   }
 
-  /**
-   * Crea una reseña validando que la película esté aprobada y que el usuario no tenga reseña previa.
-   */
   async crear({ pelicula_id, usuario_id, titulo, comentario, calificacion }) {
     const pelicula = await this.peliculaModel.buscarPorId(pelicula_id);
     if (!pelicula || pelicula.estado !== 'aprobada') {
@@ -38,17 +32,11 @@ export class ResenasService extends BaseService {
     }
   }
 
-  /**
-   * Lista todas las reseñas de una película dada.
-   */
   async listarPorPelicula(peliculaId) {
     const resenas = await this.resenaModel.listarPorPelicula(peliculaId);
     return resenas.map((r) => r.toJSON());
   }
 
-  /**
-   * Actualiza el contenido o calificación de una reseña verificando autoría.
-   */
   async actualizar(resenaId, usuarioId, { titulo, comentario, calificacion }) {
     const resena = await this.resenaModel.buscarPorId(resenaId);
     if (!resena) {
@@ -70,9 +58,6 @@ export class ResenasService extends BaseService {
     return actualizada.toJSON();
   }
 
-  /**
-   * Elimina una reseña verificando autoría o rol de administrador.
-   */
   async eliminar(resenaId, usuarioId, userRol = 'usuario') {
     const resena = await this.resenaModel.buscarPorId(resenaId);
     if (!resena) {

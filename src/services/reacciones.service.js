@@ -2,9 +2,6 @@ import { BaseService } from './base.service.js';
 import { reaccionModel as defaultReaccionModel, ReaccionModel } from '../models/reaccion.model.js';
 import { resenaModel as defaultResenaModel, ResenaModel } from '../models/resena.model.js';
 
-/**
- * Servicio de Reacciones (Like / Dislike) orientado a objetos
- */
 export class ReaccionesService extends BaseService {
   constructor(reaccionModel = defaultReaccionModel, resenaModel = defaultResenaModel) {
     super();
@@ -12,9 +9,6 @@ export class ReaccionesService extends BaseService {
     this.resenaModel = resenaModel;
   }
 
-  /**
-   * Registra una reacción (like/dislike) sobre una reseña existente.
-   */
   async reaccionar({ usuarioId, resenaId, tipo }) {
     const resena = await this.resenaModel.buscarPorId(resenaId);
     if (!resena) {

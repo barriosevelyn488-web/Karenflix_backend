@@ -1,11 +1,5 @@
 import { BaseEntity } from './BaseEntity.js';
 
-/**
- * Entidad de Dominio Categoria (POO)
- * - Herencia: extends BaseEntity
- * - Encapsulamiento: atributos privados (#), getters y setters
- * - Polimorfismo: sobrescritura de toJSON() y validar()
- */
 export class Categoria extends BaseEntity {
   #nombre;
   #descripcion;
@@ -35,16 +29,10 @@ export class Categoria extends BaseEntity {
     this.#descripcion = valor ? String(valor).trim() : '';
   }
 
-  /**
-   * Sobrescritura polimórfica de validar()
-   */
   validar() {
     return Boolean(this.#nombre && this.#nombre.trim().length > 0);
   }
 
-  /**
-   * Sobrescritura polimórfica de toJSON()
-   */
   toJSON() {
     return {
       ...super.toJSON(),

@@ -1,18 +1,12 @@
 import { BaseService } from './base.service.js';
 import { categoriaModel as defaultCategoriaModel, CategoriaModel } from '../models/categoria.model.js';
 
-/**
- * Servicio de Categorías orientado a objetos
- */
 export class CategoriasService extends BaseService {
   constructor(categoriaModel = defaultCategoriaModel) {
     super();
     this.categoriaModel = categoriaModel;
   }
 
-  /**
-   * Crea una nueva categoría controlando duplicados.
-   */
   async crear({ nombre, descripcion }) {
     try {
       const id = await this.categoriaModel.crear({ nombre: nombre.trim(), descripcion });
@@ -25,17 +19,11 @@ export class CategoriasService extends BaseService {
     }
   }
 
-  /**
-   * Lista todas las categorías.
-   */
   async listar() {
     const cats = await this.categoriaModel.listar();
     return cats.map((c) => c.toJSON());
   }
 
-  /**
-   * Obtiene una categoría por su ID.
-   */
   async buscarPorId(id) {
     const cat = await this.categoriaModel.buscarPorId(id);
     if (!cat) {
@@ -44,9 +32,6 @@ export class CategoriasService extends BaseService {
     return cat.toJSON();
   }
 
-  /**
-   * Actualiza una categoría existente.
-   */
   async actualizar(id, { nombre, descripcion }) {
     await this.buscarPorId(id);
     try {
@@ -60,9 +45,6 @@ export class CategoriasService extends BaseService {
     }
   }
 
-  /**
-   * Elimina una categoría si no tiene películas vinculadas.
-   */
   async eliminar(id) {
     await this.buscarPorId(id);
     try {
@@ -80,4 +62,3 @@ export class CategoriasService extends BaseService {
 export const categoriasService = new CategoriasService();
 export const CategoriaService = categoriasService;
 export default CategoriasService;
-

@@ -1,11 +1,5 @@
 import { BaseEntity } from './BaseEntity.js';
 
-/**
- * Entidad de Dominio Pelicula / Serie (POO)
- * - Herencia: extends BaseEntity
- * - Encapsulamiento: atributos privados (#), getters y setters
- * - Polimorfismo: sobrescritura de toJSON() y validar()
- */
 export class Pelicula extends BaseEntity {
   #titulo;
   #titulo_normalizado;
@@ -63,7 +57,6 @@ export class Pelicula extends BaseEntity {
     this.#total_resenas = Number(total_resenas) || 0;
   }
 
-  // --- Getters & Setters ---
   get titulo() { return this.#titulo; }
   set titulo(valor) {
     if (!valor || typeof valor !== 'string') throw new Error('El título es obligatorio');
@@ -80,7 +73,7 @@ export class Pelicula extends BaseEntity {
   get tipo() { return this.#tipo; }
   set tipo(valor) {
     const tipos = ['pelicula', 'serie', 'anime'];
-    if (!tipos.includes(valor)) throw new Error(`Tipo inválido: ${valor}. Debe ser: ${tipos.join(', ')}`);
+    if (!tipos.includes(valor)) throw new Error(`Tipo inválido: ${valor}`);
     this.#tipo = valor;
   }
 
@@ -111,16 +104,10 @@ export class Pelicula extends BaseEntity {
     return this.#estado === 'aprobada';
   }
 
-  /**
-   * Sobrescritura polimórfica de validar()
-   */
   validar() {
     return Boolean(this.#titulo && this.#tipo && this.#categoria_id);
   }
 
-  /**
-   * Sobrescritura polimórfica de toJSON()
-   */
   toJSON() {
     return {
       ...super.toJSON(),

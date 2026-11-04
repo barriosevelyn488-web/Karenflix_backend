@@ -1,13 +1,6 @@
 import { BaseModel } from './base.model.js';
 
-/**
- * Modelo de Reacciones a Reseñas (Like / Dislike) orientado a objetos
- */
 export class ReaccionModel extends BaseModel {
-  /**
-   * Registra o actualiza la reacción de un usuario en una reseña de forma atómica.
-   * @param {object} param0
-   */
   async registrarReaccion({ usuarioId, resenaId, tipo }) {
     return this.transaction(async (conn) => {
       await conn.query(

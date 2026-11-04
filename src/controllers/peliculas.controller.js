@@ -1,9 +1,6 @@
 import { BaseController } from './base.controller.js';
 import { peliculasService as defaultPeliculasService, PeliculasService } from '../services/peliculas.service.js';
 
-/**
- * Controlador de Películas y Series orientado a objetos
- */
 export class PeliculasController extends BaseController {
   constructor(peliculasService = defaultPeliculasService) {
     super();

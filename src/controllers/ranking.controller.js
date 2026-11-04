@@ -1,9 +1,6 @@
 import { BaseController } from './base.controller.js';
 import { rankingService as defaultRankingService, RankingService } from '../services/ranking.service.js';
 
-/**
- * Controlador de Ranking Ponderado orientado a objetos
- */
 export class RankingController extends BaseController {
   constructor(rankingService = defaultRankingService) {
     super();

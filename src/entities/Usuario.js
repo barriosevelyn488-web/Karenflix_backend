@@ -1,12 +1,5 @@
 import { BaseEntity } from './BaseEntity.js';
 
-/**
- * Entidad de Dominio Usuario (POO)
- * Demuestra:
- * - Herencia: extends BaseEntity
- * - Encapsulamiento: atributos privados (#), getters y setters
- * - Polimorfismo: sobrescritura (override) de toJSON() y validar()
- */
 export class Usuario extends BaseEntity {
   #nombre;
   #email;
@@ -50,7 +43,7 @@ export class Usuario extends BaseEntity {
   set rol(valor) {
     const rolesValidos = ['usuario', 'admin'];
     if (!rolesValidos.includes(valor)) {
-      throw new Error(`Rol inválido: ${valor}. Debe ser 'usuario' o 'admin'`);
+      throw new Error(`Rol inválido: ${valor}`);
     }
     this.#rol = valor;
   }
@@ -63,17 +56,10 @@ export class Usuario extends BaseEntity {
     return this.#rol === 'admin';
   }
 
-  /**
-   * Sobrescritura polimórfica de validar()
-   */
   validar() {
     return Boolean(this.#nombre && this.#email && this.#email.includes('@'));
   }
 
-  /**
-   * Sobrescritura polimórfica de toJSON()
-   * Oculta el password_hash y extiende la serialización base de BaseEntity.
-   */
   toJSON() {
     return {
       ...super.toJSON(),

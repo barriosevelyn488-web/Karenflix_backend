@@ -2,18 +2,12 @@ import { BaseService } from './base.service.js';
 import { peliculaModel as defaultPeliculaModel, PeliculaModel } from '../models/pelicula.model.js';
 import { normalizarTexto } from '../utils/normalizar.js';
 
-/**
- * Servicio de Películas y Series orientado a objetos
- */
 export class PeliculasService extends BaseService {
   constructor(peliculaModel = defaultPeliculaModel) {
     super();
     this.peliculaModel = peliculaModel;
   }
 
-  /**
-   * Propone o registra una nueva película/serie en el catálogo.
-   */
   async proponer({
     titulo,
     descripcion,
@@ -53,17 +47,11 @@ export class PeliculasService extends BaseService {
     return creada ? creada.toJSON() : { id: peliculaId, titulo, estado };
   }
 
-  /**
-   * Lista películas aprobadas según filtros, ordenamiento y paginación.
-   */
   async listarAprobadas(filtros = {}) {
     const peliculas = await this.peliculaModel.listarAprobadas(filtros);
     return peliculas.map((p) => p.toJSON());
   }
 
-  /**
-   * Obtiene una película por su identificador.
-   */
   async buscarPorId(id) {
     const pelicula = await this.peliculaModel.buscarPorId(id);
     if (!pelicula) {
@@ -72,17 +60,11 @@ export class PeliculasService extends BaseService {
     return pelicula.toJSON();
   }
 
-  /**
-   * Lista películas pendientes de aprobación para moderación de administradores.
-   */
   async listarPendientes() {
     const pendientes = await this.peliculaModel.listarPendientes();
     return pendientes.map((p) => p.toJSON());
   }
 
-  /**
-   * Cambia el estado de una película (aprobada, rechazada, pendiente).
-   */
   async cambiarEstado(id, estado, aprobadoPor) {
     const pelicula = await this.peliculaModel.buscarPorId(id);
     if (!pelicula) {
@@ -98,9 +80,6 @@ export class PeliculasService extends BaseService {
     return actualizada ? actualizada.toJSON() : { id, estado };
   }
 
-  /**
-   * Actualiza los datos de una película existente.
-   */
   async actualizar(id, data) {
     await this.buscarPorId(id);
 
@@ -126,9 +105,6 @@ export class PeliculasService extends BaseService {
     return actualizada.toJSON();
   }
 
-  /**
-   * Elimina una película por su ID.
-   */
   async eliminar(id) {
     await this.buscarPorId(id);
     return await this.peliculaModel.eliminar(id);
@@ -138,4 +114,3 @@ export class PeliculasService extends BaseService {
 export const peliculasService = new PeliculasService();
 export const PeliculaService = peliculasService;
 export default PeliculasService;
-

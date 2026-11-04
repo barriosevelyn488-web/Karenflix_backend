@@ -2,9 +2,6 @@ import { BaseController } from './base.controller.js';
 import { resenasService as defaultResenasService, ResenasService } from '../services/resenas.service.js';
 import { reaccionesService as defaultReaccionesService, ReaccionesService } from '../services/reacciones.service.js';
 
-/**
- * Controlador de Reseñas orientado a objetos
- */
 export class ResenasController extends BaseController {
   constructor(
     resenasService = defaultResenasService,

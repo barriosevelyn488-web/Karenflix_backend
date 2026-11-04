@@ -4,18 +4,12 @@ import { BaseService } from './base.service.js';
 import { usuarioModel as defaultUsuarioModel, UsuarioModel } from '../models/usuario.model.js';
 import { config } from '../config/config.js';
 
-/**
- * Servicio de Autenticación orientado a objetos
- */
 export class AuthService extends BaseService {
   constructor(usuarioModel = defaultUsuarioModel) {
     super();
     this.usuarioModel = usuarioModel;
   }
 
-  /**
-   * Genera un token JWT para un usuario.
-   */
   generarToken(usuario) {
     const payload = {
       id: usuario.id,
@@ -26,9 +20,6 @@ export class AuthService extends BaseService {
     return jwt.sign(payload, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
   }
 
-  /**
-   * Registra un nuevo usuario en la plataforma.
-   */
   async registrar({ nombre, email, password, rol = 'usuario' }) {
     const existe = await this.usuarioModel.buscarPorEmail(email);
     if (existe) {
@@ -49,9 +40,6 @@ export class AuthService extends BaseService {
     return { token, usuario };
   }
 
-  /**
-   * Autentica las credenciales de un usuario.
-   */
   async login({ email, password }) {
     const usuario = await this.usuarioModel.buscarPorEmail(email);
     if (!usuario) {
@@ -69,9 +57,6 @@ export class AuthService extends BaseService {
     return { token, usuario: usuarioData };
   }
 
-  /**
-   * Obtiene la información del perfil del usuario por ID.
-   */
   async obtenerPerfil(id) {
     const usuario = await this.usuarioModel.buscarPorId(id);
     if (!usuario) {
@@ -80,9 +65,6 @@ export class AuthService extends BaseService {
     return usuario.toJSON();
   }
 
-  /**
-   * Actualiza el perfil de un usuario (nombre o contraseña).
-   */
   async actualizarPerfil(id, { nombre, password }) {
     let hashedPassword = null;
     if (password && password.trim()) {

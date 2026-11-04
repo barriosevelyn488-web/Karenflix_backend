@@ -1,9 +1,6 @@
 import { BaseController } from './base.controller.js';
 import { favoritosService as defaultFavoritosService, FavoritosService } from '../services/favoritos.service.js';
 
-/**
- * Controlador de Favoritos / Watchlist orientado a objetos
- */
 export class FavoritosController extends BaseController {
   constructor(favoritosService = defaultFavoritosService) {
     super();
@@ -45,4 +42,3 @@ export const listarFavoritos = favoritosController.listarFavoritos;
 export const agregarFavorito = favoritosController.agregarFavorito;
 export const eliminarFavorito = favoritosController.eliminarFavorito;
 export default FavoritosController;
-

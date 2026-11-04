@@ -1,9 +1,6 @@
 import { BaseController } from './base.controller.js';
 import { authService as defaultAuthService, AuthService } from '../services/auth.service.js';
 
-/**
- * Controlador de Autenticación orientado a objetos
- */
 export class AuthController extends BaseController {
   constructor(authService = defaultAuthService) {
     super();

@@ -1,15 +1,7 @@
 import { BaseModel } from './base.model.js';
 import { Pelicula } from '../entities/Pelicula.js';
 
-/**
- * Modelo de Películas y Series orientado a objetos
- */
 export class PeliculaModel extends BaseModel {
-  /**
-   * Obtiene o crea un director por su nombre.
-   * @param {string} nombre
-   * @returns {Promise<number|null>}
-   */
   async obtenerOCrearDirector(nombre) {
     if (!nombre || !nombre.trim()) return null;
     const nombreLimpio = nombre.trim();
@@ -21,9 +13,6 @@ export class PeliculaModel extends BaseModel {
     return nuevo.insertId;
   }
 
-  /**
-   * Inserta una nueva propuesta de película.
-   */
   async crear({
     titulo,
     tituloNormalizado,
@@ -58,20 +47,12 @@ export class PeliculaModel extends BaseModel {
     return result.insertId;
   }
 
-  /**
-   * Busca si ya existe una película con un título normalizado dado.
-   * @param {string} tituloNormalizado
-   */
   async buscarPorTituloNormalizado(tituloNormalizado) {
     const [rows] = await this.query('SELECT * FROM peliculas WHERE titulo_normalizado = ?', [tituloNormalizado]);
     if (rows.length === 0) return null;
     return new Pelicula(rows[0]);
   }
 
-  /**
-   * Busca una película por ID incluyendo nombre de categoría y director.
-   * @param {number} id
-   */
   async buscarPorId(id) {
     const [rows] = await this.query(
       `SELECT p.*, c.nombre as categoria_nombre, d.nombre as director_nombre 
@@ -85,9 +66,6 @@ export class PeliculaModel extends BaseModel {
     return new Pelicula(rows[0]);
   }
 
-  /**
-   * Lista películas aprobadas con soporte de filtros, orden y paginación.
-   */
   async listarAprobadas({ categoria, orden, busqueda, limit, page } = {}) {
     let sql = `
       SELECT p.*, c.nombre as categoria_nombre, d.nombre as director_nombre 
@@ -119,7 +97,6 @@ export class PeliculaModel extends BaseModel {
     } else if (orden === 'popularidad') {
       sql += ` ORDER BY p.total_resenas DESC, p.rating_promedio DESC`;
     } else {
-      // Por defecto orden por ranking / calificación
       sql += ` ORDER BY p.rating_promedio DESC, p.total_resenas DESC`;
     }
 
@@ -137,9 +114,6 @@ export class PeliculaModel extends BaseModel {
     return rows.map((row) => new Pelicula(row));
   }
 
-  /**
-   * Lista películas en estado pendiente de aprobación (para moderación de admins).
-   */
   async listarPendientes() {
     const [rows] = await this.query(
       `SELECT p.*, c.nombre as categoria_nombre, d.nombre as director_nombre, u.email as creado_por_email 
@@ -153,9 +127,6 @@ export class PeliculaModel extends BaseModel {
     return rows.map((row) => new Pelicula(row));
   }
 
-  /**
-   * Cambia el estado de una película (aprobada, rechazada, pendiente).
-   */
   async actualizarEstado(id, estado, aprobadoPor) {
     await this.query(
       `UPDATE peliculas SET estado = ?, aprobado_por = ? WHERE id = ?`,
@@ -164,9 +135,6 @@ export class PeliculaModel extends BaseModel {
     return this.buscarPorId(id);
   }
 
-  /**
-   * Actualiza los datos de una película existente.
-   */
   async actualizar(id, { titulo, tituloNormalizado, descripcion, duracionMinutos, tipo, anio, categoriaId, directorId, imagenUrl }) {
     await this.query(
       `UPDATE peliculas 
@@ -196,9 +164,6 @@ export class PeliculaModel extends BaseModel {
     return this.buscarPorId(id);
   }
 
-  /**
-   * Elimina una película por su ID.
-   */
   async eliminar(id) {
     const [result] = await this.query('DELETE FROM peliculas WHERE id = ?', [id]);
     return result.affectedRows > 0;
@@ -207,4 +172,3 @@ export class PeliculaModel extends BaseModel {
 
 export const peliculaModel = new PeliculaModel();
 export default PeliculaModel;
-

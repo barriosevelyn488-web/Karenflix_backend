@@ -1,13 +1,7 @@
 import { BaseModel } from './base.model.js';
 import { Resena } from '../entities/Resena.js';
 
-/**
- * Modelo de Reseñas orientado a objetos con soporte transaccional ACID
- */
 export class ResenaModel extends BaseModel {
-  /**
-   * Crea una reseña de forma transaccional actualizando las estadísticas de la película.
-   */
   async crearConTransaccion({ peliculaId, usuarioId, titulo, comentario, calificacion }) {
     return this.transaction(async (conn) => {
       const [resResult] = await conn.query(
@@ -16,7 +10,6 @@ export class ResenaModel extends BaseModel {
       );
       const resenaId = resResult.insertId;
 
-      // Recalcular promedio y total en la película
       const [stats] = await conn.query(
         `SELECT AVG(calificacion) as promedio, COUNT(*) as total FROM resenas WHERE pelicula_id = ?`,
         [peliculaId]
@@ -33,10 +26,6 @@ export class ResenaModel extends BaseModel {
     });
   }
 
-  /**
-   * Lista todas las reseñas asociadas a una película dada.
-   * @param {number} peliculaId
-   */
   async listarPorPelicula(peliculaId) {
     const [rows] = await this.query(
       `SELECT r.*, u.nombre as usuario_nombre 
@@ -49,10 +38,6 @@ export class ResenaModel extends BaseModel {
     return rows.map((row) => new Resena(row));
   }
 
-  /**
-   * Busca una reseña por su ID.
-   * @param {number} id
-   */
   async buscarPorId(id) {
     const [rows] = await this.query(
       `SELECT r.*, u.nombre as usuario_nombre 
@@ -65,9 +50,6 @@ export class ResenaModel extends BaseModel {
     return new Resena(rows[0]);
   }
 
-  /**
-   * Actualiza el contenido de una reseña y recalcula el rating promedio.
-   */
   async actualizarConTransaccion(id, { titulo, comentario, calificacion, peliculaId }) {
     return this.transaction(async (conn) => {
       await conn.query(
@@ -94,11 +76,6 @@ export class ResenaModel extends BaseModel {
     });
   }
 
-  /**
-   * Elimina una reseña y recalcula el promedio de la película.
-   * @param {number} resenaId
-   * @param {number} peliculaId
-   */
   async eliminarConTransaccion(resenaId, peliculaId) {
     return this.transaction(async (conn) => {
       await conn.query('DELETE FROM resenas WHERE id = ?', [resenaId]);

@@ -3,7 +3,7 @@ dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret && process.env.NODE_ENV === 'production') {
-  throw new Error('Configuración inválida: JWT_SECRET debe estar definido en las variables de entorno.');
+  throw new Error('JWT_SECRET no configurado en entorno de producción');
 }
 
 export const config = Object.freeze({
@@ -17,11 +17,10 @@ export const config = Object.freeze({
     name: process.env.DB_NAME || 'karenflix'
   },
   jwt: {
-    secret: jwtSecret || process.env.JWT_SECRET_DEV || 'karenflix_dev_fallback_unsecure',
+    secret: jwtSecret || 'dev_secret_key',
     expiresIn: process.env.JWT_EXPIRES_IN || '2h'
   },
   corsOrigin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*'
 });
 
 export default config;
-

@@ -6,11 +6,8 @@ import { requireAuth } from '../middlewares/auth.js';
 
 const router = Router();
 
-// Registro y Login
 router.post('/register', validarRegistro, validate, authController.registrar);
 router.post('/login', validarLogin, validate, authController.login);
-
-// Información del usuario autenticado
 router.get('/me', requireAuth, authController.me);
 router.get('/perfil', requireAuth, authController.obtenerPerfil);
 router.put('/perfil', requireAuth, authController.actualizarPerfil);

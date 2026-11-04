@@ -1,9 +1,6 @@
 import { BaseController } from './base.controller.js';
 import { categoriasService as defaultCategoriasService, CategoriasService } from '../services/categorias.service.js';
 
-/**
- * Controlador de Categorías orientado a objetos
- */
 export class CategoriasController extends BaseController {
   constructor(categoriasService = defaultCategoriasService) {
     super();

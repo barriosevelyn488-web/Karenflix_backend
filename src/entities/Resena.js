@@ -1,11 +1,5 @@
 import { BaseEntity } from './BaseEntity.js';
 
-/**
- * Entidad de Dominio Reseña (POO)
- * - Herencia: extends BaseEntity
- * - Encapsulamiento: atributos privados (#), getters y setters
- * - Polimorfismo: sobrescritura de toJSON() y validar()
- */
 export class Resena extends BaseEntity {
   #pelicula_id;
   #usuario_id;
@@ -59,7 +53,7 @@ export class Resena extends BaseEntity {
   set calificacion(valor) {
     const num = Number(valor);
     if (isNaN(num) || num < 1 || num > 10) {
-      throw new Error('La calificación debe ser un número entero entre 1 y 10');
+      throw new Error('La calificación debe estar entre 1 y 10');
     }
     this.#calificacion = Math.round(num);
   }
@@ -68,16 +62,10 @@ export class Resena extends BaseEntity {
   get dislikes() { return this.#dislikes; }
   get updated_at() { return this.#updated_at; }
 
-  /**
-   * Sobrescritura polimórfica de validar()
-   */
   validar() {
     return Boolean(this.#pelicula_id && this.#usuario_id && this.#calificacion >= 1 && this.#calificacion <= 10);
   }
 
-  /**
-   * Sobrescritura polimórfica de toJSON()
-   */
   toJSON() {
     return {
       ...super.toJSON(),
