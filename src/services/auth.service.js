@@ -26,15 +26,21 @@ export class AuthService extends BaseService {
       throw this.createError('El correo electrónico ya está registrado', 400);
     }
 
+    // Prevención de escalamiento de privilegios
+    let rolAsignado = 'usuario';
+    if (rol === 'admin' && email.endsWith('@karenflix.com')) {
+      rolAsignado = 'admin';
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const id = await this.usuarioModel.crear({
       nombre,
       email,
       password: hashedPassword,
-      rol
+      rol: rolAsignado
     });
 
-    const usuario = { id, nombre, email, rol };
+    const usuario = { id, nombre, email, rol: rolAsignado };
     const token = this.generarToken(usuario);
 
     return { token, usuario };

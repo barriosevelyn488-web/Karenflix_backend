@@ -20,7 +20,9 @@ export const config = Object.freeze({
     secret: jwtSecret || 'dev_secret_key',
     expiresIn: process.env.JWT_EXPIRES_IN || '2h'
   },
-  corsOrigin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*'
+  corsOrigin: process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+    : ['http://localhost:5500', 'http://127.0.0.1:5500', 'https://karenflix-frontend.vercel.app']
 });
 
 export default config;
