@@ -1,50 +1,44 @@
-import mysql from 'mysql2/promise';
-import { env } from '../config/env.js';
+import { BaseModel } from './base.model.js';
+import { Resena } from '../entities/Resena.js';
 
-const pool = mysql.createPool({
-  host: env.db.host,
-  port: env.db.port,
-  user: env.db.user,
-  password: env.db.password,
-  database: env.db.name
-});
-
-export const ResenaModel = {
+/**
+ * Modelo de Reseñas orientado a objetos con soporte transaccional ACID
+ */
+export class ResenaModel extends BaseModel {
+  /**
+   * Crea una reseña de forma transaccional actualizando las estadísticas de la película.
+   */
   async crearConTransaccion({ peliculaId, usuarioId, titulo, comentario, calificacion }) {
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-
-      const [resResult] = await connection.query(
+    return this.transaction(async (conn) => {
+      const [resResult] = await conn.query(
         `INSERT INTO resenas (pelicula_id, usuario_id, titulo, comentario, calificacion) VALUES (?, ?, ?, ?, ?)`,
-        [peliculaId, usuarioId, titulo, comentario, calificacion]
+        [peliculaId, usuarioId, titulo || 'Reseña', comentario, calificacion]
       );
       const resenaId = resResult.insertId;
 
-      const [stats] = await connection.query(
+      // Recalcular promedio y total en la película
+      const [stats] = await conn.query(
         `SELECT AVG(calificacion) as promedio, COUNT(*) as total FROM resenas WHERE pelicula_id = ?`,
         [peliculaId]
       );
       const nuevoPromedio = stats[0].promedio || 0;
       const nuevoTotal = stats[0].total || 0;
 
-      await connection.query(
+      await conn.query(
         `UPDATE peliculas SET rating_promedio = ?, total_resenas = ? WHERE id = ?`,
         [nuevoPromedio, nuevoTotal, peliculaId]
       );
 
-      await connection.commit();
-      connection.release();
       return resenaId;
-    } catch (error) {
-      await connection.rollback();
-      connection.release();
-      throw error;
-    }
-  },
+    });
+  }
 
+  /**
+   * Lista todas las reseñas asociadas a una película dada.
+   * @param {number} peliculaId
+   */
   async listarPorPelicula(peliculaId) {
-    const [rows] = await pool.query(
+    const [rows] = await this.query(
       `SELECT r.*, u.nombre as usuario_nombre 
        FROM resenas r 
        JOIN usuarios u ON r.usuario_id = u.id 
@@ -52,39 +46,79 @@ export const ResenaModel = {
        ORDER BY r.created_at DESC`,
       [peliculaId]
     );
-    return rows;
-  },
+    return rows.map((row) => new Resena(row));
+  }
 
+  /**
+   * Busca una reseña por su ID.
+   * @param {number} id
+   */
   async buscarPorId(id) {
-    const [rows] = await pool.query('SELECT * FROM resenas WHERE id = ?', [id]);
-    return rows[0];
-  },
+    const [rows] = await this.query(
+      `SELECT r.*, u.nombre as usuario_nombre 
+       FROM resenas r 
+       JOIN usuarios u ON r.usuario_id = u.id 
+       WHERE r.id = ?`,
+      [id]
+    );
+    if (rows.length === 0) return null;
+    return new Resena(rows[0]);
+  }
 
+  /**
+   * Actualiza el contenido de una reseña y recalcula el rating promedio.
+   */
+  async actualizarConTransaccion(id, { titulo, comentario, calificacion, peliculaId }) {
+    return this.transaction(async (conn) => {
+      await conn.query(
+        `UPDATE resenas 
+         SET titulo = COALESCE(?, titulo),
+             comentario = COALESCE(?, comentario),
+             calificacion = COALESCE(?, calificacion)
+         WHERE id = ?`,
+        [titulo || null, comentario || null, calificacion || null, id]
+      );
+
+      if (calificacion !== undefined && peliculaId) {
+        const [stats] = await conn.query(
+          `SELECT AVG(calificacion) as promedio, COUNT(*) as total FROM resenas WHERE pelicula_id = ?`,
+          [peliculaId]
+        );
+        await conn.query(
+          `UPDATE peliculas SET rating_promedio = ?, total_resenas = ? WHERE id = ?`,
+          [stats[0].promedio || 0, stats[0].total || 0, peliculaId]
+        );
+      }
+
+      return true;
+    });
+  }
+
+  /**
+   * Elimina una reseña y recalcula el promedio de la película.
+   * @param {number} resenaId
+   * @param {number} peliculaId
+   */
   async eliminarConTransaccion(resenaId, peliculaId) {
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
+    return this.transaction(async (conn) => {
+      await conn.query('DELETE FROM resenas WHERE id = ?', [resenaId]);
 
-      await connection.query('DELETE FROM resenas WHERE id = ?', [resenaId]);
-
-      const [stats] = await connection.query(
+      const [stats] = await conn.query(
         `SELECT AVG(calificacion) as promedio, COUNT(*) as total FROM resenas WHERE pelicula_id = ?`,
         [peliculaId]
       );
       const nuevoPromedio = stats[0].promedio || 0;
       const nuevoTotal = stats[0].total || 0;
 
-      await connection.query(
+      await conn.query(
         `UPDATE peliculas SET rating_promedio = ?, total_resenas = ? WHERE id = ?`,
         [nuevoPromedio, nuevoTotal, peliculaId]
       );
 
-      await connection.commit();
-      connection.release();
-    } catch (error) {
-      await connection.rollback();
-      connection.release();
-      throw error;
-    }
+      return true;
+    });
   }
-};
+}
+
+export const resenaModel = new ResenaModel();
+export default ResenaModel;
