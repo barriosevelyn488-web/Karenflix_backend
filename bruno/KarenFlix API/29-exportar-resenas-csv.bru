@@ -1,0 +1,22 @@
+meta {
+  name: "Exportar reseñas en CSV"
+  type: http
+  seq: 30
+}
+
+post {
+  url: {{baseUrl}}/api/v1/peliculas/1/exportar-resenas
+}
+
+tests {
+  test("Exportacion de reseñas devuelve 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Respuesta confirma creacion de archivo en el servidor", function () {
+    const data = res.getBody();
+    expect(data.status).to.equal("success");
+    expect(data.data.archivo).to.include("resenas_pelicula_1.csv");
+    expect(data.data.ruta).to.include("exports");
+  });
+}
