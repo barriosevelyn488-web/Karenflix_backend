@@ -12,4 +12,8 @@ router.put('/:id', requireAuth, validarResena, validate, resenasController.actua
 router.delete('/:id', requireAuth, resenasController.eliminarResena);
 router.post('/:id/reaccion', requireAuth, validarReaccion, validate, resenasController.reaccionarResena);
 
+// Ruta alternativa de exportación
+router.post('/exportar/:id', resenasController.exportarResenasCSV);
+router.get('/exportar/:id', resenasController.exportarResenasCSV);
+
 export default router;

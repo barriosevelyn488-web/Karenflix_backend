@@ -73,6 +73,18 @@ export class ResenasController extends BaseController {
       this.handleError(next, error);
     }
   };
+
+
+  //requisito de examen 
+  exportarResenasCSV = async (req, res, next) => {
+    try {
+      const peliculaId = req.params.id || req.params.peliculaId;
+      const resultado = await this.resenasService.exportarResenasCSV(peliculaId);
+      return this.sendSuccess(res, resultado, 200, 'Archivo CSV generado exitosamente en el servidor');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 }
 
 export const resenasController = new ResenasController();
@@ -81,4 +93,5 @@ export const crearResena = resenasController.crearResena;
 export const actualizarResena = resenasController.actualizarResena;
 export const eliminarResena = resenasController.eliminarResena;
 export const reaccionarResena = resenasController.reaccionarResena;
+export const exportarResenasCSV = resenasController.exportarResenasCSV;
 export default ResenasController;
