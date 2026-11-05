@@ -21,7 +21,7 @@ router.delete('/:id', requireAuth, requireAdmin, peliculasController.eliminarPel
 router.get('/:id/resenas', resenasController.listarResenasPelicula);
 router.post('/:id/resenas', requireAuth, validarResena, validate, resenasController.crearResena);
 
-// Exportar reseñas en archivo CSV en el servidor backend (Requisito examen)
+// Exportar resenas en CSV
 router.post('/:id/exportar-resenas', resenasController.exportarResenasCSV);
 router.get('/:id/exportar-resenas', resenasController.exportarResenasCSV);
 router.post('/:id/resenas/exportar', resenasController.exportarResenasCSV);

@@ -74,16 +74,6 @@ export class ResenasService extends BaseService {
     return true;
   }
 
-  /**
-   * Genera un archivo CSV con todas las reseñas de una película y lo guarda en /exports.
-   * Requisitos del examen:
-   * - Nombre del usuario 
-   * - Calificación asignada 1 a 5
-   * - Comentario escrito
-   * - Fecha de creación de la reseña
-   * - Guardado en carpeta /exports del backend
-   * - NO descargarse en el navegador
-   */
   async exportarResenasCSV(peliculaId) {
     const pelicula = await this.peliculaModel.buscarPorId(peliculaId);
     if (!pelicula) {
@@ -96,27 +86,35 @@ export class ResenasService extends BaseService {
 
     const filas = resenas.map((r) => {
       const nombreUsuario = `"${(r.usuario_nombre || 'Anónimo').replace(/"/g, '""')}"`;
-      // Convertir a escala 1 a 5 en caso de estar almacenado en base a 10
+      
+      // Ajustar calificacion a rango 1 a 5
       const calificacionOriginal = Number(r.calificacion) || 5;
-      const calificacion1a5 = Math.min(
+      const calificacion = Math.min(
         5,
         Math.max(1, Math.round(calificacionOriginal > 5 ? calificacionOriginal / 2 : calificacionOriginal))
       );
+      
       const comentario = `"${(r.comentario || '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
       const fecha = r.created_at
         ? new Date(r.created_at).toISOString().replace('T', ' ').substring(0, 19)
         : new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-      return [nombreUsuario, calificacion1a5, comentario, `"${fecha}"`].join(',');
+      return [nombreUsuario, calificacion, comentario, `"${fecha}"`].join(',');
     });
 
     const contenidoCSV = [encabezados.join(','), ...filas].join('\n');
 
     const nombreArchivo = `resenas_pelicula_${peliculaId}.csv`;
     const rutaDirectorio = path.resolve(process.cwd(), 'exports');
-    await fs.mkdir(rutaDirectorio, { recursive: true });
-    const rutaArchivo = path.join(rutaDirectorio, nombreArchivo);
 
+    // Crear la carpeta si no existe
+    try {
+      await fs.access(rutaDirectorio);
+    } catch {
+      await fs.mkdir(rutaDirectorio, { recursive: true });
+    }
+
+    const rutaArchivo = path.join(rutaDirectorio, nombreArchivo);
     await fs.writeFile(rutaArchivo, contenidoCSV, 'utf-8');
 
     return {

@@ -74,8 +74,6 @@ export class ResenasController extends BaseController {
     }
   };
 
-
-  //requisito de examen 
   exportarResenasCSV = async (req, res, next) => {
     try {
       const peliculaId = req.params.id || req.params.peliculaId;
