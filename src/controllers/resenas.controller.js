@@ -1,82 +1,84 @@
-import { ResenaService } from '../services/resenas.service.js';
-import { ReaccionService } from '../services/reacciones.service.js';
-import { createDto, createInputDto } from '../factories/dto.factory.js';
+import { BaseController } from './base.controller.js';
+import { resenasService as defaultResenasService, ResenasService } from '../services/resenas.service.js';
+import { reaccionesService as defaultReaccionesService, ReaccionesService } from '../services/reacciones.service.js';
 
-// Coordina las rutas HTTP de reseñas con sus servicios y transforma las respuestas.
-export const listarResenasPelicula = async (req, res, next) => {
-  try {
-    res.json({
-      status: 'success',
-      data: (await ResenaService.listarPorPelicula(Number(req.params.id))).map((resena) =>
-        createDto('resena', resena)
-      )
-    });
-  } catch (error) {
-    next(error);
+export class ResenasController extends BaseController {
+  constructor(
+    resenasService = defaultResenasService,
+    reaccionesService = defaultReaccionesService
+  ) {
+    super();
+    this.resenasService = resenasService;
+    this.reaccionesService = reaccionesService;
   }
-};
 
-export const crearResena = async (req, res, next) => {
-  try {
-    const datos = createInputDto('resena', req.body);
-    const id = await ResenaService.crear({
-      pelicula_id: Number(req.params.id),
-      usuario_id: req.user.id,
-      ...datos
-    });
-    res.status(201).json({ status: 'success', data: { id, ...datos, usuario_id: req.user.id } });
-  } catch (error) {
-    next(error);
-  }
-};
+  listarResenasPelicula = async (req, res, next) => {
+    try {
+      const peliculaId = req.params.id || req.params.peliculaId;
+      const resenas = await this.resenasService.listarPorPelicula(peliculaId);
+      return this.sendSuccess(res, resenas);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const actualizarResena = async (req, res, next) => {
-  try {
-    const datos = createInputDto('resena', req.body);
-    await ResenaService.actualizar(Number(req.params.id), req.user.id, datos);
-    res.json({
-      status: 'success',
-      data: { id: Number(req.params.id), ...datos, usuario_id: req.user.id }
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  crearResena = async (req, res, next) => {
+    try {
+      const peliculaId = req.params.id || req.params.peliculaId;
+      const data = {
+        pelicula_id: peliculaId,
+        usuario_id: req.user.id,
+        titulo: req.body.titulo,
+        comentario: req.body.comentario,
+        calificacion: req.body.calificacion
+      };
+      const resultado = await this.resenasService.crear(data);
+      return this.sendCreated(res, resultado, 'Reseña creada y promedio actualizado');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const eliminarResena = async (req, res, next) => {
-  try {
-    await ResenaService.eliminar(Number(req.params.id), req.user.id);
-    res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-};
+  actualizarResena = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const actualizada = await this.resenasService.actualizar(id, req.user.id, req.body);
+      return this.sendSuccess(res, actualizada, 200, 'Reseña actualizada exitosamente');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const reaccionarResena = async (req, res, next) => {
-  try {
-    res.json({
-      status: 'success',
-      data: await ReaccionService.reaccionar({
+  eliminarResena = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await this.resenasService.eliminar(id, req.user.id, req.user.rol);
+      return this.sendSuccess(res, null, 200, 'Reseña eliminada');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+
+  reaccionarResena = async (req, res, next) => {
+    try {
+      const { id: resenaId } = req.params;
+      const { tipo } = req.body;
+      const resultado = await this.reaccionesService.reaccionar({
         usuarioId: req.user.id,
-        resenaId: Number(req.params.id),
-        tipo: req.body.tipo
-      })
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+        resenaId,
+        tipo
+      });
+      return this.sendSuccess(res, resultado, 200, 'Reacción registrada correctamente');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+}
 
-export const quitarReaccion = async (req, res, next) => {
-  try {
-    res.json({
-      status: 'success',
-      data: await ReaccionService.quitar({
-        usuarioId: req.user.id,
-        resenaId: Number(req.params.id)
-      })
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+export const resenasController = new ResenasController();
+export const listarResenasPelicula = resenasController.listarResenasPelicula;
+export const crearResena = resenasController.crearResena;
+export const actualizarResena = resenasController.actualizarResena;
+export const eliminarResena = resenasController.eliminarResena;
+export const reaccionarResena = resenasController.reaccionarResena;
+export default ResenasController;

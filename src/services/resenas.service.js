@@ -1,52 +1,78 @@
-import { PeliculaModel } from '../models/pelicula.model.js';
-import { ResenaModel } from '../models/resena.model.js';
-import { AppError } from '../utils/AppError.js';
+import { BaseService } from './base.service.js';
+import { resenaModel as defaultResenaModel, ResenaModel } from '../models/resena.model.js';
+import { peliculaModel as defaultPeliculaModel, PeliculaModel } from '../models/pelicula.model.js';
 
-// Coordina reglas de reseñas con las consultas de películas y ResenaModel.
-export const ResenaService = {
+export class ResenasService extends BaseService {
+  constructor(resenaModel = defaultResenaModel, peliculaModel = defaultPeliculaModel) {
+    super();
+    this.resenaModel = resenaModel;
+    this.peliculaModel = peliculaModel;
+  }
+
   async crear({ pelicula_id, usuario_id, titulo, comentario, calificacion }) {
-    if (!(await PeliculaModel.existeAprobada(pelicula_id))) {
-      throw new AppError('Película no encontrada.', 404, 'NOT_FOUND');
+    const pelicula = await this.peliculaModel.buscarPorId(pelicula_id);
+    if (!pelicula || pelicula.estado !== 'aprobada') {
+      throw this.createError('Película no encontrada o no aprobada.', 404);
     }
+
     try {
-      return await ResenaModel.crearConTransaccion({
+      const resenaId = await this.resenaModel.crearConTransaccion({
         peliculaId: pelicula_id,
         usuarioId: usuario_id,
         titulo,
         comentario,
         calificacion
       });
+      return { id: resenaId, pelicula_id, usuario_id, titulo, calificacion };
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new AppError('Ya publicaste una reseña para esta película.', 409, 'REVIEW_EXISTS');
+        throw this.createError('Ya has publicado una reseña para esta película.', 409);
       }
       throw error;
     }
-  },
+  }
 
-  listarPorPelicula: (id) => ResenaModel.listarPorPelicula(id),
+  async listarPorPelicula(peliculaId) {
+    const resenas = await this.resenaModel.listarPorPelicula(peliculaId);
+    return resenas.map((r) => r.toJSON());
+  }
 
-  async actualizar(id, userId, data) {
-    const resena = await ResenaModel.buscarPorId(id);
-    if (!resena) throw new AppError('Reseña no encontrada.', 404, 'NOT_FOUND');
-    if (Number(resena.usuario_id) !== Number(userId)) {
-      throw new AppError('Solo la autora puede modificar la reseña.', 403, 'FORBIDDEN');
+  async actualizar(resenaId, usuarioId, { titulo, comentario, calificacion }) {
+    const resena = await this.resenaModel.buscarPorId(resenaId);
+    if (!resena) {
+      throw this.createError('Reseña no encontrada.', 404);
     }
-    const updated = await ResenaModel.actualizarConTransaccion({
-      ...data,
-      id,
-      usuarioId: userId,
+
+    if (resena.usuario_id !== usuarioId) {
+      throw this.createError('No tienes permisos para editar esta reseña.', 403);
+    }
+
+    await this.resenaModel.actualizarConTransaccion(resenaId, {
+      titulo,
+      comentario,
+      calificacion,
       peliculaId: resena.pelicula_id
     });
-    if (!updated) throw new AppError('Reseña no encontrada.', 404, 'NOT_FOUND');
-  },
 
-  async eliminar(id, userId) {
-    const resena = await ResenaModel.buscarPorId(id);
-    if (!resena) throw new AppError('Reseña no encontrada.', 404, 'NOT_FOUND');
-    if (Number(resena.usuario_id) !== Number(userId)) {
-      throw new AppError('Solo la autora puede eliminar la reseña.', 403, 'FORBIDDEN');
-    }
-    await ResenaModel.eliminarConTransaccion(id, resena.pelicula_id, userId);
+    const actualizada = await this.resenaModel.buscarPorId(resenaId);
+    return actualizada.toJSON();
   }
-};
+
+  async eliminar(resenaId, usuarioId, userRol = 'usuario') {
+    const resena = await this.resenaModel.buscarPorId(resenaId);
+    if (!resena) {
+      throw this.createError('Reseña no encontrada.', 404);
+    }
+
+    if (resena.usuario_id !== usuarioId && userRol !== 'admin') {
+      throw this.createError('No tienes permisos para eliminar esta reseña.', 403);
+    }
+
+    await this.resenaModel.eliminarConTransaccion(resenaId, resena.pelicula_id);
+    return true;
+  }
+}
+
+export const resenasService = new ResenasService();
+export const ResenaService = resenasService;
+export default ResenasService;

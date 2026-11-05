@@ -1,81 +1,95 @@
-import { PeliculaService } from '../services/peliculas.service.js';
-import { createDto, createInputDto } from '../factories/dto.factory.js';
+import { BaseController } from './base.controller.js';
+import { peliculasService as defaultPeliculasService, PeliculasService } from '../services/peliculas.service.js';
 
-// Recibe las rutas de películas, delega el trabajo al servicio y adapta DTO de salida.
-export const listarPeliculas = async (req, res, next) => {
-  try {
-    const result = await PeliculaService.listar({
-      page: Number(req.query.page || 1),
-      limit: Number(req.query.limit || 20),
-      categoria_id: req.query.categoria_id ? Number(req.query.categoria_id) : undefined,
-      q: req.query.q,
-      orden: req.query.orden
-    });
-    res.json({
-      status: 'success',
-      data: {
-        ...result,
-        items: result.items.map((pelicula) => createDto('pelicula', pelicula))
-      }
-    });
-  } catch (error) {
-    next(error);
+export class PeliculasController extends BaseController {
+  constructor(peliculasService = defaultPeliculasService) {
+    super();
+    this.peliculasService = peliculasService;
   }
-};
 
-export const obtenerPelicula = async (req, res, next) => {
-  try {
-    res.json({
-      status: 'success',
-      data: createDto('pelicula', await PeliculaService.obtener(Number(req.params.id)))
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  listarPeliculas = async (req, res, next) => {
+    try {
+      const { categoria, orden, busqueda, page, limit } = req.query;
+      const peliculas = await this.peliculasService.listarAprobadas({
+        categoria,
+        orden,
+        busqueda,
+        page,
+        limit
+      });
+      return this.sendSuccess(res, peliculas);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const proponerPelicula = async (req, res, next) => {
-  try {
-    const datos = createInputDto('pelicula', req.body);
-    const id = await PeliculaService.crear(datos, req.user.id);
-    res.status(201).json({ status: 'success', data: { id, estado: 'pendiente' } });
-  } catch (error) {
-    next(error);
-  }
-};
+  obtenerPelicula = async (req, res, next) => {
+    try {
+      const pelicula = await this.peliculasService.buscarPorId(req.params.id);
+      return this.sendSuccess(res, pelicula);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const listarPendientes = async (_req, res, next) => {
-  try {
-    res.json({ status: 'success', data: await PeliculaService.pendientes() });
-  } catch (error) {
-    next(error);
-  }
-};
+  proponerPelicula = async (req, res, next) => {
+    try {
+      const data = {
+        ...req.body,
+        creadoPor: req.user ? req.user.id : null
+      };
+      const pelicula = await this.peliculasService.proponer(data);
+      return this.sendCreated(res, pelicula);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const cambiarEstadoPelicula = async (req, res, next) => {
-  try {
-    await PeliculaService.estado(Number(req.params.id), req.body.estado, req.user.id);
-    res.json({ status: 'success', data: { id: Number(req.params.id), estado: req.body.estado } });
-  } catch (error) {
-    next(error);
-  }
-};
+  listarPendientes = async (req, res, next) => {
+    try {
+      const pendientes = await this.peliculasService.listarPendientes();
+      return this.sendSuccess(res, pendientes);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const actualizarPelicula = async (req, res, next) => {
-  try {
-    const datos = createInputDto('pelicula', req.body);
-    await PeliculaService.actualizar(Number(req.params.id), datos);
-    res.json({ status: 'success', data: { id: Number(req.params.id), ...datos } });
-  } catch (error) {
-    next(error);
-  }
-};
+  cambiarEstadoPelicula = async (req, res, next) => {
+    try {
+      const { estado } = req.body;
+      const adminId = req.user ? req.user.id : null;
+      await this.peliculasService.cambiarEstado(req.params.id, estado, adminId);
+      return this.sendSuccess(res, null, 200, `Película ${estado} exitosamente.`);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const eliminarPelicula = async (req, res, next) => {
-  try {
-    await PeliculaService.eliminar(Number(req.params.id));
-    res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-};
+  actualizarPelicula = async (req, res, next) => {
+    try {
+      const actualizada = await this.peliculasService.actualizar(req.params.id, req.body);
+      return this.sendSuccess(res, actualizada);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+
+  eliminarPelicula = async (req, res, next) => {
+    try {
+      await this.peliculasService.eliminar(req.params.id);
+      return this.sendSuccess(res, null, 200, 'Película eliminada');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+}
+
+export const peliculasController = new PeliculasController();
+export const listarPeliculas = peliculasController.listarPeliculas;
+export const obtenerPelicula = peliculasController.obtenerPelicula;
+export const proponerPelicula = peliculasController.proponerPelicula;
+export const listarPendientes = peliculasController.listarPendientes;
+export const cambiarEstadoPelicula = peliculasController.cambiarEstadoPelicula;
+export const actualizarPelicula = peliculasController.actualizarPelicula;
+export const eliminarPelicula = peliculasController.eliminarPelicula;
+export default PeliculasController;

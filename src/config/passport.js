@@ -1,32 +1,37 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { env } from './env.js';
-import { UsuarioModel } from '../models/usuario.model.js';
+import { config } from './config.js';
+import { usuarioModel } from '../models/usuario.model.js';
 
-// Passport acepta JWT tanto en Authorization: Bearer como en la cookie de sesión.
 const extractToken = (req) => {
   const bearer = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
   if (bearer) return bearer;
-  const prefix = `${env.jwt.cookieName}=`;
-  const item = req.headers.cookie
-    ?.split(';')
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(prefix));
-  return item ? decodeURIComponent(item.slice(prefix.length)) : null;
+  const cookieHeader = req?.headers?.cookie;
+  if (!cookieHeader) return null;
+  const match = cookieHeader.split(';').map(c => c.trim()).find(c => c.startsWith('karenflix_token='));
+  return match ? decodeURIComponent(match.split('=')[1]) : null;
 };
 
 passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: extractToken,
-      secretOrKey: env.jwt.secret,
-      issuer: 'karenflix-api',
-      audience: 'karenflix-client'
+      secretOrKey: config.jwt.secret
     },
-    async (payload, done) => {
+    async (jwtPayload, done) => {
       try {
-        const usuario = await UsuarioModel.buscarPorId(payload.sub);
-        return done(null, usuario || false);
+        const email = jwtPayload.email;
+        if (!email) return done(null, false);
+        const usuario = await usuarioModel.buscarPorEmail(email);
+        if (usuario) {
+          return done(null, {
+            id: usuario.id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            rol: usuario.rol
+          });
+        }
+        return done(null, false);
       } catch (error) {
         return done(error, false);
       }

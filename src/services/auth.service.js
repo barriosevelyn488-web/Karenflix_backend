@@ -1,55 +1,88 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UsuarioModel } from '../models/usuario.model.js';
-import { env } from '../config/env.js';
-import { AppError } from '../utils/AppError.js';
+import { BaseService } from './base.service.js';
+import { usuarioModel as defaultUsuarioModel, UsuarioModel } from '../models/usuario.model.js';
+import { config } from '../config/config.js';
 
-// Implementa los casos de uso de autenticación consumidos por auth.controller.js.
-export const AuthService = {
-  async registrar({ nombre, email, password }) {
-    const normalizedEmail = email.trim().toLowerCase();
-    if (await UsuarioModel.buscarPorEmail(normalizedEmail))
-      throw new AppError('El correo ya está registrado.', 409, 'EMAIL_EXISTS');
-    const passwordHash = await bcrypt.hash(password, 12);
-    const id = await UsuarioModel.crear({
-      nombre: nombre.trim(),
-      email: normalizedEmail,
-      password: passwordHash
-    });
-    const user = { id, nombre: nombre.trim(), email: normalizedEmail, rol: 'usuario' };
-    return { token: this.crearToken(user), usuario: user };
-  },
-  async login({ email, password }) {
-    const user = await UsuarioModel.buscarPorEmail(email.trim().toLowerCase());
-    if (!user || !(await bcrypt.compare(password, user.password_hash)))
-      throw new AppError('Credenciales inválidas.', 401, 'INVALID_CREDENTIALS');
-    const dto = { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol };
-    return { token: this.crearToken(dto), usuario: dto };
-  },
-  async actualizarPerfil(userId, { nombre, email, nuevaPassword }) {
-    const normalizedEmail = String(email || '').trim().toLowerCase();
-    const cleanNombre = String(nombre || '').trim();
-    if (cleanNombre.length < 2)
-      throw new AppError('El nombre debe tener mínimo 2 caracteres.', 400, 'INVALID_NAME');
-    const existente = await UsuarioModel.buscarPorEmail(normalizedEmail);
-    if (existente && Number(existente.id) !== Number(userId))
-      throw new AppError('El correo ya está en uso por otra cuenta.', 409, 'EMAIL_EXISTS');
-    const passwordHash =
-      nuevaPassword && String(nuevaPassword).length >= 8
-        ? await bcrypt.hash(String(nuevaPassword), 12)
-        : null;
-    const actualizado = await UsuarioModel.actualizar(userId, {
-      nombre: cleanNombre,
-      email: normalizedEmail,
-      passwordHash
-    });
-    return actualizado;
-  },
-  crearToken(usuario) {
-    return jwt.sign({ sub: String(usuario.id), rol: usuario.rol }, env.jwt.secret, {
-      expiresIn: env.jwt.expiresIn,
-      issuer: 'karenflix-api',
-      audience: 'karenflix-client'
-    });
+export class AuthService extends BaseService {
+  constructor(usuarioModel = defaultUsuarioModel) {
+    super();
+    this.usuarioModel = usuarioModel;
   }
-};
+
+  generarToken(usuario) {
+    const payload = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol
+    };
+    return jwt.sign(payload, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
+  }
+
+  async registrar({ nombre, email, password, rol = 'usuario' }) {
+    const existe = await this.usuarioModel.buscarPorEmail(email);
+    if (existe) {
+      throw this.createError('El correo electrónico ya está registrado', 400);
+    }
+
+    // Prevención de escalamiento de privilegios
+    let rolAsignado = 'usuario';
+    if (rol === 'admin' && email.endsWith('@karenflix.com')) {
+      rolAsignado = 'admin';
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const id = await this.usuarioModel.crear({
+      nombre,
+      email,
+      password: hashedPassword,
+      rol: rolAsignado
+    });
+
+    const usuario = { id, nombre, email, rol: rolAsignado };
+    const token = this.generarToken(usuario);
+
+    return { token, usuario };
+  }
+
+  async login({ email, password }) {
+    const usuario = await this.usuarioModel.buscarPorEmail(email);
+    if (!usuario) {
+      throw this.createError('Credenciales inválidas', 401);
+    }
+
+    const valido = await bcrypt.compare(password, usuario.password_hash);
+    if (!valido) {
+      throw this.createError('Credenciales inválidas', 401);
+    }
+
+    const usuarioData = usuario.toJSON();
+    const token = this.generarToken(usuarioData);
+
+    return { token, usuario: usuarioData };
+  }
+
+  async obtenerPerfil(id) {
+    const usuario = await this.usuarioModel.buscarPorId(id);
+    if (!usuario) {
+      throw this.createError('Usuario no encontrado', 404);
+    }
+    return usuario.toJSON();
+  }
+
+  async actualizarPerfil(id, { nombre, password }) {
+    let hashedPassword = null;
+    if (password && password.trim()) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+    const actualizado = await this.usuarioModel.actualizarPerfil(id, {
+      nombre,
+      password: hashedPassword
+    });
+    return actualizado.toJSON();
+  }
+}
+
+export const authService = new AuthService();
+export default AuthService;

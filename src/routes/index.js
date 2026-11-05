@@ -5,23 +5,26 @@ import categoriasRoutes from './categorias.routes.js';
 import peliculasRoutes from './peliculas.routes.js';
 import resenasRoutes from './resenas.routes.js';
 import rankingRoutes from './ranking.routes.js';
-import { env } from '../config/env.js';
+import favoritosRoutes from './favoritos.routes.js';
+import usuariosRoutes from './usuarios.routes.js';
 
 const router = Router();
 
-// Punto de montaje común: cada prefijo conecta con el router de su recurso.
-router.get('/version', (_req, res) =>
-  res.json({
+router.get('/version', (req, res) => {
+  res.status(200).json({
     status: 'success',
     name: 'karenflix-backend',
-    version: env.apiVersion,
-    semverValid: semver.valid(env.apiVersion)
-  })
-);
+    version: '0.1.0',
+    semverValid: semver.valid('0.1.0')
+  });
+});
+
 router.use('/auth', authRoutes);
 router.use('/categorias', categoriasRoutes);
 router.use('/peliculas', peliculasRoutes);
 router.use('/resenas', resenasRoutes);
 router.use('/ranking', rankingRoutes);
+router.use('/favoritos', favoritosRoutes);
+router.use('/usuarios', usuariosRoutes);
 
 export default router;

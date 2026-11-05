@@ -1,51 +1,24 @@
 import { Router } from 'express';
-import {
-  listarPeliculas,
-  obtenerPelicula,
-  proponerPelicula,
-  listarPendientes,
-  cambiarEstadoPelicula,
-  actualizarPelicula,
-  eliminarPelicula
-} from '../controllers/peliculas.controller.js';
-import {
-  validarPelicula,
-  validarIdPelicula,
-  validarListadoPeliculas,
-  validarEstadoPelicula
-} from '../validators/peliculas.validator.js';
-import { validarCrearResena } from '../validators/resenas.validator.js';
-import { listarResenasPelicula, crearResena } from '../controllers/resenas.controller.js';
+import { peliculasController } from '../controllers/peliculas.controller.js';
+import { resenasController } from '../controllers/resenas.controller.js';
+import { validarPelicula } from '../validators/peliculas.validator.js';
+import { validarResena } from '../validators/resenas.validator.js';
 import { validate } from '../middlewares/validate.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { requireAdmin } from '../middlewares/roles.js';
 
 const router = Router();
 
-// Cada ruta enlaza validación/autorización con el controlador correspondiente.
-router.get('/', validarListadoPeliculas, validate, listarPeliculas);
-router.get('/admin/pendientes', requireAuth, requireAdmin, listarPendientes);
-router.post('/', requireAuth, validarPelicula, validate, proponerPelicula);
-router.get('/:id/resenas', validarIdPelicula, validate, listarResenasPelicula);
-router.post('/:id/resenas', requireAuth, validarCrearResena, validate, crearResena);
-router.get('/:id', validarIdPelicula, validate, obtenerPelicula);
-router.put(
-  '/:id',
-  requireAuth,
-  requireAdmin,
-  validarIdPelicula,
-  validarPelicula,
-  validate,
-  actualizarPelicula
-);
-router.delete('/:id', requireAuth, requireAdmin, validarIdPelicula, validate, eliminarPelicula);
-router.patch(
-  '/admin/:id/estado',
-  requireAuth,
-  requireAdmin,
-  validarEstadoPelicula,
-  validate,
-  cambiarEstadoPelicula
-);
+router.get('/', peliculasController.listarPeliculas);
+router.get('/admin/pendientes', requireAuth, requireAdmin, peliculasController.listarPendientes);
+router.patch('/admin/:id/estado', requireAuth, requireAdmin, peliculasController.cambiarEstadoPelicula);
+router.post('/', requireAuth, validarPelicula, validate, peliculasController.proponerPelicula);
+router.get('/:id', peliculasController.obtenerPelicula);
+router.put('/:id', requireAuth, requireAdmin, peliculasController.actualizarPelicula);
+router.delete('/:id', requireAuth, requireAdmin, peliculasController.eliminarPelicula);
+
+// Reseñas de la película
+router.get('/:id/resenas', resenasController.listarResenasPelicula);
+router.post('/:id/resenas', requireAuth, validarResena, validate, resenasController.crearResena);
 
 export default router;

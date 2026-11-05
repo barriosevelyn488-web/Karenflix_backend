@@ -1,78 +1,70 @@
-import { AuthService } from '../services/auth.service.js';
-import { env } from '../config/env.js';
-import { createDto, createInputDto } from '../factories/dto.factory.js';
+import { BaseController } from './base.controller.js';
+import { authService as defaultAuthService, AuthService } from '../services/auth.service.js';
 
-const expiresMs = () => {
-  const durationMatch = String(env.jwt.expiresIn).match(/^(\d+)(s|m|h|d)$/);
-  if (!durationMatch) return 7200000;
-  return (
-    Number(durationMatch[1]) *
-    { s: 1000, m: 60000, h: 3600000, d: 86400000 }[durationMatch[2]]
-  );
-};
-
-const cookieOptions = () => ({
-  httpOnly: true,
-  secure: env.nodeEnv === 'production',
-  sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
-  path: '/',
-  maxAge: expiresMs()
-});
-
-// Los controladores conectan las solicitudes HTTP con AuthService y sus DTO de respuesta.
-export const registrar = async (req, res, next) => {
-  try {
-    const result = await AuthService.registrar(createInputDto('usuario', req.body));
-    res
-      .cookie(env.jwt.cookieName, result.token, cookieOptions())
-      .status(201)
-      .json({
-        status: 'success',
-        data: { usuario: createDto('usuario', result.usuario), token: result.token }
-      });
-  } catch (error) {
-    next(error);
+export class AuthController extends BaseController {
+  constructor(authService = defaultAuthService) {
+    super();
+    this.authService = authService;
   }
-};
 
-export const login = async (req, res, next) => {
-  try {
-    const result = await AuthService.login(createInputDto('usuario', req.body));
-    res.cookie(env.jwt.cookieName, result.token, cookieOptions()).json({
-      status: 'success',
-      data: { usuario: createDto('usuario', result.usuario), token: result.token }
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  registrar = async (req, res, next) => {
+    try {
+      const resultado = await this.authService.registrar(req.body);
+      return this.sendCreated(res, resultado);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const logout = (_req, res) =>
-  res
-    .clearCookie(env.jwt.cookieName, {
-      httpOnly: true,
-      secure: env.nodeEnv === 'production',
-      sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
-      path: '/'
-    })
-    .status(204)
-    .end();
+  login = async (req, res, next) => {
+    try {
+      const resultado = await this.authService.login(req.body);
+      return this.sendSuccess(res, resultado);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const me = (req, res) =>
-  res.json({ status: 'success', data: createDto('usuario', req.user) });
+  me = async (req, res, next) => {
+    try {
+      return this.sendSuccess(res, req.user);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const actualizarPerfil = async (req, res, next) => {
-  try {
-    const actualizado = await AuthService.actualizarPerfil(req.user.id, req.body);
-    res.json({
-      status: 'success',
-      data: {
-        ...createDto('usuario', actualizado),
-        bio: req.body?.bio || '',
-        genero_favorito: req.body?.genero_favorito || 'Ciencia ficción'
-      }
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  obtenerPerfil = async (req, res, next) => {
+    try {
+      const perfil = await this.authService.obtenerPerfil(req.user.id);
+      return this.sendSuccess(res, perfil);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+
+  actualizarPerfil = async (req, res, next) => {
+    try {
+      const actualizado = await this.authService.actualizarPerfil(req.user.id, req.body);
+      return this.sendSuccess(res, actualizado);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+
+  logout = async (req, res, next) => {
+    try {
+      return this.sendSuccess(res, null, 200, 'Sesión cerrada exitosamente');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+}
+
+export const authController = new AuthController();
+export const registrar = authController.registrar;
+export const login = authController.login;
+export const me = authController.me;
+export const obtenerPerfil = authController.obtenerPerfil;
+export const actualizarPerfil = authController.actualizarPerfil;
+export const logout = authController.logout;
+export default AuthController;

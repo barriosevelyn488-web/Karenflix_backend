@@ -1,10 +1,8 @@
 import { Router } from 'express';
-import { obtenerRanking } from '../controllers/ranking.controller.js';
-import { validarLimiteRanking } from '../validators/peliculas.validator.js';
-import { validate } from '../middlewares/validate.js';
+import { rankingController } from '../controllers/ranking.controller.js';
 
 const router = Router();
 
-router.get('/', validarLimiteRanking, validate, obtenerRanking);
+router.get('/', rankingController.obtenerRanking);
 
 export default router;

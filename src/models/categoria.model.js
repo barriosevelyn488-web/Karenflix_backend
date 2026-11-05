@@ -1,39 +1,39 @@
-import pool from '../config/db.js';
+import { BaseModel } from './base.model.js';
+import { Categoria } from '../entities/Categoria.js';
 
-// Persistencia de categorías; este modelo es usado por CategoriaService.
-export const CategoriaModel = {
-  async listar() {
-    const [rows] = await pool.query(
-      `SELECT c.id,c.nombre,c.descripcion,c.created_at,COUNT(p.id) AS total_peliculas
-       FROM categorias c
-       LEFT JOIN peliculas p ON p.categoria_id=c.id
-       GROUP BY c.id
-       ORDER BY c.nombre`
-    );
-    return rows;
-  },
-
+export class CategoriaModel extends BaseModel {
   async crear({ nombre, descripcion }) {
-    const [result] = await pool.query('INSERT INTO categorias(nombre,descripcion) VALUES(?,?)', [
-      nombre,
-      descripcion || null
-    ]);
+    const [result] = await this.query(
+      'INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)',
+      [nombre, descripcion || null]
+    );
     return result.insertId;
-  },
+  }
+
+  async listar() {
+    const [rows] = await this.query('SELECT * FROM categorias ORDER BY nombre ASC');
+    return rows.map((row) => new Categoria(row));
+  }
+
+  async buscarPorId(id) {
+    const [rows] = await this.query('SELECT * FROM categorias WHERE id = ?', [id]);
+    if (rows.length === 0) return null;
+    return new Categoria(rows[0]);
+  }
 
   async actualizar(id, { nombre, descripcion }) {
-    const [existing] = await pool.query('SELECT id FROM categorias WHERE id=?', [id]);
-    if (!existing.length) return false;
-    await pool.query('UPDATE categorias SET nombre=?,descripcion=? WHERE id=?', [
-      nombre,
-      descripcion || null,
-      id
-    ]);
-    return true;
-  },
+    await this.query(
+      'UPDATE categorias SET nombre = ?, descripcion = ? WHERE id = ?',
+      [nombre, descripcion || null, id]
+    );
+    return this.buscarPorId(id);
+  }
 
   async eliminar(id) {
-    const [result] = await pool.query('DELETE FROM categorias WHERE id=?', [id]);
+    const [result] = await this.query('DELETE FROM categorias WHERE id = ?', [id]);
     return result.affectedRows > 0;
   }
-};
+}
+
+export const categoriaModel = new CategoriaModel();
+export default CategoriaModel;

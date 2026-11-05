@@ -1,40 +1,52 @@
-import { CategoriaService } from '../services/categorias.service.js';
-import { createInputDto } from '../factories/dto.factory.js';
+import { BaseController } from './base.controller.js';
+import { categoriasService as defaultCategoriasService, CategoriasService } from '../services/categorias.service.js';
 
-// Adapta las solicitudes de categorías a las operaciones de CategoriaService.
-export const listarCategorias = async (_req, res, next) => {
-  try {
-    res.json({ status: 'success', data: await CategoriaService.listar() });
-  } catch (error) {
-    next(error);
+export class CategoriasController extends BaseController {
+  constructor(categoriasService = defaultCategoriasService) {
+    super();
+    this.categoriasService = categoriasService;
   }
-};
 
-export const crearCategoria = async (req, res, next) => {
-  try {
-    const datos = createInputDto('categoria', req.body);
-    const id = await CategoriaService.crear(datos);
-    res.status(201).json({ status: 'success', data: { id, ...datos } });
-  } catch (error) {
-    next(error);
-  }
-};
+  listarCategorias = async (req, res, next) => {
+    try {
+      const categorias = await this.categoriasService.listar();
+      return this.sendSuccess(res, categorias);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const actualizarCategoria = async (req, res, next) => {
-  try {
-    const datos = createInputDto('categoria', req.body);
-    await CategoriaService.actualizar(req.params.id, datos);
-    res.json({ status: 'success', data: { id: Number(req.params.id), ...datos } });
-  } catch (error) {
-    next(error);
-  }
-};
+  crearCategoria = async (req, res, next) => {
+    try {
+      const categoria = await this.categoriasService.crear(req.body);
+      return this.sendCreated(res, categoria);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
 
-export const eliminarCategoria = async (req, res, next) => {
-  try {
-    await CategoriaService.eliminar(req.params.id);
-    res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-};
+  actualizarCategoria = async (req, res, next) => {
+    try {
+      const categoria = await this.categoriasService.actualizar(req.params.id, req.body);
+      return this.sendSuccess(res, categoria);
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+
+  eliminarCategoria = async (req, res, next) => {
+    try {
+      await this.categoriasService.eliminar(req.params.id);
+      return this.sendSuccess(res, null, 200, 'Categoría eliminada');
+    } catch (error) {
+      this.handleError(next, error);
+    }
+  };
+}
+
+export const categoriasController = new CategoriasController();
+export const listarCategorias = categoriasController.listarCategorias;
+export const crearCategoria = categoriasController.crearCategoria;
+export const actualizarCategoria = categoriasController.actualizarCategoria;
+export const eliminarCategoria = categoriasController.eliminarCategoria;
+export default CategoriasController;
